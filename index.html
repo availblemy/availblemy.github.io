@@ -136,7 +136,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -324,6 +324,91 @@
 <h1 id="汇总"><a href="#汇总" class="headerlink" title="汇总"></a>汇总</h1><p>peloader的加载原理就是将pe文件的内容读取后根据当中的VirtualAddress将内容分配到申请空间里，然后执行。（下面是所有代码）</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_WARNINGS</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdbool.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;winnt.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">HANDLE <span class="title function_">X1</span><span class="params">(<span class="type">char</span>* x, <span class="type">unsigned</span> <span class="type">char</span>** pbuf)</span></span><br><span class="line">&#123;</span><br><span class="line">	HANDLE X;</span><br><span class="line">	DWORD FileSize;</span><br><span class="line">	LPDWORD IFFileSize=<span class="number">0</span>;</span><br><span class="line">	LPDWORD IFReadFile=<span class="number">0</span>;</span><br><span class="line">	X = CreateFileA(x,</span><br><span class="line">		GENERIC_READ,</span><br><span class="line">		FILE_SHARE_READ | FILE_SHARE_WRITE,</span><br><span class="line">		<span class="literal">NULL</span>,</span><br><span class="line">		OPEN_EXISTING,</span><br><span class="line">		FILE_ATTRIBUTE_NORMAL,</span><br><span class="line">		<span class="literal">NULL</span></span><br><span class="line">	);</span><br><span class="line">	DWORD err= GetLastError();</span><br><span class="line">	<span class="keyword">if</span> (X == INVALID_HANDLE_VALUE)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;未能打开文件%d&quot;</span>, err);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	FileSize = GetFileSize(X, IFFileSize);</span><br><span class="line">	<span class="keyword">if</span> (IFFileSize == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;未能得到文件尺寸&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    *pbuf =(<span class="type">unsigned</span> <span class="type">char</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>)* FileSize);</span><br><span class="line">	ZeroMemory(*pbuf, FileSize);</span><br><span class="line">	ReadFile(X, *pbuf, FileSize, IFReadFile, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">if</span> (IFReadFile == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;未能复制文件&quot;</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">VOID <span class="title function_">MAIN1</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span>* pbuf)</span> &#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;这是个64进制文件\n&quot;</span>);</span><br><span class="line">	Sleep(<span class="number">500</span>);</span><br><span class="line">	PIMAGE_DOS_HEADER DOS = (PIMAGE_DOS_HEADER)pbuf;</span><br><span class="line">	PIMAGE_NT_HEADERS64 NT = (PIMAGE_NT_HEADERS64)(pbuf + DOS-&gt;e_lfanew);</span><br><span class="line">	DWORD SizeOfImage = NT-&gt;OptionalHeader.SizeOfImage;</span><br><span class="line">	LPVOID Alloc;</span><br><span class="line">	<span class="keyword">if</span> (NT-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress != <span class="number">0</span>)</span><br><span class="line">	Alloc = VirtualAlloc(<span class="literal">NULL</span>, SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	Alloc = VirtualAlloc(NT-&gt;OptionalHeader.ImageBase, SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);</span><br><span class="line">	ZeroMemory(Alloc, SizeOfImage);</span><br><span class="line">	CopyMemory(Alloc, pbuf, NT-&gt;OptionalHeader.SizeOfHeaders);<span class="comment">//申请dos，nt空间</span></span><br><span class="line">	DWORD SectionNumber = NT-&gt;FileHeader.NumberOfSections;</span><br><span class="line">	<span class="keyword">for</span> (DWORD n=<span class="number">0</span>; n &lt; SectionNumber; n++)<span class="comment">//复制节区</span></span><br><span class="line">	&#123;</span><br><span class="line">		PIMAGE_SECTION_HEADER SectionHead = (PIMAGE_SECTION_HEADER)((<span class="type">char</span>*)NT+<span class="keyword">sizeof</span>(IMAGE_NT_HEADERS64)+ <span class="keyword">sizeof</span>(IMAGE_SECTION_HEADER)*n);</span><br><span class="line">		<span class="keyword">if</span> (SectionHead-&gt;PointerToRawData!=<span class="number">0</span>)<span class="comment">//.bss特殊</span></span><br><span class="line">		CopyMemory(SectionHead-&gt;VirtualAddress + (PCHAR)Alloc, pbuf + SectionHead-&gt;PointerToRawData, SectionHead-&gt;SizeOfRawData);</span><br><span class="line">		<span class="keyword">else</span><span class="comment">//.bss特殊</span></span><br><span class="line">		&#123;</span><br><span class="line">			ZeroMemory(SectionHead-&gt;VirtualAddress + (PCHAR)Alloc, SectionHead-&gt;Misc.VirtualSize);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (NT-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress != <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		PIMAGE_BASE_RELOCATION ReLoc = (PIMAGE_BASE_RELOCATION)(NT-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress + (PCHAR)Alloc);</span><br><span class="line">		<span class="keyword">while</span> (ReLoc-&gt;SizeOfBlock != <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			PCHAR ReV = ReLoc-&gt;VirtualAddress + (PCHAR)Alloc;</span><br><span class="line">			<span class="type">int</span> NumberOfBlock = (ReLoc-&gt;SizeOfBlock - <span class="number">8</span>) / <span class="number">2</span>;</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> n = <span class="number">0</span>; n &lt; NumberOfBlock; n++)</span><br><span class="line">			&#123;</span><br><span class="line">				PWORD ChangByte = (PWORD)(ReLoc + <span class="number">1</span>);</span><br><span class="line">				<span class="type">char</span> Type = ChangByte[n] &gt;&gt; <span class="number">12</span>;</span><br><span class="line">				<span class="comment">//PDWORD64 Offest = 0;</span></span><br><span class="line">				<span class="keyword">if</span> (Type == <span class="number">10</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">// 找到目标地址</span></span><br><span class="line">					<span class="comment">// 修改目标地址的值：方法是原来的值+偏移</span></span><br><span class="line">					PDWORD64 Offest = (PDWORD64*)((ChangByte[n] &amp; <span class="number">0xfff</span>) + ReV);</span><br><span class="line">					*Offest = *Offest + (ULONGLONG)Alloc - NT-&gt;OptionalHeader.ImageBase;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			ReLoc = (PIMAGE_SECTION_HEADER)((PCHAR)ReLoc + ReLoc-&gt;SizeOfBlock);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	PIMAGE_IMPORT_DESCRIPTOR IntImport = (PIMAGE_IMPORT_DESCRIPTOR)(NT-&gt;OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress + (PCHAR)Alloc);</span><br><span class="line">	<span class="keyword">while</span> (IntImport-&gt;Name!=<span class="number">0</span>)<span class="comment">//引入表</span></span><br><span class="line">	&#123;</span><br><span class="line">		HMODULE DllHandle;</span><br><span class="line">		<span class="type">char</span> DllName[<span class="number">50</span>];</span><br><span class="line">		<span class="built_in">strncpy</span>(DllName,IntImport-&gt;Name+(PCHAR)Alloc,<span class="number">49</span>);</span><br><span class="line">		DllHandle = LoadLibraryA(DllName);</span><br><span class="line">		PIMAGE_THUNK_DATA64	INT = IntImport-&gt;OriginalFirstThunk + (PCHAR)Alloc;</span><br><span class="line">		PIMAGE_THUNK_DATA64	IAT = IntImport-&gt;FirstThunk + (PCHAR)Alloc;</span><br><span class="line">		<span class="keyword">while</span> (INT-&gt;u1.AddressOfData != <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (INT-&gt;u1.Ordinal &amp; IMAGE_ORDINAL_FLAG64)</span><br><span class="line">			&#123;</span><br><span class="line">				IAT-&gt;u1.AddressOfData = GetProcAddress(DllHandle, INT-&gt;u1.Ordinal);</span><br><span class="line">			&#125;	</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				PIMAGE_IMPORT_BY_NAME Fcn = (PIMAGE_IMPORT_BY_NAME)(INT-&gt;u1.AddressOfData + (PCHAR)Alloc);</span><br><span class="line">				IAT-&gt;u1.AddressOfData = GetProcAddress(DllHandle, Fcn-&gt;Name);</span><br><span class="line">				<span class="type">int</span> l = <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			INT++;</span><br><span class="line">			IAT++;</span><br><span class="line">		&#125;</span><br><span class="line">		IntImport++;</span><br><span class="line">	&#125;</span><br><span class="line">	FARPROC EOP = (FARPROC)((LPBYTE)Alloc + NT-&gt;OptionalHeader.AddressOfEntryPoint);</span><br><span class="line">	EOP(); </span><br><span class="line"></span><br><span class="line">	<span class="built_in">free</span>(pbuf);</span><br><span class="line">	<span class="built_in">free</span>(Alloc);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;<span class="comment">//64文件处理</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc,<span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>* pbuf=<span class="literal">NULL</span>;</span><br><span class="line">	X1(argv[<span class="number">1</span>],&amp;pbuf);</span><br><span class="line">	PIMAGE_DOS_HEADER DOS = (PIMAGE_DOS_HEADER)pbuf;</span><br><span class="line">	<span class="keyword">if</span> (*(PWORD)pbuf == <span class="number">0x5A4D</span>)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;这是个PE文件\n&quot;</span>);</span><br><span class="line">	WORD Magic = *(WORD*)(pbuf + (DOS-&gt;e_lfanew + <span class="number">6</span> * <span class="number">4</span>));</span><br><span class="line">	<span class="keyword">if</span> (Magic == <span class="number">0x20b</span>)</span><br><span class="line">		MAIN1(pbuf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2004/02/26/789456/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2004/02/26/789456/" class="post-title-link" itemprop="url">789456</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2004-02-26 23:17:48" itemprop="dateCreated datePublished" datetime="2004-02-26T23:17:48+08:00">2004-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2026-04-04 23:17:49" itemprop="dateModified" datetime="2026-04-04T23:17:49+08:00">2026-04-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="789456"><a href="#789456" class="headerlink" title="789456"></a>789456</h1><p>文章内容…</p>
 
       
     </div>
