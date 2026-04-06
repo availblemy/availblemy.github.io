@@ -136,7 +136,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -146,7 +146,7 @@
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
@@ -163,6 +163,121 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/07/SCTF-2019-Crackme-wp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/07/SCTF-2019-Crackme-wp/" class="post-title-link" itemprop="url">SCTF 2019 Crackme -wp</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-07 00:57:00 / Modified: 01:24:54" itemprop="dateCreated datePublished" datetime="2026-04-07T00:57:00+08:00">2026-04-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/question/" itemprop="url" rel="index"><span itemprop="name">question</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407010147583.png" alt="image-20260407010147583"></p>
+<p>这是主函数</p>
+<p>先用findcrypt扫描算法发现有aes和base64编码并回溯找到aes函数位置为sub_4020D0(Block, (int)v22)</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407010221904.png" alt="image-20260407010221904"></p>
+<p>接着运行调试时进入sub_402320(ModuleHandleW)发现有int3断点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407010437363.png" alt="image-20260407010437363"></p>
+<p>打开汇编流程图分析</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407010520959.png" alt="image-20260407010520959"></p>
+<p>左边的为seh函数右边为主程序</p>
+<p>并且在右边发现了注册she函数的汇编</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407010658595.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407010823312.png" alt="image-20260407010823312"></p>
+<p>其中seh结构体中loc_4023EF就是主程序中左边的seh函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011015416.png" alt="image-20260407011015416"></p>
+<p>这个程序在注册seh后在下面的DebugBreak()会强制出发int3断点然后交给调试器进而反调试我们调试的时候可以选择交给程序自己解决来跳过</p>
+<p>在seh中有个函数sub_402450</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011353264.png" alt="image-20260407011353264"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011411898.png" alt="image-20260407011411898"></p>
+<p>这其中就是smc代码对每个字节和aSycloversyclov中的字符循环加密然后取反</p>
+<p>至于smc的区域肯定在后面可以找到</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011641548.png" alt="image-20260407011641548"></p>
+<p>这个函数中return ((int (*)(void))dword_404000[0])();就是很明显的smc代码</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011718433.png" alt="image-20260407011718433"></p>
+<p>我们用ida脚本来还原</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011830172.png" alt="image-20260407011830172"></p>
+<p>重新编码后可以看到</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407011904719.png" alt="image-20260407011904719"></p>
+<p>这是一个对aPvfqyc4ttc2uxr每个字符减一再逆序的函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407012102103.png" alt="image-20260407012102103"></p>
+<p>解密后可以得到nKnbHsgqD3aNEB91jB3gEzAr+IklQwT1bSs3+bXpeuo&#x3D;</p>
+<p>这很明显是一个base64加密后的结果</p>
+<p>结合前面的加密函数中两串连续的字符</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407012354573.png" alt="image-20260407012354573"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407012404250.png" alt="image-20260407012404250"></p>
+<p>推测是aes的cbc模式</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260407012435345.png" alt="image-20260407012435345"></p>
+<p>解密拿到答案sctf{Ae3_C8c_I28_pKcs79ad4}</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
