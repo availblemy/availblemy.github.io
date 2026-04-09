@@ -202,7 +202,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2026-04-09 08:25:17 / Modified: 15:23:02" itemprop="dateCreated datePublished" datetime="2026-04-09T08:25:17+08:00">2026-04-09</time>
+      <time title="Created: 2026-04-09 08:25:17 / Modified: 15:29:30" itemprop="dateCreated datePublished" datetime="2026-04-09T08:25:17+08:00">2026-04-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -241,11 +241,11 @@
 <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083413524.png" alt="image-20260409083346785"></p>
 <p>这个是sub_14001132A（func1）函数的主要逻辑</p>
 <p>其中sub_7FF628F611FE()的逻辑就是下面的那张图将unk_14001D178保存的值还给_imp_strcmp指向地方</p>
-<p>而下面的就是sm4加密然后再调用__imp_memcmp</p>
+<p>而下面的就是rc4加密然后再调用__imp_memcmp</p>
 <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083434242.png" alt="image-20260409083434242"></p>
 <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083456953.png" alt="image-20260409083456953"></p>
 <p>这张图是sub_7FF628F61046()的主要逻辑就是将__imp_memcmp指向的值换为sub_14001132A（func1）函数</p>
-<p>总结一下这个题的逻辑就是在tls中将j_strcmp钩取然后在主程序使用时调用先还原j_strcmp然后sm4加密再用还原的j_strcmp将密文和下面j_strcmp真正的密钥对比，而scuctf{fakeflag}时密钥。</p>
+<p>总结一下这个题的逻辑就是在tls中将j_strcmp钩取然后在主程序使用时调用先还原j_strcmp然后rc4加密再用还原的j_strcmp将密文和下面j_strcmp真正的密钥对比，而scuctf{fakeflag}时密钥。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409092756473.png" alt="image-20260409092756473"></p>
 <p>密文就是unk_7FF628F6D120（ 0x98, 0x11, 0xA1, 0x15, 0x1B, 0xFA, 0x99, 0xAB, 0xAF, 0xEA, 0x63, 0xCB, 0xB3, 0x98, 0x52, 0x1C,<br>0x0D, 0xD5, 0xCE, 0xDA, 0xC4, 0xAF, 0x07, 0xA3, 0x4F, 0xB2, 0x65, 0x99, 0x15, 0x8A, 0xE1, 0x02,  0x4C, 0x3A, 0x1A, 0x69, 0x86, 0xCD, 0x56, 0x9C, 0xCA, 0x2C, 0x40, 0x4A）</p>
 <p>由于这个rc4加密将交换改为了异或交换使得它不能用在线工具接的这是解密脚本</p>
