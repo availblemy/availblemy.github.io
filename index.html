@@ -136,7 +136,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -163,6 +163,112 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/09/SCUCTF-2020-fake-exe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/09/SCUCTF-2020-fake-exe/" class="post-title-link" itemprop="url">SCUCTF 2020 fake.exe</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-09 08:25:17 / Modified: 15:23:02" itemprop="dateCreated datePublished" datetime="2026-04-09T08:25:17+08:00">2026-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/question/" itemprop="url" rel="index"><span itemprop="name">question</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409082707423.png" alt="image-20260409082707423"></p>
+<p>打开程序可以看到逻辑非常简单但是sub_7FF7C68B1320很明显是scanf函数答案又不可能是scuctf{fakeflag}</p>
+<p>所以猜测有stl反调</p>
+<p>打开TlsDirectory查看回调函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083059688.png" alt="image-20260409083059688"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083320531.png" alt="image-20260409083320531"></p>
+<p>这里就是两个个反调试</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083629994.png" alt="image-20260409083629994"></p>
+<p>这个是挂钩函数的主函数这里nop掉前面所有反函数后就可以看到</p>
+<p>v5的值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083907720.png" alt="image-20260409083907720"></p>
+<p>unk_14001D178的值</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083937535.png" alt="image-20260409083937535"></p>
+<p>可以看到它将_imp_strcmp指向的ucrtbased_strcmp放在了unk_14001D178上</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083413524.png" alt="image-20260409083346785"></p>
+<p>这个是sub_14001132A（func1）函数的主要逻辑</p>
+<p>其中sub_7FF628F611FE()的逻辑就是下面的那张图将unk_14001D178保存的值还给_imp_strcmp指向地方</p>
+<p>而下面的就是sm4加密然后再调用__imp_memcmp</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083434242.png" alt="image-20260409083434242"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409083456953.png" alt="image-20260409083456953"></p>
+<p>这张图是sub_7FF628F61046()的主要逻辑就是将__imp_memcmp指向的值换为sub_14001132A（func1）函数</p>
+<p>总结一下这个题的逻辑就是在tls中将j_strcmp钩取然后在主程序使用时调用先还原j_strcmp然后sm4加密再用还原的j_strcmp将密文和下面j_strcmp真正的密钥对比，而scuctf{fakeflag}时密钥。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409092756473.png" alt="image-20260409092756473"></p>
+<p>密文就是unk_7FF628F6D120（ 0x98, 0x11, 0xA1, 0x15, 0x1B, 0xFA, 0x99, 0xAB, 0xAF, 0xEA, 0x63, 0xCB, 0xB3, 0x98, 0x52, 0x1C,<br>0x0D, 0xD5, 0xCE, 0xDA, 0xC4, 0xAF, 0x07, 0xA3, 0x4F, 0xB2, 0x65, 0x99, 0x15, 0x8A, 0xE1, 0x02,  0x4C, 0x3A, 0x1A, 0x69, 0x86, 0xCD, 0x56, 0x9C, 0xCA, 0x2C, 0x40, 0x4A）</p>
+<p>由于这个rc4加密将交换改为了异或交换使得它不能用在线工具接的这是解密脚本</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">decrypt</span><span class="params">(<span class="type">char</span>* a1, <span class="type">char</span>* a2, <span class="type">int</span> data_len)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> v1[<span class="number">256</span>]; </span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> v2[<span class="number">256</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> temp;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">256</span>; ++j)</span><br><span class="line">    &#123;</span><br><span class="line">        v1[j] = j;</span><br><span class="line">        <span class="type">int</span> v16 = <span class="built_in">strlen</span>(a2);</span><br><span class="line">        v2[j] = a2[j % v16];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> x1 = <span class="number">0</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> x2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (x1 &lt; <span class="number">256</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        x2 = (v2[x1] + v1[x1] + x2) % <span class="number">256</span>;</span><br><span class="line">        <span class="type">int</span> v14 = v1[x2] ^ v1[x1];</span><br><span class="line">        v1[x1] = v14;</span><br><span class="line">        <span class="type">int</span> v15 = v14 ^ v1[x2];</span><br><span class="line">        v1[x2] = v15;</span><br><span class="line">        v1[x1] ^= v15;</span><br><span class="line">        ++x1;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> y1 = <span class="number">0</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> y2 = <span class="number">0</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> y3 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (y1 &lt; data_len) </span><br><span class="line">    &#123;</span><br><span class="line">        y2 = (y2 + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">        y3 = (v1[y2] + y3) % <span class="number">256</span>;</span><br><span class="line">        <span class="type">int</span> v14 = v1[y3] ^ v1[y2];</span><br><span class="line">        v1[y2] = v14;</span><br><span class="line">        <span class="type">int</span> v15 = v14 ^ v1[y3];</span><br><span class="line">        v1[y3] = v15;</span><br><span class="line">        v1[y2] ^= v15;</span><br><span class="line">        <span class="type">int</span> v13 = (v1[y3] + v1[y2]) % <span class="number">256</span>;</span><br><span class="line">        a1[y1++] ^= v1[v13];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> a2[] = <span class="string">&quot;scuctf&#123;fakeflag&#125;&quot;</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> a1[<span class="number">45</span>] = &#123;</span><br><span class="line">        <span class="number">0x98</span>, <span class="number">0x11</span>, <span class="number">0xA1</span>, <span class="number">0x15</span>, <span class="number">0x1B</span>, <span class="number">0xFA</span>, <span class="number">0x99</span>, <span class="number">0xAB</span>,</span><br><span class="line">        <span class="number">0xAF</span>, <span class="number">0xEA</span>, <span class="number">0x63</span>, <span class="number">0xCB</span>, <span class="number">0xB3</span>, <span class="number">0x98</span>, <span class="number">0x52</span>, <span class="number">0x1C</span>,</span><br><span class="line">        <span class="number">0x0D</span>, <span class="number">0xD5</span>, <span class="number">0xCE</span>, <span class="number">0xDA</span>, <span class="number">0xC4</span>, <span class="number">0xAF</span>, <span class="number">0x07</span>, <span class="number">0xA3</span>,</span><br><span class="line">        <span class="number">0x4F</span>, <span class="number">0xB2</span>, <span class="number">0x65</span>, <span class="number">0x99</span>, <span class="number">0x15</span>, <span class="number">0x8A</span>, <span class="number">0xE1</span>, <span class="number">0x02</span>,</span><br><span class="line">        <span class="number">0x4C</span>, <span class="number">0x3A</span>, <span class="number">0x1A</span>, <span class="number">0x69</span>, <span class="number">0x86</span>, <span class="number">0xCD</span>, <span class="number">0x56</span>, <span class="number">0x9C</span>,</span><br><span class="line">        <span class="number">0xCA</span>, <span class="number">0x2C</span>, <span class="number">0x40</span>, <span class="number">0x4A</span></span><br><span class="line">    &#125;;</span><br><span class="line">    decrypt(a1, a2, <span class="number">44</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;解密结果：&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">44</span>; i++) <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a1[i]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260409152252109.png" alt="image-20260409152252109"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
