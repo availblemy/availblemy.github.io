@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=20260718">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":260,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js?v=20260718" defer></script>
+
+    <meta name="description" content="报告规范结构每篇样本分析报告须覆盖以下 10 节：  概述 — 样本 SHA256、来源、家族归属（一句话定性） 静态分析 — 文件结构、编译信息、混淆方式、关键字符串 动态分析 — 进程行为、持久化机制、反分析手段 核心载荷 — 加密算法、C2 通信协议 ATT&amp;CK 映射 — 战术 → 技术编号 → 本样本中的具体体现 IOC — SHA256 &#x2F; C2 域名 &#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="总结和反思">
+<meta property="og:url" content="https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/index.html">
+<meta property="og:site_name" content="Next的小站">
+<meta property="og:description" content="报告规范结构每篇样本分析报告须覆盖以下 10 节：  概述 — 样本 SHA256、来源、家族归属（一句话定性） 静态分析 — 文件结构、编译信息、混淆方式、关键字符串 动态分析 — 进程行为、持久化机制、反分析手段 核心载荷 — 加密算法、C2 通信协议 ATT&amp;CK 映射 — 战术 → 技术编号 → 本样本中的具体体现 IOC — SHA256 &#x2F; C2 域名 &#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-15T09:34:08.000Z">
+<meta property="article:modified_time" content="2026-07-15T06:03:01.471Z">
+<meta property="article:author" content="Next">
+<meta property="article:tag" content="反思">
+<meta property="article:tag" content="总结">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/","path":"2026/06/15/总结和反思/","title":"总结和反思"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>总结和反思 | Next的小站</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/7.2.0/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js?v=20260718" defer></script><script src="/js/motion.js?v=20260718" defer></script><script src="/js/sidebar.js?v=20260718" defer></script><script src="/js/next-boot.js?v=20260718" defer></script><script src="/js/pjax.js?v=20260718" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js?v=20260718" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js?v=20260718" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/"}</script>
+  <script src="/js/third-party/quicklink.js?v=20260718" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css?v=20260718">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Next的小站" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="Next的小站" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Next的小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">恶意代码分析 & 逆向工程</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-样本分析"><a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-bug fa-fw"></i>样本分析</a></li><li class="menu-item menu-item-流量分析"><a href="/categories/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-network-wired fa-fw"></i>流量分析</a></li><li class="menu-item menu-item-逆向基础"><a href="/categories/%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/" rel="section"><i class="fa fa-microscope fa-fw"></i>逆向基础</a></li><li class="menu-item menu-item-日志分析"><a href="/categories/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-clipboard-list fa-fw"></i>日志分析</a></li><li class="menu-item menu-item-其他"><a href="/categories/%E5%85%B6%E4%BB%96/" rel="section"><i class="fa fa-ellipsis-h fa-fw"></i>其他</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A%E8%A7%84%E8%8C%83"><span class="nav-number">1.</span> <span class="nav-text">报告规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%AA%E5%9B%BE"><span class="nav-number">1.2.</span> <span class="nav-text">截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%AA%E8%BE%9E"><span class="nav-number">1.3.</span> <span class="nav-text">措辞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%85%E5%AD%A6%E6%B8%85%E5%8D%95"><span class="nav-number">2.</span> <span class="nav-text">待学清单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E8%A7%84%E5%88%92"><span class="nav-number">3.</span> <span class="nav-text">项目规划</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BB%E9%93%BE%E9%87%8D%E5%BB%BA%E5%99%A8%EF%BC%88Python%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">攻击链重建器（Python）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%8F%90%E5%8F%96%E6%A1%86%E6%9E%B6%EF%BC%88C-%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">配置提取框架（C++）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%AE%A4%E7%9F%A5"><span class="nav-number">4.</span> <span class="nav-text">核心认知</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Next</p>
+  <div class="site-description" itemprop="description">记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/availblemy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;availblemy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="总结和反思 | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          总结和反思
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-15 17:34:08" itemprop="dateCreated datePublished" datetime="2026-06-15T17:34:08+08:00">2026-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>719</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="报告规范"><a href="#报告规范" class="headerlink" title="报告规范"></a>报告规范</h2><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>每篇样本分析报告须覆盖以下 10 节：</p>
+<ol>
+<li><strong>概述</strong> — 样本 SHA256、来源、家族归属（一句话定性）</li>
+<li><strong>静态分析</strong> — 文件结构、编译信息、混淆方式、关键字符串</li>
+<li><strong>动态分析</strong> — 进程行为、持久化机制、反分析手段</li>
+<li><strong>核心载荷</strong> — 加密算法、C2 通信协议</li>
+<li><strong>ATT&amp;CK 映射</strong> — 战术 → 技术编号 → 本样本中的具体体现</li>
+<li><strong>IOC</strong> — SHA256 &#x2F; C2 域名 &#x2F; 互斥体 &#x2F; 文件路径 &#x2F; 注册表（表格形式）</li>
+<li><strong>网络流量</strong> — JA3 指纹、心跳包特征、请求 URI</li>
+<li><strong>YARA 规则</strong> — 每条 ≥ 5 个 strings</li>
+<li><strong>归因线索</strong> — 与已知组织 TTP 对比，标注置信度</li>
+<li><strong>待深入</strong> — 列明未完成的分析点</li>
+</ol>
+<h3 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h3><ul>
+<li>每张截图须有对应文字说明，连续两张截图之间须有过渡文字</li>
+<li>删除后文章仍通顺的截图一律删除</li>
+<li>反编译代码、字符串列表、简单分支逻辑使用代码块展示，不要截图</li>
+<li>保留的截图必须用 Greenshot 添加红框&#x2F;箭头标注关键位置</li>
+</ul>
+<h3 id="措辞"><a href="#措辞" class="headerlink" title="措辞"></a>措辞</h3><table>
+<thead>
+<tr>
+<th>禁止</th>
+<th>替代</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“可以看见……”</td>
+<td>“分析发现””该函数实现了””如图所示”</td>
+</tr>
+<tr>
+<td>木马&#x2F;病毒&#x2F;蠕虫混用</td>
+<td>按实际类型准确使用 Trojan &#x2F; RAT &#x2F; Worm &#x2F; Ransomware</td>
+</tr>
+<tr>
+<td>“有空再分析”</td>
+<td>“待深入分析：1) … 2) …”</td>
+</tr>
+<tr>
+<td>用截图代替文字说明</td>
+<td>文字说明结论，截图作为证据佐证</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="待学清单"><a href="#待学清单" class="headerlink" title="待学清单"></a>待学清单</h2><ul>
+<li><p><input disabled="" type="checkbox"> 
+ATT&amp;CK 矩阵映射 — <a target="_blank" rel="noopener" href="https://attack.mitre.org/">https://attack.mitre.org</a></p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+YARA 规则编写 — 每个样本产出 1 条规则</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+网络流量分析 — Wireshark 抓包、JA3 指纹提取、心跳包识别</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+R3 Syscall — ntdll 调用链分析，自写 syscall stub 绕过用户态 Hook</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+R0 驱动分析 — WinDbg 双机调试，分析恶意 .sys（回调注册&#x2F;进程隐藏&#x2F;网络拦截）</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+VMProtect 壳 — 识别 VMP 区段特征，dump 内存定位非虚拟化代码</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+Shellcode 编写 — 位置无关代码（PIC）、反射式 DLL 加载</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+APT 归因 — 精读 20 份公开报告，建立 TTP 特征库，进行 5 次独立归因练习</p>
+</li>
+</ul>
+<hr>
+<h2 id="项目规划"><a href="#项目规划" class="headerlink" title="项目规划"></a>项目规划</h2><h3 id="攻击链重建器（Python）"><a href="#攻击链重建器（Python）" class="headerlink" title="攻击链重建器（Python）"></a>攻击链重建器（Python）</h3><ul>
+<li><input disabled="" type="checkbox"> 输入 Security.evtx → 解析 4688&#x2F;5156&#x2F;4657&#x2F;4663 → 进程树关联</li>
+<li><input disabled="" type="checkbox"> 自动识别攻击阶段（初始执行 → 持久化 → C2）</li>
+<li><input disabled="" type="checkbox"> 输出 JSON + Markdown 时间线</li>
+<li><input disabled="" type="checkbox"> 3 个银狐样本 EVTX 验证</li>
+</ul>
+<h3 id="配置提取框架（C-）"><a href="#配置提取框架（C-）" class="headerlink" title="配置提取框架（C++）"></a>配置提取框架（C++）</h3><ul>
+<li><input disabled="" type="checkbox"> 插件架构，首批 3 插件：QuasarRAT &#x2F; 银狐 &#x2F; FernBot</li>
+<li><input disabled="" type="checkbox"> 手动解析 PE Section &#x2F; ELF Segment</li>
+<li><input disabled="" type="checkbox"> 批量扫描 + 统一 JSON 输出</li>
+<li><input disabled="" type="checkbox"> 10 样本验证，准确率 ≥ 80%</li>
+<li><input disabled="" type="checkbox"> CLI：<code>mcconfig extract sample.bin --family quasar</code></li>
+</ul>
+<hr>
+<h2 id="核心认知"><a href="#核心认知" class="headerlink" title="核心认知"></a>核心认知</h2><ul>
+<li><strong>当前状态：</strong> 14 篇博客有逆向深度但缺格式、有分析过程但缺 ATT&amp;CK、有 shellcode 追踪但缺 YARA。不是能力不够，是能力没对准靶子。</li>
+<li><strong>核心转向：</strong> 从”我会分析样本”转向”我能输出结构化证据”。每个样本产 ATT&amp;CK + YARA + IOC + 流量指纹，分析即积累，积累即归因。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Next
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/" title="总结和反思">https://woshinext.top/2026/06/15/总结和反思/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://woshinext.top">
+            <span class="icon">
+              <i class="fa fa-globe"></i>
+            </span>
+
+            <span class="label">个人博客</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://blog.csdn.net/2401_86516690?type=blog">
+            <span class="icon">
+              <i class="fa fa-pencil"></i>
+            </span>
+
+            <span class="label">CSDN</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://bbs.kanxue.com/homepage-1081539.htm">
+            <span class="icon">
+              <i class="fa fa-shield"></i>
+            </span>
+
+            <span class="label">看雪论坛</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%8F%8D%E6%80%9D/" rel="tag"><i class="fa fa-tag"></i> 反思</a>
+              <a href="/tags/%E6%80%BB%E7%BB%93/" rel="tag"><i class="fa fa-tag"></i> 总结</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/" rel="prev" title="elf文件蠕虫木马病毒">
+                  <i class="fa fa-angle-left"></i> elf文件蠕虫木马病毒
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="isso-thread"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">true</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">10k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">38 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="isso" type="application/json">{"enable":false}</script>
+<script src="/js/third-party/comments/isso.js?v=20260718" defer></script>
+
+</body>
+</html>

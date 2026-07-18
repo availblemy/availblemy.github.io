@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /js/
+Disallow: /css/
+Disallow: /lib/
+
+Sitemap: https://woshinext.top/sitemap.xml
+Sitemap: https://woshinext.top/baidusitemap.xml

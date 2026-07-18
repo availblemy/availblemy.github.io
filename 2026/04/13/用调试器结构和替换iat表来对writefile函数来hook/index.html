@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=20260718">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":260,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js?v=20260718" defer></script>
+
+    <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include &quot;pch.h&quot;typedef BOOL(WINAPI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用调试器结构和替换iat表来对writefile函数来hook">
+<meta property="og:url" content="https://woshinext.top/2026/04/13/%E7%94%A8%E8%B0%83%E8%AF%95%E5%99%A8%E7%BB%93%E6%9E%84%E5%92%8C%E6%9B%BF%E6%8D%A2iat%E8%A1%A8%E6%9D%A5%E5%AF%B9writefile%E5%87%BD%E6%95%B0%E6%9D%A5hook/index.html">
+<meta property="og:site_name" content="Next的小站">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include &quot;pch.h&quot;typedef BOOL(WINAPI">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-13T06:51:54.000Z">
+<meta property="article:modified_time" content="2026-07-18T13:56:19.935Z">
+<meta property="article:author" content="Next">
+<meta property="article:tag" content="Hook">
+<meta property="article:tag" content="IAT">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://woshinext.top/2026/04/13/%E7%94%A8%E8%B0%83%E8%AF%95%E5%99%A8%E7%BB%93%E6%9E%84%E5%92%8C%E6%9B%BF%E6%8D%A2iat%E8%A1%A8%E6%9D%A5%E5%AF%B9writefile%E5%87%BD%E6%95%B0%E6%9D%A5hook/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://woshinext.top/2026/04/13/%E7%94%A8%E8%B0%83%E8%AF%95%E5%99%A8%E7%BB%93%E6%9E%84%E5%92%8C%E6%9B%BF%E6%8D%A2iat%E8%A1%A8%E6%9D%A5%E5%AF%B9writefile%E5%87%BD%E6%95%B0%E6%9D%A5hook/","path":"2026/04/13/用调试器结构和替换iat表来对writefile函数来hook/","title":"用调试器结构和替换iat表来对writefile函数来hook"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>用调试器结构和替换iat表来对writefile函数来hook | Next的小站</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/7.2.0/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js?v=20260718" defer></script><script src="/js/motion.js?v=20260718" defer></script><script src="/js/sidebar.js?v=20260718" defer></script><script src="/js/next-boot.js?v=20260718" defer></script><script src="/js/pjax.js?v=20260718" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js?v=20260718" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js?v=20260718" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://woshinext.top/2026/04/13/%E7%94%A8%E8%B0%83%E8%AF%95%E5%99%A8%E7%BB%93%E6%9E%84%E5%92%8C%E6%9B%BF%E6%8D%A2iat%E8%A1%A8%E6%9D%A5%E5%AF%B9writefile%E5%87%BD%E6%95%B0%E6%9D%A5hook/"}</script>
+  <script src="/js/third-party/quicklink.js?v=20260718" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css?v=20260718">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Next的小站" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="Next的小站" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Next的小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">恶意代码分析 & 逆向工程</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-归档"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-关于"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-样本分析"><a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-bug fa-fw"></i>样本分析</a></li><li class="menu-item menu-item-流量分析"><a href="/categories/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-network-wired fa-fw"></i>流量分析</a></li><li class="menu-item menu-item-逆向基础"><a href="/categories/%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/" rel="section"><i class="fa fa-microscope fa-fw"></i>逆向基础</a></li><li class="menu-item menu-item-日志分析"><a href="/categories/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" rel="section"><i class="fa fa-clipboard-list fa-fw"></i>日志分析</a></li><li class="menu-item menu-item-其他"><a href="/categories/%E5%85%B6%E4%BB%96/" rel="section"><i class="fa fa-ellipsis-h fa-fw"></i>其他</a></li><li class="menu-item menu-item-标签"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Next</p>
+  <div class="site-description" itemprop="description">记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/availblemy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;availblemy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/04/13/%E7%94%A8%E8%B0%83%E8%AF%95%E5%99%A8%E7%BB%93%E6%9E%84%E5%92%8C%E6%9B%BF%E6%8D%A2iat%E8%A1%A8%E6%9D%A5%E5%AF%B9writefile%E5%87%BD%E6%95%B0%E6%9D%A5hook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Next">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Next的小站">
+      <meta itemprop="description" content="记录样本分析、脱壳去混淆、反调试对抗等底层安全技术笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="用调试器结构和替换iat表来对writefile函数来hook | Next的小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用调试器结构和替换iat表来对writefile函数来hook
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-04-13 14:51:54" itemprop="dateCreated datePublished" datetime="2026-04-13T14:51:54+08:00">2026-04-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">逆向基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>672</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;pch.h&quot;</span></span></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">BOOL</span><span class="params">(WINAPI* WriteFileFuncPtr)</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    HANDLE       hFile,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPCVOID      lpBuffer,</span></span></span><br><span class="line"><span class="params"><span class="function">    DWORD        nNumberOfBytesToWrite,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPDWORD      lpNumberOfBytesWritten,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPOVERLAPPED lpOverlapped</span></span></span><br><span class="line"><span class="params"><span class="function">    )</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局变量：保存原始WriteFile函数地址（使用正确的函数指针类型）</span></span><br><span class="line">PROC proc = <span class="literal">nullptr</span>;</span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">procnew</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    HANDLE       hFile,   </span></span></span><br><span class="line"><span class="params"><span class="function">    LPCVOID      lpBuffer,    </span></span></span><br><span class="line"><span class="params"><span class="function">    DWORD        nNumberOfBytesToWrite, </span></span></span><br><span class="line"><span class="params"><span class="function">    LPDWORD      lpNumberOfBytesWritten, </span></span></span><br><span class="line"><span class="params"><span class="function">    LPOVERLAPPED lpOverlapped  </span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br><span class="line"><span class="function">BOOL <span class="title">Hook_iat</span><span class="params">(LPCSTR DllName, WriteFileFuncPtr proc, WriteFileFuncPtr procnew)</span></span>;</span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">( HMODULE hModule,DWORD  ul_reason_for_call,LPVOID lpReserved)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">        <span class="built_in">MessageBoxA</span>(<span class="literal">NULL</span>, <span class="string">&quot;WriteFile Hook 成功！&quot;</span>, <span class="string">&quot;DLL 注入提示&quot;</span>, MB_OK | MB_ICONINFORMATION);</span><br><span class="line">        proc = <span class="built_in">GetProcAddress</span>(<span class="built_in">GetModuleHandleA</span>(<span class="string">&quot;kernel32.dll&quot;</span>), <span class="string">&quot;WriteFile&quot;</span>);</span><br><span class="line">        <span class="built_in">Hook_iat</span>(<span class="string">&quot;kernel32.dll&quot;</span>, (WriteFileFuncPtr)proc, procnew);<span class="comment">//提取原本的writefile函数</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="built_in">Hook_iat</span>(<span class="string">&quot;kernel32.dll&quot;</span>, procnew, (WriteFileFuncPtr)proc);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">BOOL WINAPI <span class="title">procnew</span><span class="params">(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped)</span><span class="comment">//编写钩子函数</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">char</span>* newBuffer = <span class="keyword">new</span> <span class="type">char</span>[nNumberOfBytesToWrite];</span><br><span class="line">    <span class="built_in">memcpy</span>(newBuffer, lpBuffer, nNumberOfBytesToWrite);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; nNumberOfBytesToWrite; k++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">97</span> &lt;= newBuffer[k] &amp;&amp; newBuffer[k] &lt;= <span class="number">122</span>)</span><br><span class="line">            newBuffer[k] -= <span class="number">0x20</span>; <span class="comment">// 小写转大写</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">65</span> &lt;= newBuffer[k] &amp;&amp; newBuffer[k] &lt;= <span class="number">90</span>)</span><br><span class="line">            newBuffer[k] += <span class="number">0x20</span>; <span class="comment">// 大写转小写</span></span><br><span class="line">    &#125;</span><br><span class="line">    ((WriteFileFuncPtr)proc)(hFile, newBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped);</span><br><span class="line">    <span class="keyword">delete</span>[] newBuffer;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line"><span class="function">BOOL <span class="title">Hook_iat</span><span class="params">(LPCSTR DllName, WriteFileFuncPtr proc, WriteFileFuncPtr procnew)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    HMODULE hMod;</span><br><span class="line">    hMod = <span class="built_in">GetModuleHandleW</span>(<span class="literal">NULL</span>);</span><br><span class="line">    PBYTE pAddr = (PBYTE)hMod;</span><br><span class="line">    IMAGE_NT_HEADERS64 NT = *(PIMAGE_NT_HEADERS64)(pAddr + *(DWORD*)&amp;pAddr[<span class="number">0x3c</span>]);</span><br><span class="line">    PIMAGE_IMPORT_DESCRIPTOR Import = (PIMAGE_IMPORT_DESCRIPTOR)(NT.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress + pAddr);</span><br><span class="line">    <span class="keyword">for</span> (; Import-&gt;Name; Import++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_stricmp((<span class="type">const</span> <span class="type">char</span>*)(pAddr + (DWORD64)Import-&gt;Name), DllName))</span><br><span class="line">        &#123;</span><br><span class="line">            PIMAGE_THUNK_DATA64 IAT = (PIMAGE_THUNK_DATA64)(Import-&gt;FirstThunk+ pAddr);</span><br><span class="line">            <span class="keyword">for</span> (; IAT-&gt;u<span class="number">1.F</span>unction;IAT++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (IAT-&gt;u<span class="number">1.F</span>unction == (DWORD64)proc)<span class="comment">//找到iat表中write</span></span><br><span class="line">                &#123;</span><br><span class="line">                    DWORD OldProtect;</span><br><span class="line">                    <span class="built_in">VirtualProtect</span>((LPVOID)&amp;IAT-&gt;u<span class="number">1.F</span>unction, <span class="number">4</span>, PAGE_EXECUTE_READWRITE, &amp;OldProtect);</span><br><span class="line">                    IAT-&gt;u<span class="number">1.F</span>unction = (DWORD64)procnew;</span><br><span class="line">                    <span class="built_in">VirtualProtect</span>((LPVOID)&amp;IAT-&gt;u<span class="number">1.F</span>unction, <span class="number">4</span>, OldProtect, &amp;OldProtect);</span><br><span class="line">                    <span class="keyword">return</span> TRUE;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> FALSE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line">LPVOID proc;</span><br><span class="line">DWORD int0=<span class="number">0</span>,int3=<span class="number">0xcc</span>;</span><br><span class="line">main() &#123;</span><br><span class="line">	EnablePrivilege(SE_DEBUG_NAME, TRUE);</span><br><span class="line">	DWORD PID;</span><br><span class="line">    scanf_s(<span class="string">&quot;%d&quot;</span>,&amp;PID);</span><br><span class="line">	DebugActiveProcess(PID);</span><br><span class="line">	DEBUG_EVENT pe;</span><br><span class="line">	<span class="keyword">while</span> (WaitForDebugEvent(&amp;pe, INFINITE))<span class="comment">//等待调试</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (pe.dwDebugEventCode == CREATE_PROCESS_DEBUG_EVENT)</span><br><span class="line">			hook1(&amp;pe);<span class="comment">//初次调试设置断点</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (pe.dwDebugEventCode == EXCEPTION_DEBUG_EVENT)</span><br><span class="line">			hook2(&amp;pe);<span class="comment">//遇到断点修改内容</span></span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(pe.dwDebugEventCode==EXIT_PROCESS_DEBUG_EVENT)</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		ContinueDebugEvent(pe.dwProcessId, pe.dwThreadId, DBG_CONTINUE);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">BOOL <span class="title function_">hook1</span><span class="params">(LPDEBUG_EVENT pe)</span></span><br><span class="line">&#123;</span><br><span class="line">	proc = GetProcAddress(GetModuleHandleA(<span class="string">&quot;Kernel32.dll&quot;</span>), <span class="string">&quot;WriteFile&quot;</span>);</span><br><span class="line">	ReadProcessMemory(pe-&gt;u.CreateProcessInfo.hProcess, proc, &amp;int0, <span class="keyword">sizeof</span>(DWORD), <span class="literal">NULL</span>);<span class="comment">//保存促使值</span></span><br><span class="line">	WriteProcessMemory(pe-&gt;u.CreateProcessInfo.hProcess, proc, &amp;int3, <span class="keyword">sizeof</span>(DWORD), <span class="literal">NULL</span>);<span class="comment">//设置断点</span></span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line">BOOL <span class="title function_">hook2</span><span class="params">(LPDEBUG_EVENT pe)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (pe-&gt;u.Exception.ExceptionRecord.ExceptionCode == EXCEPTION_BREAKPOINT)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (pe-&gt;u.Exception.ExceptionRecord.ExceptionAddress == proc)</span><br><span class="line">		&#123;</span><br><span class="line">			HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe-&gt;dwProcessId);</span><br><span class="line">			HANDLE hThread = OpenThread(</span><br><span class="line">				THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_SET_CONTEXT,</span><br><span class="line">				FALSE, pe-&gt;dwThreadId</span><br><span class="line">			);</span><br><span class="line">			WriteProcessMemory(hProcess, proc, &amp;int0, <span class="keyword">sizeof</span>(DWORD), <span class="literal">NULL</span>);<span class="comment">//恢复断点</span></span><br><span class="line">			CONTEXT ctx;</span><br><span class="line">			ctx.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;</span><br><span class="line">			<span class="keyword">if</span>(!GetThreadContext(hThread, &amp;ctx))</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;true%d&quot;</span>,GetLastError());<span class="comment">//获得寄存器值</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;\nRCX (hFile): 0x%016llX\n&quot;</span>, ctx.Rcx);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;RDX (lpBuffer): 0x%016llX\n&quot;</span>, ctx.Rdx);</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;R8 (nNumberOfBytesToWrite): 0x%016llX\n&quot;</span>, ctx.R8);<span class="comment">//当时那上下文的时候老是拿不到</span></span><br><span class="line">			PBYTE Buffer;</span><br><span class="line">			PBYTE pRemoteData = ctx.Rdx;</span><br><span class="line">			DWORD pRemoteDataLen = ctx.R8;</span><br><span class="line">			Buffer = <span class="built_in">malloc</span>(pRemoteDataLen + <span class="number">1</span>);</span><br><span class="line">			<span class="built_in">memset</span>(Buffer, <span class="number">0</span>, pRemoteDataLen + <span class="number">1</span>);</span><br><span class="line">			<span class="keyword">if</span> (!ReadProcessMemory(hProcess, (LPVOID)pRemoteData, Buffer, pRemoteDataLen, <span class="literal">NULL</span>))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;read memory wrong!%x&quot;</span>,GetLastError());</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span>; k &lt; pRemoteDataLen; k++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span>(<span class="number">97</span>&lt;=Buffer[k]&amp;&amp;Buffer[k]&lt;=<span class="number">122</span>)</span><br><span class="line">				Buffer[k] -= <span class="number">0x20</span>;<span class="comment">//大写转小写</span></span><br><span class="line">				<span class="keyword">else</span> <span class="keyword">if</span>(<span class="number">65</span>&lt;= Buffer[k] &amp;&amp; Buffer[k] &lt;= <span class="number">90</span>)</span><br><span class="line">				Buffer[k] += <span class="number">0x20</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			WriteProcessMemory(hProcess, (LPVOID)pRemoteData, Buffer, pRemoteDataLen, <span class="literal">NULL</span>);</span><br><span class="line">			<span class="built_in">free</span>(Buffer);</span><br><span class="line">			ctx.Rip = (DWORD64)proc;</span><br><span class="line">			SetThreadContext(hThread, &amp;ctx);<span class="comment">//纠正运行地址</span></span><br><span class="line">			ContinueDebugEvent(pe-&gt;dwProcessId, pe-&gt;dwThreadId, DBG_CONTINUE);</span><br><span class="line">			WriteProcessMemory(pe-&gt;u.CreateProcessInfo.hProcess, proc, &amp;int3, <span class="keyword">sizeof</span>(DWORD), <span class="literal">NULL</span>);</span><br><span class="line">			<span class="keyword">return</span> TRUE;</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">	<span class="keyword">return</span> FALSE;</span><br><span class="line">&#125;</span><br><span class="line">BOOL <span class="title function_">EnablePrivilege</span><span class="params">(LPCTSTR Privilege, BOOL enable)</span></span><br><span class="line">&#123;</span><br><span class="line">	LUID Luid;</span><br><span class="line">	TOKEN_PRIVILEGES TokenPrivileges;</span><br><span class="line">	HANDLE Token;</span><br><span class="line">	OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &amp;Token);</span><br><span class="line">	LookupPrivilegeValueA(<span class="literal">NULL</span>, Privilege, &amp;Luid);</span><br><span class="line">	TokenPrivileges.PrivilegeCount = <span class="number">1</span>;</span><br><span class="line">	TokenPrivileges.Privileges[<span class="number">0</span>].Luid = Luid;</span><br><span class="line">	TokenPrivileges.Privileges[<span class="number">0</span>].Attributes = enable;</span><br><span class="line">	<span class="keyword">if</span>(!AdjustTokenPrivileges(Token, FALSE, &amp;TokenPrivileges, <span class="keyword">sizeof</span>(TOKEN_PRIVILEGES), <span class="literal">NULL</span>, <span class="literal">NULL</span>))</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;false%d&quot;</span>, GetLastError());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个实现的效果都是在文件保存后中的英文字母大小写互换</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Next
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://woshinext.top/2026/04/13/%E7%94%A8%E8%B0%83%E8%AF%95%E5%99%A8%E7%BB%93%E6%9E%84%E5%92%8C%E6%9B%BF%E6%8D%A2iat%E8%A1%A8%E6%9D%A5%E5%AF%B9writefile%E5%87%BD%E6%95%B0%E6%9D%A5hook/" title="用调试器结构和替换iat表来对writefile函数来hook">https://woshinext.top/2026/04/13/用调试器结构和替换iat表来对writefile函数来hook/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://woshinext.top">
+            <span class="icon">
+              <i class="fa fa-globe"></i>
+            </span>
+
+            <span class="label">个人博客</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://blog.csdn.net/2401_86516690?type=blog">
+            <span class="icon">
+              <i class="fa fa-pencil"></i>
+            </span>
+
+            <span class="label">CSDN</span>
+          </a>
+      </div>
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://bbs.kanxue.com/homepage-1081539.htm">
+            <span class="icon">
+              <i class="fa fa-shield"></i>
+            </span>
+
+            <span class="label">看雪论坛</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Hook/" rel="tag"><i class="fa fa-tag"></i> Hook</a>
+              <a href="/tags/IAT/" rel="tag"><i class="fa fa-tag"></i> IAT</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/04/13/%E6%89%8B%E8%84%B1upx/" rel="prev" title="手脱upx">
+                  <i class="fa fa-angle-left"></i> 手脱upx
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/04/15/Lab07-1-2-3-%E7%AC%94%E8%AE%B0/" rel="next" title="Lab07.1.2.3-笔记">
+                  Lab07.1.2.3-笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="isso-thread"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">true</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">10k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">38 分钟</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="isso" type="application/json">{"enable":false}</script>
+<script src="/js/third-party/comments/isso.js?v=20260718" defer></script>
+
+</body>
+</html>
