@@ -20,44 +20,30 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":260,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js?v=20260719" defer></script>
 
-    <meta name="description" content="socket（1，1，0）使用tcp协议，其中ensure_persistence有着大量的持久化技术，先看下面的流量加密逻辑  可以清楚的看见它使用了0x7f进行异或加密  这里可以看到用三个命令用来交互 第一个是用来dos攻击的   可以看见它有8中的常见dos攻击，并且会将信息返回c2服务器 第二和是用来横向感染的  先是提取本地ip用于后面的感染  然后循环判断子网段下有没有ip  这个">
+    <meta name="description" content="windows日志日志查看方法：win+r输入eventvwr.msc弹出事件查看器，日志的储存格式为evtx  1.安全日志1储存位置：C:\Windows\System32\Winevt\Logs\Security.evtx  主要存放安全事件及id    安全事件 id    成功登录，登录失败，账户加入管理员组，修改账户密码 4624，4625，4732，4723   管理员特权登录，调用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="elf文件蠕虫木马病毒">
-<meta property="og:url" content="https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/index.html">
+<meta property="og:title" content="windows日志+Sysmon">
+<meta property="og:url" content="https://woshinext.top/2026/07/19/windows%E6%97%A5%E5%BF%97-Sysmon/index.html">
 <meta property="og:site_name" content="Next的小站">
-<meta property="og:description" content="socket（1，1，0）使用tcp协议，其中ensure_persistence有着大量的持久化技术，先看下面的流量加密逻辑  可以清楚的看见它使用了0x7f进行异或加密  这里可以看到用三个命令用来交互 第一个是用来dos攻击的   可以看见它有8中的常见dos攻击，并且会将信息返回c2服务器 第二和是用来横向感染的  先是提取本地ip用于后面的感染  然后循环判断子网段下有没有ip  这个">
+<meta property="og:description" content="windows日志日志查看方法：win+r输入eventvwr.msc弹出事件查看器，日志的储存格式为evtx  1.安全日志1储存位置：C:\Windows\System32\Winevt\Logs\Security.evtx  主要存放安全事件及id    安全事件 id    成功登录，登录失败，账户加入管理员组，修改账户密码 4624，4625，4732，4723   管理员特权登录，调用">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163246401.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163536566.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170119088.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170053251.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170201491.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170440722.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170604319.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610171029155.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610172009038.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610173502416.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610173824620.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610174148418.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610180130870.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610182710249.png">
-<meta property="article:published_time" content="2026-06-10T08:22:28.000Z">
-<meta property="article:modified_time" content="2026-06-14T15:37:29.924Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260719134528230.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260719135754081.png">
+<meta property="article:published_time" content="2026-07-19T05:14:13.000Z">
+<meta property="article:modified_time" content="2026-07-19T06:07:36.695Z">
 <meta property="article:author" content="Next">
-<meta property="article:tag" content="ELF">
-<meta property="article:tag" content="Linux">
-<meta property="article:tag" content="木马">
+<meta property="article:tag" content="恶意代码分析,逆向工程,CTF,脱壳,样本分析,PE结构,反调试,木马分析,IDA,Shellcode">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163246401.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260719134528230.png">
 
 
-<link rel="canonical" href="https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/">
+<link rel="canonical" href="https://woshinext.top/2026/07/19/windows%E6%97%A5%E5%BF%97-Sysmon/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/","path":"2026/06/10/elf文件木马/","title":"elf文件蠕虫木马病毒"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://woshinext.top/2026/07/19/windows%E6%97%A5%E5%BF%97-Sysmon/","path":"2026/07/19/windows日志-Sysmon/","title":"windows日志+Sysmon"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>elf文件蠕虫木马病毒 | Next的小站</title>
+<title>windows日志+Sysmon | Next的小站</title>
   
 
 
@@ -92,7 +78,7 @@
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
-  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/"}</script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://woshinext.top/2026/07/19/windows%E6%97%A5%E5%BF%97-Sysmon/"}</script>
   <script src="/js/third-party/quicklink.js?v=20260719" defer></script>
 
   <noscript>
@@ -174,7 +160,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -187,6 +173,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#windows%E6%97%A5%E5%BF%97"><span class="nav-number">1.</span> <span class="nav-text">windows日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E5%85%A8%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.</span> <span class="nav-text">1.安全日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%B3%BB%E7%BB%9F%E6%97%A5%E5%BF%97"><span class="nav-number">1.2.</span> <span class="nav-text">2.系统日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97"><span class="nav-number">1.3.</span> <span class="nav-text">3.应用日志</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sysmon"><span class="nav-number">2.</span> <span class="nav-text">Sysmon</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%AF%E5%8A%A8%E7%94%A8powershell%E5%90%AF%E5%8A%A8%EF%BC%8C%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9A%84%E8%A7%84%E5%88%99%E5%8F%AF%E4%BB%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">1.启动用powershell启动，有不同的规则可以配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%9C%A8%E4%BA%8B%E4%BB%B6%E7%AE%A1%E7%90%86%E5%99%A8%E4%B8%AD%E6%9F%A5%E7%9C%8B"><span class="nav-number">2.2.</span> <span class="nav-text">2.在事件管理器中查看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%B8%B8%E8%A7%81%E6%9F%A5%E7%9C%8B%E7%9A%84%E4%BA%8B%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">3.常见查看的事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8D%B8%E8%BD%BD%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.4.</span> <span class="nav-text">4.卸载服务</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -244,7 +231,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/">
+    <link itemprop="mainEntityOfPage" href="https://woshinext.top/2026/07/19/windows%E6%97%A5%E5%BF%97-Sysmon/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -257,12 +244,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="elf文件蠕虫木马病毒 | Next的小站">
+      <meta itemprop="name" content="windows日志+Sysmon | Next的小站">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          elf文件蠕虫木马病毒
+          windows日志+Sysmon
         </h1>
 
         <div class="post-meta-container">
@@ -273,7 +260,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-10 16:22:28" itemprop="dateCreated datePublished" datetime="2026-06-10T16:22:28+08:00">2026-06-10</time>
+      <time title="创建时间：2026-07-19 13:14:13" itemprop="dateCreated datePublished" datetime="2026-07-19T13:14:13+08:00">2026-07-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -281,7 +268,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">样本分析</span></a>
+          <a href="/categories/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">日志分析</span></a>
         </span>
     </span>
 
@@ -292,14 +279,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>633</span>
+      <span>725</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>3 分钟</span>
     </span>
 </div>
 
@@ -309,135 +296,184 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163246401.png" alt="image-20260610163246401"></p>
-<p>socket（1，1，0）使用tcp协议，其中ensure_persistence有着大量的持久化技术，先看下面的流量加密逻辑</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610163536566.png" alt="image-20260610163536566"></p>
-<p>可以清楚的看见它使用了0x7f进行异或加密</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170119088.png" alt="image-20260610170119088"></p>
-<p>这里可以看到用三个命令用来交互</p>
-<p>第一个是用来dos攻击的</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170053251.png" alt="image-20260610170053251"></p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170201491.png" alt="image-20260610170201491"></p>
-<p>可以看见它有8中的常见dos攻击，并且会将信息返回c2服务器</p>
-<p>第二和是用来横向感染的</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170440722.png" alt="image-20260610170440722"></p>
-<p>先是提取本地ip用于后面的感染</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610170604319.png"></p>
-<p>然后循环判断子网段下有没有ip</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610171029155.png" alt="image-20260610171029155"></p>
-<p>这个是感染核心逻辑使用开放的5555端口来投放木马文件</p>
-<p>第三个是用来执行shell命令来远程操控</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610172009038.png" alt="image-20260610172009038"></p>
-<p>popen是执行函数其他的是一些数据处理</p>
-<p>接下来我来分析下持久化的函数ensure_persistence</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610173502416.png" alt="image-20260610173502416"></p>
-<p>它先是加入了一些开机自启的目录这些都是不同系统下的开机目录</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610173824620.png" alt="image-20260610173824620"></p>
-<p>install_chipset_persistence()这个是芯片级的持久化install_root_persistence()这个是有root权限的持久化install_nonroot_persistence()这个是非root权限的持久化</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610174148418.png" alt="image-20260610174148418"></p>
-<p>这个是对物联网系统的install_iot_persistence()持久化</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610180130870.png" alt="image-20260610180130870"></p>
-<p>这里是创建了一个shell脚本来看主程序有没有存在没有就启动后面是主程序检查脚本存在吗，是两个进程互相检查</p>
-<p>这里我们可以看到如果程序运行起来后几乎是很难删除的。</p>
-<p>最后我来做一下流量分析</p>
-<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260610182710249.png" alt="image-20260610182710249"></p>
-<p>可以看见这个程序发送了请求但是我这个虚拟机断网了没有完成三次握手就没有发送流量了</p>
-<p>下面的ioc和hash值</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="windows日志"><a href="#windows日志" class="headerlink" title="windows日志"></a>windows日志</h1><p>日志查看方法：win+r输入<strong>eventvwr.msc</strong>弹出事件查看器，日志的储存格式为evtx</p>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260719134528230.png" alt="image-20260719134528230"></p>
+<h2 id="1-安全日志"><a href="#1-安全日志" class="headerlink" title="1.安全日志"></a>1.安全日志</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">储存位置：C:\Windows\System32\Winevt\Logs\Security.evtx</span><br></pre></td></tr></table></figure>
+
+<p>主要存放安全事件及id</p>
 <table>
 <thead>
 <tr>
-<th>ip</th>
-<th>176.65.139.41</th>
-<th></th>
+<th>安全事件</th>
+<th>id</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>主程序隐藏副本</td>
-<td>&#x2F;data&#x2F;local&#x2F;tmp&#x2F;.fern_bot</td>
-<td></td>
+<td>成功登录，登录失败，账户加入管理员组，修改账户密码</td>
+<td>4624，4625，4732，4723</td>
 </tr>
 <tr>
-<td>主程序隐藏副本</td>
-<td>&#x2F;dev&#x2F;.fern_bot</td>
-<td></td>
+<td>管理员特权登录，调用系统高级权限，特权操作（修改权限、接管文件、篡改服务）</td>
+<td>4672，4673，4674</td>
 </tr>
 <tr>
-<td>主程序隐藏副本</td>
-<td>&#x2F;tmp&#x2F;.fern_bot</td>
-<td></td>
+<td>进程创建与程序执行（无文件执行、恶意脚本、远控程序启动）</td>
+<td>4688</td>
 </tr>
 <tr>
-<td>主程序隐藏副本</td>
-<td>&#x2F;sdcard&#x2F;.fern_bot</td>
-<td></td>
+<td>文件访问，注册表修改，对象权限变更</td>
+<td>4663，4657，4670</td>
 </tr>
 <tr>
-<td>主程序隐藏副本</td>
-<td>&#x2F;jffs&#x2F;.sysupd</td>
-<td></td>
+<td>新建系统服务，服务注册表权限变更</td>
+<td>4697，4656 &#x2F; 4657 &#x2F; 4670</td>
 </tr>
 <tr>
-<td>持久化文件路径</td>
-<td>&#x2F;etc&#x2F;init.d&#x2F;S99sysupd</td>
-<td>SysVinit 启动脚本</td>
+<td>建立 SMB 共享连接，访问共享内文件、读取共享资源</td>
+<td>5140，5145</td>
 </tr>
 <tr>
-<td>持久化文件路径</td>
-<td>&#x2F;etc&#x2F;hotplug.d&#x2F;iface&#x2F;99-sysupd</td>
-<td>Hotplug 事件触发</td>
+<td>清除日志行为</td>
+<td>4698</td>
 </tr>
 <tr>
-<td>持久化文件路径</td>
-<td>&#x2F;etc&#x2F;crontabs&#x2F;root</td>
-<td>Crontab 定时任务</td>
-</tr>
-<tr>
-<td>持久化文件路径</td>
-<td>&#x2F;data&#x2F;local&#x2F;tmp&#x2F;.dex</td>
-<td></td>
-</tr>
-<tr>
-<td>持久化文件路径</td>
-<td>&#x2F;data&#x2F;local&#x2F;tmp&#x2F;.sys</td>
-<td></td>
-</tr>
-<tr>
-<td>进程与系统 IOC</td>
-<td>fern_bot</td>
-<td></td>
-</tr>
-<tr>
-<td>进程与系统 IOC</td>
-<td>kworker</td>
-<td></td>
-</tr>
-<tr>
-<td>命令行 IOC</td>
-<td>&#96;while true; do grep -q ‘fernet_hb’ &#x2F;proc&#x2F;net&#x2F;unix</td>
-<td></td>
-</tr>
-<tr>
-<td>命令行 IOC</td>
-<td>adb connect %s:5555 &amp;&amp; adb push .fern_bot &#x2F;data&#x2F;local&#x2F;tmp&#x2F; &amp;&amp; adb shell chmod 777 .fern_bot &amp;&amp; adb shell nohup .&#x2F;fern_bot &amp;</td>
-<td>横向感染安卓设备的完整命令链</td>
+<td>设备插拔</td>
+<td>6416，6417</td>
 </tr>
 </tbody></table>
-<table>
+<h2 id="2-系统日志"><a href="#2-系统日志" class="headerlink" title="2.系统日志"></a>2.系统日志</h2><p>系统日志记录操作系统组件产生的事件，主要包括<strong>驱动程序、系统组件和应用软件的崩溃以及数据丢失错误</strong>等</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">储存位置：C:\Windows\System32\Winevt\Logs\System.evtx</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-应用日志"><a href="#3-应用日志" class="headerlink" title="3.应用日志"></a>3.应用日志</h2><p><strong>应用程序出现崩溃</strong>情况，那么我们可以从程序事件日志中找到相应的记录</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">储存位置：C:\Windows\System32\Winevt\Logs\Application.evtx</span><br></pre></td></tr></table></figure>
+
+<h1 id="Sysmon"><a href="#Sysmon" class="headerlink" title="Sysmon"></a>Sysmon</h1><p>终端增强审计工具，驱动层捕获进程、网络、DNS、DLL 注入、文件创建、注册表修改、远程线程注入等<strong>底层恶意行为</strong>，弥补系统日志缺失</p>
+<h2 id="1-启动用powershell启动，有不同的规则可以配置"><a href="#1-启动用powershell启动，有不同的规则可以配置" class="headerlink" title="1.启动用powershell启动，有不同的规则可以配置"></a>1.启动用powershell启动，有不同的规则可以配置</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysmon64.exe -i sysmonconfig-export.xml</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-在事件管理器中查看"><a href="#2-在事件管理器中查看" class="headerlink" title="2.在事件管理器中查看"></a>2.在事件管理器中查看</h2><p>查看路径：应用程序和服务日志 → Microsoft → Windows → Sysmon → Operational</p>
+<hr>
+<p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260719135754081.png" alt="image-20260719135754081"></p>
+<h2 id="3-常见查看的事件"><a href="#3-常见查看的事件" class="headerlink" title="3.常见查看的事件"></a>3.常见查看的事件</h2><table>
 <thead>
 <tr>
-<th>sha256</th>
-<th>3d91b861984bda9fb52b9c082a2839d0a11a9d83979c79676a8667472da8cc09</th>
+<th>ID</th>
+<th>事件名称</th>
+<th>核心监控行为</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>md5</td>
-<td>d2ec16db8621508cada2d9fd60127409</td>
+<td>1</td>
+<td>ProcessCreate</td>
+<td>创建进程</td>
 </tr>
 <tr>
-<td>sha1</td>
-<td>9f36ac3143357a25935d812f3cc738129188ec84</td>
+<td>5</td>
+<td>ProcessTerminate</td>
+<td>进程退出、程序关闭</td>
+</tr>
+<tr>
+<td>8</td>
+<td>CreateRemoteThread</td>
+<td>远程线程注入</td>
+</tr>
+<tr>
+<td>10</td>
+<td>ProcessAccess</td>
+<td>打开其他进程句柄、读取内存</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ImageLoad</td>
+<td>加载 DLL、驱动 sys，捕获劫持 &#x2F; 恶意模块</td>
+</tr>
+<tr>
+<td>3</td>
+<td>NetworkConnect</td>
+<td>TCP&#x2F;UDP 外联，记录进程、目标 IP 端口（C2 远控）</td>
+</tr>
+<tr>
+<td>22</td>
+<td>DNSEvent</td>
+<td>所有域名解析行为，捕获恶意域名</td>
+</tr>
+<tr>
+<td>11</td>
+<td>FileCreate</td>
+<td>文件新建、覆盖写入</td>
+</tr>
+<tr>
+<td>23</td>
+<td>FileDelete</td>
+<td>文件直接删除</td>
+</tr>
+<tr>
+<td>26</td>
+<td>FileDeleteOnClose</td>
+<td>关闭后自删（内存马、无文件攻击常用）</td>
+</tr>
+<tr>
+<td>15</td>
+<td>FileCreateStreamHash</td>
+<td>NTFS 备用数据流 ADS（隐藏恶意文件）</td>
+</tr>
+<tr>
+<td>12</td>
+<td>RegistryKeyEvent</td>
+<td>注册表项 创建 &#x2F; 删除</td>
+</tr>
+<tr>
+<td>13</td>
+<td>RegistryValueSet</td>
+<td>注册表键值修改（Run 启动项劫持）</td>
+</tr>
+<tr>
+<td>14</td>
+<td>RegistryKeyDelete</td>
+<td>删除注册表项，清理后门痕迹</td>
+</tr>
+<tr>
+<td>17</td>
+<td>PipeCreated</td>
+<td>创建命名管道</td>
+</tr>
+<tr>
+<td>18</td>
+<td>PipeConnected</td>
+<td>管道建立连接（PsExec、横向渗透）</td>
+</tr>
+<tr>
+<td>19</td>
+<td>WmiEventFilter</td>
+<td>创建 WMI 事件过滤器</td>
+</tr>
+<tr>
+<td>20</td>
+<td>WmiEventConsumer</td>
+<td>注册 WMI 事件消费者</td>
+</tr>
+<tr>
+<td>21</td>
+<td>WmiEventConsumerToFilter</td>
+<td>绑定过滤器与消费者</td>
+</tr>
+<tr>
+<td>9</td>
+<td>RawAccessRead</td>
+<td>底层读取磁盘卷（窃取影子副本、凭证文件）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>DriverLoad</td>
+<td>驱动加载事件</td>
+</tr>
+<tr>
+<td>24</td>
+<td>ProcessProtectChange</td>
+<td>进程内存保护修改（篡改内存权限执行 shellcode）</td>
 </tr>
 </tbody></table>
+<h2 id="4-卸载服务"><a href="#4-卸载服务" class="headerlink" title="4.卸载服务"></a>4.卸载服务</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sysmon64.exe <span class="literal">-u</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -455,7 +491,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://woshinext.top/2026/06/10/elf%E6%96%87%E4%BB%B6%E6%9C%A8%E9%A9%AC/" title="elf文件蠕虫木马病毒">https://woshinext.top/2026/06/10/elf文件木马/</a>
+      <a href="https://woshinext.top/2026/07/19/windows%E6%97%A5%E5%BF%97-Sysmon/" title="windows日志+Sysmon">https://woshinext.top/2026/07/19/windows日志-Sysmon/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -500,24 +536,16 @@
   </div>
 </div>
 
-          <div class="post-tags">
-              <a href="/tags/%E6%9C%A8%E9%A9%AC/" rel="tag"><i class="fa fa-tag"></i> 木马</a>
-              <a href="/tags/ELF/" rel="tag"><i class="fa fa-tag"></i> ELF</a>
-              <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
-          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2026/05/27/5-27-%E9%93%B6%E7%8B%90%E6%9C%A8%E9%A9%AC%E5%88%86%E6%9E%90/" rel="prev" title="5.27-银狐木马分析">
-                  <i class="fa fa-angle-left"></i> 5.27-银狐木马分析
+                <a href="/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/" rel="prev" title="总结和反思">
+                  <i class="fa fa-angle-left"></i> 总结和反思
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/06/15/%E6%80%BB%E7%BB%93%E5%92%8C%E5%8F%8D%E6%80%9D/" rel="next" title="总结和反思">
-                  总结和反思 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
