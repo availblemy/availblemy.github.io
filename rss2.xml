@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>next的小站</title>
+    <title>Next的小站</title>
     <link>https://woshinext.top/</link>
     <description>恶意代码分析，威胁情报，逆向工程</description>
     <language>zh-CN</language>
