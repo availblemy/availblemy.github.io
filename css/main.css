@@ -1591,7 +1591,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #cfff41;
+    background: #ff6bdb;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3304,6 +3304,8 @@ header.header {
   --cat-log-text: #b7950b;
   --cat-other: #f4ecf7;
   --cat-other-text: #7d3c98;
+  --cat-web: #fef0e5;
+  --cat-web-text: #d35400;
   --cat-default: #f5f5f5;
   --cat-default-text: #7f8c8d;
 }
@@ -3486,6 +3488,13 @@ header.header {
 .main-inner.index .post-block.post-featured.cat-其他:hover {
   box-shadow: 0 0 12px rgba(125,60,152,0.3), 0 0 28px rgba(125,60,152,0.12), var(--card-shadow-hover) !important;
 }
+.main-inner.index .post-block.post-featured.cat-Web安全 {
+  border-color: var(--cat-web-text) !important;
+  box-shadow: 0 0 8px rgba(211,84,0,0.2), 0 0 20px rgba(211,84,0,0.08), var(--card-shadow) !important;
+}
+.main-inner.index .post-block.post-featured.cat-Web安全:hover {
+  box-shadow: 0 0 12px rgba(211,84,0,0.3), 0 0 28px rgba(211,84,0,0.12), var(--card-shadow-hover) !important;
+}
 .main-inner.index .post-meta .post-meta-item [itemprop="about"] a {
   background: var(--cat-default);
   color: var(--cat-default-text);
@@ -3538,6 +3547,14 @@ header.header {
 .main-inner.index .post-block:has([itemprop="about"] a[href*="其他"]) .post-meta .post-meta-item [itemprop="about"] a {
   background: var(--cat-other);
   color: var(--cat-other-text);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="Web%E5%AE%89%E5%85%A8"])::before,
+.main-inner.index .post-block:has([itemprop="about"] a[href*="/categories/Web安全/"])::before {
+  background: var(--cat-web);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="Web安全"]) .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-web);
+  color: var(--cat-web-text);
 }
 .posts-expand:not(.main-inner.index.posts-expand) .post-block,
 .main-inner:not(.index) .post-block {
@@ -3749,6 +3766,8 @@ html[data-theme="dark"] {
   --cat-log-text: #f9e79f;
   --cat-other: #2d1f3d;
   --cat-other-text: #d7bde2;
+  --cat-web: #3d2a1a;
+  --cat-web-text: #f5b041;
   --cat-default: #2a2a2a;
 }
 html[data-theme="dark"] .post-block {
