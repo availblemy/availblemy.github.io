@@ -20,12 +20,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":260,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js?v=20260809" defer></script>
 
-    <meta name="description" content="DVWA本文章环境介绍：kali linux作为攻击机，windows10作为DVWA靶机，SIME采集用的是wazuh    Brute Forcelow攻击将密码设定为变量，使用爆破集来爆破 根据相应长度判断password为正确密码  防御在wazuh中可以看见来自kali的DHCP记录Suricata保存相应的pcap可用于分析 C:\Program Files\Suricata\log&amp;">
+    <meta name="description" content="DVWA本文章环境介绍：kali linux作为攻击机，windows10作为DVWA靶机，SIEM采集用的是wazuh    Brute Forcelow攻击将密码设定为变量，使用爆破集来爆破 根据相应长度判断password为正确密码  防御在wazuh中可以看见来自kali的DHCP记录Suricata保存相应的pcap可用于分析 C:\Program Files\Suricata\log&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DVWA靶场练习-soc视角">
 <meta property="og:url" content="https://woshinext.top/2026/08/04/DVWA%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0-soc%E8%A7%86%E8%A7%92/index.html">
 <meta property="og:site_name" content="Next的小站">
-<meta property="og:description" content="DVWA本文章环境介绍：kali linux作为攻击机，windows10作为DVWA靶机，SIME采集用的是wazuh    Brute Forcelow攻击将密码设定为变量，使用爆破集来爆破 根据相应长度判断password为正确密码  防御在wazuh中可以看见来自kali的DHCP记录Suricata保存相应的pcap可用于分析 C:\Program Files\Suricata\log&amp;">
+<meta property="og:description" content="DVWA本文章环境介绍：kali linux作为攻击机，windows10作为DVWA靶机，SIEM采集用的是wazuh    Brute Forcelow攻击将密码设定为变量，使用爆破集来爆破 根据相应长度判断password为正确密码  防御在wazuh中可以看见来自kali的DHCP记录Suricata保存相应的pcap可用于分析 C:\Program Files\Suricata\log&amp;">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260804150046347.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260804150118346.png">
@@ -40,7 +40,7 @@
 <meta property="og:image" content="c:\Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20260808180022106.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260808200647537.png">
 <meta property="article:published_time" content="2026-08-04T06:58:00.000Z">
-<meta property="article:modified_time" content="2026-08-08T12:37:13.158Z">
+<meta property="article:modified_time" content="2026-08-09T14:22:58.161Z">
 <meta property="article:author" content="Next">
 <meta property="article:tag" content="—漏洞">
 <meta name="twitter:card" content="summary">
@@ -306,7 +306,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="DVWA"><a href="#DVWA" class="headerlink" title="DVWA"></a>DVWA</h1><p>本文章环境介绍：kali linux作为攻击机，windows10作为DVWA靶机，SIME采集用的是wazuh</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="DVWA"><a href="#DVWA" class="headerlink" title="DVWA"></a>DVWA</h1><p>本文章环境介绍：kali linux作为攻击机，windows10作为DVWA靶机，SIEM采集用的是wazuh</p>
 <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260804150046347.png" alt="image-20260804150046347"></p>
 <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260804150118346.png" alt="image-20260804150118346"></p>
 <p><img data-src="https://cdn.jsdelivr.net/gh/availblemy/blog-img@main/img/image-20260804150514604.png" alt="image-20260804150514604"></p>
