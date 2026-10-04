@@ -35,9 +35,19 @@ jobs:
           node scripts/sync-projects.js
 
       - name: Generate and Deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.HEXO_PROJECTS_SYNC }}
         run: |
+          # Use token in deploy URL for authentication
           npx hexo clean
           npx hexo generate
+          DEPLOY_REPO="https://x-access-token:${GITHUB_TOKEN}@github.com/availblemy/availblemy.github.io.git"
+          node -e "
+            const fs = require('fs');
+            let c = fs.readFileSync('_config.yml','utf-8');
+            c = c.replace(/repo: https:\/\/github\.com\/.+\.git/, 'repo: ' + process.env.DEPLOY_REPO);
+            fs.writeFileSync('_config.yml', c);
+          "
           npx hexo deploy
 
       - name: Commit updated project data
