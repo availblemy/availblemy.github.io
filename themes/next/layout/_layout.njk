@@ -139,8 +139,6 @@
     
     new MutationObserver(function(){var isDark=document.documentElement.getAttribute('data-theme')==='dark'||document.documentElement.classList.contains('dark');if(isDark){pet.classList.add('pet-dark');say(pick(msgs.dark));}else{pet.classList.remove('pet-dark');say(pick(msgs.light));}}).observe(document.documentElement,{attributes:true,attributeFilter:['class','data-theme']});
 
-    // 滚动>300px时猫有光晕提示可返回顶部
-    window.addEventListener('scroll',function(){if(window.scrollY>300){pet.classList.add('pet-can-top');}else{pet.classList.remove('pet-can-top');}},{passive:true});
     
     wrapper.classList.add('pet-enter');
     setTimeout(function(){say(pick(msgs.welcome));setExpr('happy');setTimeout(resetEyes,2000);},600);
@@ -153,7 +151,7 @@
   <style>
   .pet-wrapper{position:fixed;right:20px;bottom:20px;z-index:999;opacity:0;transform:translateY(30px) scale(0.6);transition:all .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
   .pet-wrapper.pet-enter{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
-  .pet{position:relative;cursor:pointer;animation:pet-idle 3s ease-in-out infinite;image-rendering:pixelated;image-rendering:-moz-crisp-edges;transition:transform .2s,box-shadow .3s;}
+  .pet{position:relative;cursor:pointer;animation:pet-idle 3s ease-in-out infinite;image-rendering:pixelated;image-rendering:-moz-crisp-edges;transition:transform .2s;}
   .pet:hover{transform:scale(1.1);}
   .pet:hover .pet-tail{animation:tail-wag .25s ease-in-out infinite alternate;}
   .pet-bubble{position:absolute;bottom:100%;right:0;margin-bottom:8px;background:#fff;border:2px solid #f4a460;border-radius:10px;padding:6px 12px;font-size:.78em;color:#444;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:0;transform:translateY(6px) scale(.8);transition:all .3s cubic-bezier(.68,-.55,.265,1.55);pointer-events:none;}
@@ -161,7 +159,6 @@
   .pet-bubble::after{content:'';position:absolute;bottom:-5px;right:17px;border:5px solid transparent;border-top-color:#fff;}
   .pet-bubble.pop{opacity:1;transform:translateX(0) scale(1);}
   .pet-sleeping{animation:pet-sleep 2.5s ease-in-out infinite!important;}
-  .pet-can-top{box-shadow:0 0 12px rgba(244,164,96,.5),0 0 24px rgba(244,164,96,.25);animation:pet-glow-pulse 1.8s ease-in-out infinite alternate!important;}
   .pet-fly{animation:pet-fly-up .6s ease-out!important;}
   .pet-spin{animation:pet-spin-360 .45s ease!important;}
   @keyframes pet-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -170,7 +167,6 @@
   @keyframes pet-fly-up{0%{transform:translateY(0)}40%{transform:translateY(-35px);opacity:1}100%{transform:translateY(0);opacity:1}}
   @keyframes pet-spin-360{from{transform:rotate(0deg)scale(1.1)}to{transform:rotate(360deg)scale(1.1)}}
   @keyframes tail-wag{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
-  @keyframes pet-glow-pulse{from{box-shadow:0 0 12px rgba(244,164,96,.5),0 0 24px rgba(244,164,96,.25)}to{box-shadow:0 0 18px rgba(244,164,96,.7),0 0 36px rgba(244,164,96,.35)}}
   html[data-theme="dark"] .pet-dark svg rect[fill="#f4a460"]{fill:#c98a54;}html[data-theme="dark"] .pet-dark .pet-bubble{background:#161b22;border-color:#d29966;color:#e6edf3;}html[data-theme="dark"] .pet-dark .pet-bubble::before{border-left-color:#d29966;}html[data-theme="dark"] .pet-dark .pet-bubble::after{border-left-color:#161b22;}
   @media(max-width:768px){.pet-wrapper{right:10px;bottom:10px;}.pet svg{width:40px;height:40px;}.pet-bubble{display:none;}}
   </style>
