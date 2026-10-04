@@ -94,7 +94,6 @@
       sleep: ['zzZ... 💤', '好困啊... 😪', '让我眯一会...'],
       dark: ['天黑了~ 🌙', '晚上好呀 🐱‍👤'],
       light: ['早上好~ ☀️', '新的一天！🌅'],
-      top: ['嗖~ 到顶了！⬆️', '飞上去啦~ 🚀'],
       konami: ['🎮 你发现了彩蛋！', '连击大师！🔥']
     };
     
@@ -115,8 +114,6 @@
     
     pet.addEventListener('click',function(e){
       clickCount++;state='happy';setExpr('happy');
-      // 滚动超过300px时，点击猫=返回顶部
-      if(window.scrollY>300&&clickCount<=1){say(pick(msgs.top));pet.classList.add('pet-fly');setTimeout(function(){pet.classList.remove('pet-fly')},700);window.scrollTo({top:0,behavior:'smooth'});resetSleep();setTimeout(resetEyes,1000);return;}
       if(clickCount>=8){say(pick(msgs.konami));pet.classList.add('pet-spin');setTimeout(function(){pet.classList.remove('pet-spin')},600);clickCount=0;}
       else{say(pick(msgs.click));}
       pet.style.animation='none';pet.offsetHeight;pet.style.animation='pet-jump .4s ease';
@@ -159,12 +156,10 @@
   .pet-bubble::after{content:'';position:absolute;bottom:-5px;right:17px;border:5px solid transparent;border-top-color:#fff;}
   .pet-bubble.pop{opacity:1;transform:translateX(0) scale(1);}
   .pet-sleeping{animation:pet-sleep 2.5s ease-in-out infinite!important;}
-  .pet-fly{animation:pet-fly-up .6s ease-out!important;}
   .pet-spin{animation:pet-spin-360 .45s ease!important;}
   @keyframes pet-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
   @keyframes pet-jump{0%{transform:translateY(0)}30%{transform:translateY(-14px)scale(1.05)}50%{transform:translateY(-8px)}70%{transform:translateY(-2px)scale(.97)}100%{transform:translateY(0)}}
   @keyframes pet-sleep{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
-  @keyframes pet-fly-up{0%{transform:translateY(0)}40%{transform:translateY(-35px);opacity:1}100%{transform:translateY(0);opacity:1}}
   @keyframes pet-spin-360{from{transform:rotate(0deg)scale(1.1)}to{transform:rotate(360deg)scale(1.1)}}
   @keyframes tail-wag{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
   html[data-theme="dark"] .pet-dark svg rect[fill="#f4a460"]{fill:#c98a54;}html[data-theme="dark"] .pet-dark .pet-bubble{background:#161b22;border-color:#d29966;color:#e6edf3;}html[data-theme="dark"] .pet-dark .pet-bubble::before{border-left-color:#d29966;}html[data-theme="dark"] .pet-dark .pet-bubble::after{border-left-color:#161b22;}
