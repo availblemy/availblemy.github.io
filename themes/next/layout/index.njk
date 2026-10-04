@@ -3,16 +3,59 @@
 
 {% block title %}{{ title }}{% if theme.index_with_subtitle and subtitle %} - {{ subtitle }}{% endif %}{% endblock %}
 
-{% block class %}index posts-expand{% endblock %}
+{% block class %}index custom-home{% endblock %}
 
 {% block content %}
+<div class="hero">
+  <div class="hero-avatar"><i class="fa fa-shield"></i></div>
+  <div class="hero-name">MalCode</div>
+  <div class="hero-title">威胁情报 &amp; 恶意软件分析</div>
+  <div class="hero-bio">专注于恶意软件逆向工程、威胁情报研究。擅长 PE/ELF/.NET 分析、Shellcode 解密、OLLVM 去混淆，以及 C2 协议还原。</div>
+  <div class="hero-links">
+    <a href="/projects/"><i class="fa fa-code"></i> 开源项目</a>
+    <a href="https://github.com/availblemy" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+    <a href="/archives/"><i class="fa fa-book-open"></i> 技术文章</a>
+  </div>
+</div>
 
-  {%- for post in page.posts.toArray() %}
-    {{ partial('_macro/post.njk', {post: post, is_index: true}) }}
-  {%- endfor %}
-
-  {%- include '_partials/pagination.njk' -%}
-
+<div class="home-sections">
+  <div>
+    <div class="section-header">
+      <h2><i class="fa fa-code"></i> 最近项目</h2>
+      <a href="/projects/">查看全部 &rarr;</a>
+    </div>
+    <div id="projects-preview" style="display:grid;gap:14px;">
+      <div style="padding:20px;border:1px dashed #ddd;border-radius:10px;text-align:center;color:#999;font-size:.9em;">
+        <i class="fa fa-folder-open-o" style="font-size:1.5em;display:block;margin-bottom:8px;"></i>
+        项目数据同步中...<br><small style="color:#bbb;">前往 <a href="/projects/" style="color:#3572b0;">项目页</a> 查看</small>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="section-header">
+      <h2><i class="fa fa-pencil"></i> 最近文章</h2>
+      <a href="/archives/">查看全部 &rarr;</a>
+    </div>
+    <div class="recent-posts-grid">
+      {%- for post in site.posts.sort('date', -1).limit(4) %}
+      <a href="{{ url_for(post.path) }}" class="post-card">
+        <h3 class="post-card-title">{{ post.title }}</h3>
+        {%- if post.excerpt %}
+        <p class="post-card-desc">{{ post.excerpt | striptags | truncate(80) }}</p>
+        {%- else %}
+        <p class="post-card-desc">{{ post.content | striptags | truncate(80) }}</p>
+        {%- endif %}
+        <div class="post-card-meta">
+          {%- if post.categories.length %}
+          <span class="post-card-cat">{{ post.categories.first() }}</span>
+          {%- endif %}
+          <span>{{ date(post.date, 'YYYY-MM-DD') }}</span>
+        </div>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block sidebar %}
