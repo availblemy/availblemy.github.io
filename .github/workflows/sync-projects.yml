@@ -29,7 +29,7 @@ jobs:
 
       - name: Fetch projects from GitHub API
         env:
-          GITHUB_TOKEN: ${{ secrets.PROJECTS_PAT }}
+          GITHUB_TOKEN: ${{ secrets.HEXO_PROJECTS_SYNC }}
         run: |
           node scripts/sync-projects.js
 
