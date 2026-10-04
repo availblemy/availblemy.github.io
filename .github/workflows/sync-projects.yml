@@ -14,10 +14,6 @@ jobs:
     steps:
       - name: Checkout blog source (hexo branch)
         uses: actions/checkout@v4
-        with:
-          repository: availblemy/availblemy.github.io
-          ref: hexo
-          token: ${{ secrets.BLOG_PAT }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -29,7 +25,7 @@ jobs:
 
       - name: Fetch projects from GitHub API
         env:
-          GITHUB_TOKEN: ${{ secrets.HEXO_PROJECTS_SYNC }}
+          GITHUB_TOKEN: *** secrets.HEXO_PROJECTS_SYNC }}
         run: |
           node scripts/sync-projects.js
 
