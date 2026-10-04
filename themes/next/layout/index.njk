@@ -37,22 +37,7 @@
       <a href="/archives/">查看全部 &rarr;</a>
     </div>
     <div class="recent-posts-grid">
-      {%- for post in site.posts.sort('date', -1).limit(4) %}
-      <a href="{{ url_for(post.path) }}" class="post-card">
-        <h3 class="post-card-title">{{ post.title }}</h3>
-        {%- if post.excerpt %}
-        <p class="post-card-desc">{{ post.excerpt | striptags | truncate(80) }}</p>
-        {%- else %}
-        <p class="post-card-desc">{{ post.content | striptags | truncate(80) }}</p>
-        {%- endif %}
-        <div class="post-card-meta">
-          {%- if post.categories.length %}
-          <span class="post-card-cat">{{ post.categories.first() }}</span>
-          {%- endif %}
-          <span>{{ date(post.date, 'YYYY-MM-DD') }}</span>
-        </div>
-      </a>
-      {%- endfor %}
+      {{ recent_posts_html }}
     </div>
   </div>
 </div>
