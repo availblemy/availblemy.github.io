@@ -1,14 +1,10 @@
 ---
-title: 开源项目
+title: GitHub开源项目
 layout: page
 comments: false
 ---
 
 <style>
-/* Page header */
-.projects-page-header { text-align: center; margin: 30px 0 40px; }
-.projects-page-header h2 { font-size: 2em; margin-bottom: 10px; color: var(--text-color, #333); }
-.projects-page-header p { color: var(--text-secondary, #999); font-size: 1.05em; }
 /* Grid */
 .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin: 20px 0 40px; }
 /* Card */
@@ -40,11 +36,6 @@ html[data-theme="dark"] .lang-name { color: #8b949e; }
 /* Responsive */
 @media (max-width: 480px) { .projects-grid { grid-template-columns: 1fr; } .project-card { padding: 22px 20px; } }
 </style>
-
-<div class="projects-page-header">
-  <h2><i class="fa fa-folder-open-o"></i> 开源项目</h2>
-  <p>一些我在安全研究和逆向工程中的实践项目</p>
-</div>
 
 <div class="projects-grid">
   <a class="project-card" href="https://github.com/availblemy/projects/tree/main/test" target="_blank" rel="noopener">
