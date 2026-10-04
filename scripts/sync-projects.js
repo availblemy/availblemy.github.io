@@ -141,7 +141,7 @@ async function main() {
     '</style>\n\n' +
     '<div class="projects-grid">\n' + cardsHtml + '\n</div>\n';
 
-  var outPath = path.join(__dirname, '..', 'source', 'projects', 'index.md');
+  var outPath = path2.join(__dirname, '..', 'source', 'projects', 'index.md');
   fs2.writeFileSync(outPath, mdContent, 'utf-8');
   console.log('[done] generated ' + outPath + ' with ' + projectData.length + ' projects');
 }
