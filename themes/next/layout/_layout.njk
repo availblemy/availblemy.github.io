@@ -75,10 +75,6 @@
       </svg>
       <!-- 气泡 -->
       <div class="pet-bubble" id="pet-bubble">喵~</div>
-      <!-- 返回顶部 -->
-      <div class="pet-top-btn" id="pet-top" title="返回顶部">▲</div>
-      <!-- 天数 -->
-      <div class="pet-days" id="pet-days"></div>
     </div>
   </div>
 
@@ -86,8 +82,6 @@
   (function(){
     var pet = document.getElementById('pet');
     var bubble = document.getElementById('pet-bubble');
-    var topBtn = document.getElementById('pet-top');
-    var daysEl = document.getElementById('pet-days');
     var wrapper = document.getElementById('pet-wrapper');
     
     var state = 'idle';
@@ -120,9 +114,10 @@
     function resetEyes(){ setExpr('normal'); }
     
     pet.addEventListener('click',function(e){
-      if(e.target===topBtn||topBtn.contains(e.target))return;
       clickCount++;state='happy';setExpr('happy');
-      if(clickCount>=7){say(pick(msgs.konami));pet.classList.add('pet-spin');setTimeout(function(){pet.classList.remove('pet-spin')},600);clickCount=0;}
+      // 滚动超过300px时，点击猫=返回顶部
+      if(window.scrollY>300&&clickCount<=1){say(pick(msgs.top));pet.classList.add('pet-fly');setTimeout(function(){pet.classList.remove('pet-fly')},700);window.scrollTo({top:0,behavior:'smooth'});resetSleep();setTimeout(resetEyes,1000);return;}
+      if(clickCount>=8){say(pick(msgs.konami));pet.classList.add('pet-spin');setTimeout(function(){pet.classList.remove('pet-spin')},600);clickCount=0;}
       else{say(pick(msgs.click));}
       pet.style.animation='none';pet.offsetHeight;pet.style.animation='pet-jump .4s ease';
       resetSleep();setTimeout(resetEyes,1000);
@@ -138,37 +133,35 @@
       if(pr){pr.setAttribute('x',19+Math.round(dx));pr.setAttribute('y',12+Math.round(dy));}
     });
     
-    topBtn.addEventListener('click',function(e){e.stopPropagation();window.scrollTo({top:0,behavior:'smooth'});say(pick(msgs.top));pet.classList.add('pet-fly');setTimeout(function(){pet.classList.remove('pet-fly')},700);});
-    window.addEventListener('scroll',function(){topBtn.style.opacity=window.scrollY>300?'1':'0';topBtn.style.pointerEvents=window.scrollY>300?'auto':'none';});
-    
+
     function resetSleep(){clearTimeout(sleepTimer);pet.classList.remove('pet-sleeping');if(state==='sleep'){resetEyes();state='idle';}startSleep();}
     function startSleep(){clearTimeout(sleepTimer);sleepTimer=setTimeout(function(){state='sleep';setExpr('sleep');say(pick(msgs.sleep));pet.classList.add('pet-sleeping');},15000);}
     
     new MutationObserver(function(){var isDark=document.documentElement.getAttribute('data-theme')==='dark'||document.documentElement.classList.contains('dark');if(isDark){pet.classList.add('pet-dark');say(pick(msgs.dark));}else{pet.classList.remove('pet-dark');say(pick(msgs.light));}}).observe(document.documentElement,{attributes:true,attributeFilter:['class','data-theme']});
+
+    // 滚动>300px时猫有光晕提示可返回顶部
+    window.addEventListener('scroll',function(){if(window.scrollY>300){pet.classList.add('pet-can-top');}else{pet.classList.remove('pet-can-top');}},{passive:true});
     
     wrapper.classList.add('pet-enter');
     setTimeout(function(){say(pick(msgs.welcome));setExpr('happy');setTimeout(resetEyes,2000);},600);
     startSleep();
     
-    (function(){var s=new Date('2026-01-01');var n=new Date();var d=Math.floor((n-s)/86400000);if(daysEl&&d>0)daysEl.textContent='Day '+d;})();
-    ['mousedown','keydown','touchstart'].forEach(function(e){document.addEventListener(e,resetSleep,{passive:true});});
+['mousedown','keydown','touchstart'].forEach(function(e){document.addEventListener(e,resetSleep,{passive:true});});
   })();
   </script>
 
   <style>
   .pet-wrapper{position:fixed;right:20px;bottom:20px;z-index:999;opacity:0;transform:translateY(30px) scale(0.6);transition:all .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
   .pet-wrapper.pet-enter{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
-  .pet{position:relative;cursor:pointer;animation:pet-idle 3s ease-in-out infinite;image-rendering:pixelated;image-rendering:-moz-crisp-edges;transition:transform .2s;}
+  .pet{position:relative;cursor:pointer;animation:pet-idle 3s ease-in-out infinite;image-rendering:pixelated;image-rendering:-moz-crisp-edges;transition:transform .2s,box-shadow .3s;}
   .pet:hover{transform:scale(1.1);}
   .pet:hover .pet-tail{animation:tail-wag .25s ease-in-out infinite alternate;}
   .pet-bubble{position:absolute;bottom:100%;right:0;margin-bottom:8px;background:#fff;border:2px solid #f4a460;border-radius:10px;padding:6px 12px;font-size:.78em;color:#444;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:0;transform:translateY(6px) scale(.8);transition:all .3s cubic-bezier(.68,-.55,.265,1.55);pointer-events:none;}
   .pet-bubble::before{content:'';position:absolute;bottom:-7px;right:16px;border:6px solid transparent;border-top-color:#f4a460;}
   .pet-bubble::after{content:'';position:absolute;bottom:-5px;right:17px;border:5px solid transparent;border-top-color:#fff;}
   .pet-bubble.pop{opacity:1;transform:translateX(0) scale(1);}
-  .pet-top-btn{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;width:26px;height:26px;background:linear-gradient(135deg,#f4a460,#e8943a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62em;color:#fff;cursor:pointer;opacity:0;pointer-events:none;transition:all .25s;box-shadow:0 2px 5px rgba(244,164,96,.4);font-weight:bold;line-height:1;border:2px solid rgba(255,255,255,.3);}
-  .pet-top-btn:hover{transform:translateX(-50%) scale(1.15);background:linear-gradient(135deg,#e8943a,#d4852f);}
-  .pet-days{position:absolute;top:50%;right:100%;margin-right:6px;transform:translateY(-50%);font-size:.64em;color:#bbb;background:rgba(255,255,255,.85);padding:2px 5px;border-radius:6px;white-space:nowrap;font-family:monospace;border:1px solid #eee;}
   .pet-sleeping{animation:pet-sleep 2.5s ease-in-out infinite!important;}
+  .pet-can-top{box-shadow:0 0 12px rgba(244,164,96,.5),0 0 24px rgba(244,164,96,.25);animation:pet-glow-pulse 1.8s ease-in-out infinite alternate!important;}
   .pet-fly{animation:pet-fly-up .6s ease-out!important;}
   .pet-spin{animation:pet-spin-360 .45s ease!important;}
   @keyframes pet-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
@@ -177,8 +170,9 @@
   @keyframes pet-fly-up{0%{transform:translateY(0)}40%{transform:translateY(-35px);opacity:1}100%{transform:translateY(0);opacity:1}}
   @keyframes pet-spin-360{from{transform:rotate(0deg)scale(1.1)}to{transform:rotate(360deg)scale(1.1)}}
   @keyframes tail-wag{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
-  html[data-theme="dark"] .pet-dark svg rect[fill="#f4a460"]{fill:#c98a54;}html[data-theme="dark"] .pet-dark .pet-bubble{background:#161b22;border-color:#d29966;color:#e6edf3;}html[data-theme="dark"] .pet-dark .pet-bubble::before{border-left-color:#d29966;}html[data-theme="dark"] .pet-dark .pet-bubble::after{border-left-color:#161b22;}html[data-theme="dark"] .pet-days{background:rgba(22,27,34,.85);color:#8b949e;border-color:#30363d;}
-  @media(max-width:768px){.pet-wrapper{right:10px;bottom:10px;}.pet svg{width:40px;height:40px;}.pet-bubble{display:none;}.pet-days{display:none;}}
+  @keyframes pet-glow-pulse{from{box-shadow:0 0 12px rgba(244,164,96,.5),0 0 24px rgba(244,164,96,.25)}to{box-shadow:0 0 18px rgba(244,164,96,.7),0 0 36px rgba(244,164,96,.35)}}
+  html[data-theme="dark"] .pet-dark svg rect[fill="#f4a460"]{fill:#c98a54;}html[data-theme="dark"] .pet-dark .pet-bubble{background:#161b22;border-color:#d29966;color:#e6edf3;}html[data-theme="dark"] .pet-dark .pet-bubble::before{border-left-color:#d29966;}html[data-theme="dark"] .pet-dark .pet-bubble::after{border-left-color:#161b22;}
+  @media(max-width:768px){.pet-wrapper{right:10px;bottom:10px;}.pet svg{width:40px;height:40px;}.pet-bubble{display:none;}}
   </style>
 
   {{- next_inject('bodyEnd') }}
