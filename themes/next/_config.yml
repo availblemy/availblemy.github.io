@@ -1,0 +1,448 @@
+# ===============================================================
+# NexT Theme Configuration — 恶意代码分析技术博客
+# ===============================================================
+
+# ---------------------------------------------------------------
+# Theme Core Configuration Settings
+# ---------------------------------------------------------------
+
+cache:
+  enable: true
+
+minify: false
+
+custom_file_path:
+  style: source/_data/styles.styl
+
+
+# ---------------------------------------------------------------
+# Scheme Settings
+# ---------------------------------------------------------------
+
+scheme: Pisces
+
+darkmode: true
+
+lightdark:
+  enable: true
+  check_supports: true
+
+
+# ---------------------------------------------------------------
+# Site Information Settings
+# ---------------------------------------------------------------
+
+favicon:
+  small: /images/favicon-16x16-next.png
+  medium: /images/favicon-32x32-next.png
+  apple_touch_icon: /images/apple-touch-icon-next.png
+  safari_pinned_tab: /images/logo.svg
+
+custom_logo: #/uploads/custom-logo.png
+
+creative_commons:
+  license: by-nc-sa
+  size: small
+  sidebar: false
+  post: true
+
+open_graph:
+  enable: true
+
+
+# ---------------------------------------------------------------
+# Menu Settings
+# ---------------------------------------------------------------
+
+menu:
+  首页: / || fa fa-home
+  归档: /archives/ || fa fa-archive
+  关于: /about/ || fa fa-user
+  项目: /projects/ || fa fa-code
+  样本分析: /categories/样本分析/ || fa fa-bug
+  流量分析: /categories/流量分析/ || fa fa-network-wired
+  逆向基础: /categories/逆向基础/ || fa fa-microscope
+  日志分析: /categories/日志分析/ || fa fa-clipboard-list
+  Web安全: /categories/Web安全/ || fa fa-globe-americas
+  其他: /categories/其他/ || fa fa-ellipsis-h
+  标签: /tags/ || fa fa-tags
+
+menu_settings:
+  icons: true
+  badges: true
+
+
+# ---------------------------------------------------------------
+# Sidebar Settings
+# ---------------------------------------------------------------
+
+sidebar:
+  position: left
+  width_expanded: 320
+  width_dual_column: 260
+  display: post
+  padding: 18
+  offset: 12
+
+avatar:
+  url: #/images/avatar.gif
+  rounded: true
+  rotated: false
+
+site_state: true
+
+social:
+  GitHub: https://github.com/availblemy || fab fa-github
+
+social_icons:
+  enable: true
+  icons_only: false
+  transition: true
+
+links_settings:
+  icon: fa fa-globe
+  layout: block
+
+links:
+
+toc:
+  enable: true
+  number: true
+  wrap: true
+  expand_all: false
+  max_depth: 4
+
+
+# ---------------------------------------------------------------
+# Footer Settings
+# ---------------------------------------------------------------
+
+language_switcher: false
+
+footer:
+  icon:
+    name: fa fa-heart
+    animated: true
+    color: "#ff0000"
+  copyright: true
+  powered:
+    enable: true
+    heart: true
+  beian:
+    enable: false
+    icp:
+    gongan_id:
+    gongan_num:
+    gongan_icon_url:
+
+
+# ---------------------------------------------------------------
+# Post Settings
+# ---------------------------------------------------------------
+
+excerpt_description: false
+
+auto_excerpt:
+  enable: true
+  length: 250
+
+read_more_btn: true
+
+post_meta:
+  item_text: true
+  created_at: true
+  updated_at:
+    enable: false
+    another_day: true
+  categories: true
+  tags: true
+
+symbols_count_time:
+  separated_meta: true
+  item_text_total: true
+
+tag_icon: true
+
+reward_settings:
+  enable: false
+  animation: false
+
+follow_me:
+  个人博客: https://woshinext.top || fa fa-globe
+  CSDN: https://blog.csdn.net/2401_86516690?type=blog || fa fa-pencil
+  看雪论坛: https://bbs.kanxue.com/homepage-1081539.htm || fa fa-shield
+
+related_posts:
+  enable: true
+  icon: fa fa-signs-post
+  title: 相关文章
+
+post_edit:
+  enable: false
+
+post_navigation: left
+
+
+# ---------------------------------------------------------------
+# Custom Page Settings
+# ---------------------------------------------------------------
+
+tagcloud:
+  min: 14
+  max: 32
+  amount: 200
+  orderby: name
+  order: 1
+
+
+# ---------------------------------------------------------------
+# Misc Theme Settings
+# ---------------------------------------------------------------
+
+preconnect: true
+
+text_align:
+  desktop: justify
+  mobile: left
+
+mobile_layout_economy: false
+
+theme_color:
+  light: "#222"
+  dark: "#1a1a1a"
+
+body_scrollbar:
+  overlay: true
+  stable: false
+
+codeblock:
+  theme:
+    light: default
+    dark: stackoverflow-dark
+  prism:
+    light: prism
+    dark: prism-dark
+  copy_button:
+    enable: true
+    style: mac
+  fold:
+    enable: false
+    height: 500
+  language: true
+
+back2top:
+  enable: true
+  sidebar: false
+  scrollpercent: false
+
+reading_progress:
+  enable: true
+  start_at: left
+  position: top
+  reversed: false
+  color: "#37c6c0"
+  height: 3px
+
+bookmark:
+  enable: false
+  color: "#222"
+  save: auto
+
+github_banner:
+  enable: false
+
+
+# ---------------------------------------------------------------
+# Font Settings
+# ---------------------------------------------------------------
+
+font:
+  enable: false
+  host: https://fonts.googleapis.com
+
+  global:
+    external: true
+    family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif
+    size:
+
+  title:
+    external: true
+    family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif
+    size:
+
+  headings:
+    external: true
+    family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif
+    size:
+
+  posts:
+    external: true
+    family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif
+
+  codes:
+    external: true
+    family: Consolas, Monaco, "Courier New", monospace
+
+
+# ---------------------------------------------------------------
+# SEO Settings
+# ---------------------------------------------------------------
+
+index_with_subtitle: true   # 首页标题下方显示副标题
+
+exturl: false
+exturl_icon: true
+
+# 站点验证（提交搜索引擎后填入）
+google_site_verification:
+bing_site_verification:
+baidu_site_verification:
+
+
+# ---------------------------------------------------------------
+# Miscellany
+# ---------------------------------------------------------------
+
+note:
+  style: flat
+  icons: true
+  light_bg_offset: 0
+
+tabs:
+  sticky: false
+  transition:
+    tabs: false
+    labels: true
+
+mermaid:
+  enable: true
+  theme:
+    light: default
+    dark: dark
+
+math:
+  every_page: false
+  mathjax:
+    enable: false
+  katex:
+    enable: false
+
+
+# ---------------------------------------------------------------
+# Third Party Plugins & Services
+# ---------------------------------------------------------------
+
+pace:
+  enable: false
+  theme: minimal
+  color: blue
+
+
+# ---------------------------------------------------------------
+# External Libraries
+# ---------------------------------------------------------------
+
+pjax: true
+mediumzoom: true
+lazyload: true
+pangu: true
+
+quicklink:
+  enable: true
+  home: true
+  archive: true
+  delay: true
+  timeout: 3000
+  priority: true
+
+
+# ---------------------------------------------------------------
+# Animation Settings
+# ---------------------------------------------------------------
+
+motion:
+  enable: true
+  async: false
+  duration: 200
+  transition:
+    menu_item: fadeInDown
+    post_block: fadeIn
+    post_header: fadeInDown
+    post_body: fadeInDown
+    coll_header: fadeInLeft
+    sidebar: fadeInUp
+
+
+# 评论系统 — 全部关闭，但保留段结构（NexT 核心脚本依赖）
+comments:
+  style: tabs
+  active:
+  storage: true
+  lazyload: true
+  nav:
+
+disqus:
+  enable: false
+
+disqusjs:
+  enable: false
+
+changyan:
+  enable: false
+
+livere:
+  enable: false
+
+gitalk:
+  enable: false
+
+giscus:
+  enable: false
+
+waline:
+  enable: false
+
+utterances:
+  enable: false
+
+isso:
+  enable: false
+
+
+# ---------------------------------------------------------------
+# Search Services
+# ---------------------------------------------------------------
+
+local_search:
+  enable: true
+  top_n_per_article: 1
+  unescape: true
+  preload: true
+
+
+# ---------------------------------------------------------------
+# Statistics and Analytics
+# ---------------------------------------------------------------
+
+busuanzi_count:
+  enable: false
+  total_visitors: false
+  total_visitors_icon: fa fa-user
+  total_views: false
+  total_views_icon: fa fa-eye
+  post_views: false
+  post_views_icon: far fa-eye
+
+
+# ---------------------------------------------------------------
+# CDN Settings
+# ---------------------------------------------------------------
+
+vendors:
+  internal: local
+  plugins: cdnjs
+  custom_cdn_url:
+
+css: css
+js: js
+images: images

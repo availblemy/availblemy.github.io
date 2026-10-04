@@ -1,0 +1,758 @@
+﻿// ============================================================
+// 自定义样式 — 恶意代码分析技术博客
+// ============================================================
+
+// ---------- CSS 变量覆盖 ----------
+:root {
+  --primary-color: #3572b0;
+  --primary-dim: rgba(53, 114, 176, .08);
+  --link-color: #3572b0;
+  --link-hover-color: #1a5276;
+  --card-radius: 12px;
+  --card-shadow: 0 1px 8px rgba(0,0,0,.06);
+  --card-shadow-hover: 0 6px 24px rgba(0,0,0,.12);
+  --text-color: #2c3e50;
+  --text-secondary: #7f8c8d;
+  // 分类淡色条
+  --cat-sample: #fde8e8;       // 样本分析 — 淡红
+  --cat-sample-text: #c0392b;
+  --cat-traffic: #e8f4fd;      // 流量分析 — 淡蓝
+  --cat-traffic-text: #2471a3;
+  --cat-reverse: #eaf7ea;      // 逆向基础 — 淡绿
+  --cat-reverse-text: #1e8449;
+  --cat-log: #fef9e7;          // 日志分析 — 淡金
+  --cat-log-text: #b7950b;
+  --cat-other: #f4ecf7;        // 其他 — 淡紫
+  --cat-other-text: #7d3c98;
+  --cat-default: #f5f5f5;      // 未分类 — 淡灰
+  --cat-default-text: #7f8c8d;
+}
+
+// ============================================================
+// 首页：双列正方形卡片网格（仅 .main-inner.index）
+// ============================================================
+
+.main-inner.index.posts-expand {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+// 覆盖主题默认的第一个卡片多余顶部间距
+.main-inner.index .post-block:first-of-type {
+  padding-top: 0 !important;
+}
+
+// 首页卡片 — 固定正方形，圆角 + 阴影 + 悬停上浮 + 顶部色条
+.main-inner.index .post-block {
+  width: 100%;
+  height: 320px;
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow .3s ease, transform .3s ease;
+  padding: 0;
+  margin-bottom: 0;
+  border: 1px solid rgba(0,0,0,.04);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+
+  &:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  // 顶部色条
+  &::before {
+    content: '';
+    display: block;
+    height: 4px;
+    flex-shrink: 0;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+    background: var(--cat-default);
+  }
+
+  // 微悬停高亮色条
+  &:hover::before {
+    opacity: .85;
+  }
+}
+
+// 覆盖主题默认的 post-header — 卡片内居中
+.main-inner.index .post-header {
+  text-align: center !important;
+}
+
+// 卡片内容区 — 标题+meta占60%，标签行占40%
+.main-inner.index .post-block .post-content {
+  padding: 14px 18px 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 3;
+}
+
+// 隐藏摘要、阅读按钮、阅读时长
+.main-inner.index .post-body,
+.main-inner.index .post-button,
+.main-inner.index .post-meta-item[title="阅读时长"] {
+  display: none !important;
+}
+
+// 标题 — 三行截断，居中
+.main-inner.index .post-title {
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0 0 6px 0;
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  flex-shrink: 0;
+}
+
+.main-inner.index .post-title-link {
+  color: var(--text-color);
+  transition: color .2s;
+  &:hover {
+    color: var(--primary-color);
+  }
+}
+
+// meta 行 — 居中，每项独占一行 + 去掉竖线
+.main-inner.index .post-meta {
+  color: var(--text-secondary);
+  font-size: .78em;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;    // 纵向排列
+  align-items: center;
+
+  .post-meta-item {
+    margin: 2px 0;
+
+    &::before {
+      display: none !important;   // 去掉 | 分隔符
+    }
+  }
+}
+
+// footer（标签行） — 占卡片2/5，居中
+.main-inner.index .post-footer {
+  padding: 4px 18px 10px;
+  border-top: 1px solid rgba(0,0,0,.05);
+  margin: auto 0 0;
+  flex-shrink: 0;
+  text-align: center;
+  flex: 2;
+
+  .post-tags {
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+
+    a {
+      font-size: .72em;
+      color: var(--text-secondary);
+      background: rgba(0,0,0,.04);
+      border-radius: 4px;
+      padding: 2px 8px;
+      margin: 2px 3px 0;
+      text-decoration: none;
+      display: inline-block;
+      transition: all .2s;
+
+      &:hover {
+        background: var(--primary-dim);
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+// 首页分隔线 EOF 彻底隐藏
+.main-inner.index .post-eof {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+// 首页分页占满整行 + 紧凑
+.main-inner.index .pagination {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}
+
+// ============================================================
+// 推荐文章 — 发光边框（文章 front-matter 加 featured: true）
+// 颜色自动跟随卡片分类色条
+// ============================================================
+
+// 基础：加粗边框 + 放大 + z-index + 默认发光（柔和）
+.main-inner.index .post-block.post-featured {
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--primary-color);
+  box-shadow:
+    0 0 8px rgba(53, 114, 176, .20),
+    0 0 20px rgba(53, 114, 176, .08),
+    var(--card-shadow);
+  transform: scale(1.03);
+  z-index: 5;
+
+  &:hover {
+    box-shadow:
+      0 0 12px rgba(53, 114, 176, .30),
+      0 0 28px rgba(53, 114, 176, .12),
+      var(--card-shadow-hover);
+    transform: scale(1.05) translateY(-3px);
+  }
+}
+
+// 样本分析 → 红光（通过模板 cat-xxx class 匹配）
+.main-inner.index .post-block.post-featured.cat-样本分析 {
+  border-color: var(--cat-sample-text) !important;
+  box-shadow:
+    0 0 8px rgba(192, 57, 43, .20),
+    0 0 20px rgba(192, 57, 43, .08),
+    var(--card-shadow) !important;
+  &:hover {
+    box-shadow:
+      0 0 12px rgba(192, 57, 43, .30),
+      0 0 28px rgba(192, 57, 43, .12),
+      var(--card-shadow-hover) !important;
+  }
+}
+
+// 流量分析 → 蓝光
+.main-inner.index .post-block.post-featured.cat-流量分析 {
+  border-color: var(--cat-traffic-text) !important;
+  box-shadow:
+    0 0 8px rgba(36, 113, 163, .20),
+    0 0 20px rgba(36, 113, 163, .08),
+    var(--card-shadow) !important;
+  &:hover {
+    box-shadow:
+      0 0 12px rgba(36, 113, 163, .30),
+      0 0 28px rgba(36, 113, 163, .12),
+      var(--card-shadow-hover) !important;
+  }
+}
+
+// 逆向基础 → 绿光
+.main-inner.index .post-block.post-featured.cat-逆向基础 {
+  border-color: var(--cat-reverse-text) !important;
+  box-shadow:
+    0 0 8px rgba(30, 132, 73, .20),
+    0 0 20px rgba(30, 132, 73, .08),
+    var(--card-shadow) !important;
+  &:hover {
+    box-shadow:
+      0 0 12px rgba(30, 132, 73, .30),
+      0 0 28px rgba(30, 132, 73, .12),
+      var(--card-shadow-hover) !important;
+  }
+}
+
+// 日志分析 → 金光
+.main-inner.index .post-block.post-featured.cat-日志分析 {
+  border-color: var(--cat-log-text) !important;
+  box-shadow:
+    0 0 8px rgba(183, 149, 11, .20),
+    0 0 20px rgba(183, 149, 11, .08),
+    var(--card-shadow) !important;
+  &:hover {
+    box-shadow:
+      0 0 12px rgba(183, 149, 11, .30),
+      0 0 28px rgba(183, 149, 11, .12),
+      var(--card-shadow-hover) !important;
+  }
+}
+
+// 其他 → 紫光
+.main-inner.index .post-block.post-featured.cat-其他 {
+  border-color: var(--cat-other-text) !important;
+  box-shadow:
+    0 0 8px rgba(125, 60, 152, .20),
+    0 0 20px rgba(125, 60, 152, .08),
+    var(--card-shadow) !important;
+  &:hover {
+    box-shadow:
+      0 0 12px rgba(125, 60, 152, .30),
+      0 0 28px rgba(125, 60, 152, .12),
+      var(--card-shadow-hover) !important;
+  }
+}
+
+// ============================================================
+// 分类色条匹配（通过 :has() 匹配卡片内的分类链接）
+// ============================================================
+
+// 分类 meta 标签样式 — 淡色小徽章
+.main-inner.index .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-default);
+  color: var(--cat-default-text);
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: .9em;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all .2s;
+
+  &:hover { filter: brightness(.92); }
+}
+
+// 样本分析 — 淡红
+.main-inner.index .post-block:has([itemprop="about"] a[href*="%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90"])::before,
+.main-inner.index .post-block:has([itemprop="about"] a[href*="/categories/样本分析/"])::before {
+  background: var(--cat-sample);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="样本分析"]) .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-sample);
+  color: var(--cat-sample-text);
+}
+
+// 流量分析 — 淡蓝
+.main-inner.index .post-block:has([itemprop="about"] a[href*="%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"])::before,
+.main-inner.index .post-block:has([itemprop="about"] a[href*="/categories/流量分析/"])::before {
+  background: var(--cat-traffic);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="流量分析"]) .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-traffic);
+  color: var(--cat-traffic-text);
+}
+
+// 逆向基础 — 淡绿
+.main-inner.index .post-block:has([itemprop="about"] a[href*="%E9%80%86%E5%90%91%E5%9F%BA%E7%A1%80"])::before,
+.main-inner.index .post-block:has([itemprop="about"] a[href*="/categories/逆向基础/"])::before {
+  background: var(--cat-reverse);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="逆向基础"]) .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-reverse);
+  color: var(--cat-reverse-text);
+}
+
+// 日志分析 — 淡金
+.main-inner.index .post-block:has([itemprop="about"] a[href*="%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"])::before,
+.main-inner.index .post-block:has([itemprop="about"] a[href*="/categories/日志分析/"])::before {
+  background: var(--cat-log);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="日志分析"]) .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-log);
+  color: var(--cat-log-text);
+}
+
+// 其他 — 淡紫
+.main-inner.index .post-block:has([itemprop="about"] a[href*="%E5%85%B6%E4%BB%96"])::before,
+.main-inner.index .post-block:has([itemprop="about"] a[href*="/categories/其他/"])::before {
+  background: var(--cat-other);
+}
+.main-inner.index .post-block:has([itemprop="about"] a[href*="其他"]) .post-meta .post-meta-item [itemprop="about"] a {
+  background: var(--cat-other);
+  color: var(--cat-other-text);
+}
+
+// ============================================================
+// 全局样式（首页 + 文章内页共用）
+// ============================================================
+
+// 文章内页/分类页的 post-block — 单列卡片
+.posts-expand:not(.main-inner.index.posts-expand) .post-block,
+.main-inner:not(.index) .post-block {
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow .3s ease, transform .3s ease;
+  padding: 32px 40px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(0,0,0,.04);
+  aspect-ratio: auto;
+  max-width: none;
+  justify-self: auto;
+  width: auto;
+
+  &:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  &::before { display: none; }
+}
+
+// 内页标题
+.posts-expand:not(.main-inner.index.posts-expand) .post-title,
+.main-inner:not(.index) .post-title {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.3;
+  display: block;
+  -webkit-line-clamp: unset;
+  text-align: center;
+}
+
+.posts-expand .post-title-link {
+  color: var(--text-color);
+  transition: color .2s;
+  &:hover {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+  }
+}
+
+// 内页 meta 行
+.posts-expand:not(.main-inner.index.posts-expand) .post-meta,
+.main-inner:not(.index) .post-meta {
+  color: var(--text-secondary);
+  font-size: .85em;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+// 内页 body 恢复
+.posts-expand:not(.main-inner.index.posts-expand) .post-body,
+.main-inner:not(.index) .post-body {
+  overflow: visible;
+  display: block;
+  -webkit-line-clamp: unset;
+  flex: none;
+}
+
+// ---------- 侧边栏 — 紧凑优雅 ----------
+.sidebar {
+  background: var(--body-bg-color);
+}
+
+.sidebar-inner {
+  padding: 20px 10px;
+}
+
+.site-author-image {
+  border: 2px solid var(--primary-color);
+  padding: 3px;
+  max-width: 130px;
+}
+
+.site-author-name {
+  font-weight: 700;
+  font-size: 1.15em;
+  margin: 6px 0 2px;
+}
+
+.site-description {
+  color: var(--text-secondary);
+  font-size: .85em;
+}
+
+.sidebar-nav li {
+  border-radius: 8px;
+  margin: 2px 8px;
+  transition: background .2s, transform .2s;
+
+  &:hover {
+    background: var(--primary-dim);
+    transform: translateX(2px);
+  }
+
+  &.sidebar-nav-active {
+    background: var(--primary-dim);
+    font-weight: 600;
+  }
+}
+
+.post-toc .nav-item {
+  .nav-link {
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: .9em;
+    transition: background .2s;
+    &:hover { background: var(--primary-dim); }
+  }
+  &.active .nav-link {
+    background: var(--primary-dim);
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+}
+
+// ---------- 代码块 — 专业感 ----------
+figure.highlight {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  margin: 20px 0;
+}
+
+code {
+  color: #c7254e;
+  background: #f9f2f4;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: .88em;
+}
+
+html[data-theme="dark"] code {
+  color: #f48771;
+  background: #2a2a2a;
+}
+
+// ---------- 引用块 ----------
+blockquote {
+  border-left: 4px solid var(--primary-color);
+  background: var(--primary-dim);
+  border-radius: 0 8px 8px 0;
+  margin: 20px 0;
+  padding: 14px 22px;
+  color: #555;
+
+  p { margin: 6px 0; }
+}
+
+// ---------- 表格 — 现代清爽 ----------
+table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  width: 100%;
+}
+
+thead {
+  th, td {
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 14px;
+  }
+}
+
+tbody {
+  tr {
+    transition: background .15s;
+    &:nth-child(even) { background: rgba(0,0,0,.02); }
+    &:hover { background: var(--primary-dim); }
+  }
+  td { padding: 8px 14px; }
+}
+
+// ---------- 标签云 — 灵动 ----------
+.tag-cloud a {
+  border-bottom: none !important;
+  padding: 4px 12px;
+  margin: 4px;
+  border-radius: 16px;
+  background: rgba(0,0,0,.04);
+  transition: all .25s;
+
+  &:hover {
+    background: var(--primary-color);
+    color: #fff !important;
+    transform: scale(1.08);
+  }
+}
+
+.tag-cloud-tags {
+  text-align: center;
+}
+
+// ---------- 按钮/交互 ----------
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all .2s;
+}
+
+// ---------- 图片 — 卡片化 ----------
+.post-body img {
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.1);
+  transition: transform .2s;
+  &:hover { transform: scale(1.01); }
+}
+
+// ---------- 分页 — 精致 ----------
+.pagination {
+  .page-number {
+    border-radius: 6px;
+    margin: 0 3px;
+    transition: all .2s;
+  }
+  .page-number.current {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+  }
+}
+
+// ---------- 暗色模式 ----------
+html[data-theme="dark"] {
+  --text-color: #ddd;
+  --text-secondary: #999;
+  --card-shadow: 0 1px 8px rgba(0,0,0,.35);
+  --card-shadow-hover: 0 6px 24px rgba(0,0,0,.5);
+  --primary-dim: rgba(53,114,176,.12);
+  // 暗色下分类色条加深
+  --cat-sample: #3d1f1f;
+  --cat-sample-text: #f1948a;
+  --cat-traffic: #1a2d3d;
+  --cat-traffic-text: #85c1e9;
+  --cat-reverse: #1a3d1f;
+  --cat-reverse-text: #82e0aa;
+  --cat-log: #3d351a;
+  --cat-log-text: #f9e79f;
+  --cat-other: #2d1f3d;
+  --cat-other-text: #d7bde2;
+  --cat-default: #2a2a2a;
+
+  .post-block {
+    border-color: rgba(255,255,255,.06);
+  }
+
+  figure.highlight {
+    box-shadow: 0 2px 8px rgba(0,0,0,.5);
+  }
+
+  blockquote { color: #bbb; }
+
+  .tag-cloud a {
+    background: rgba(255,255,255,.06);
+  }
+
+  tbody tr:nth-child(even) {
+    background: rgba(255,255,255,.03);
+  }
+  tbody tr:hover {
+    background: var(--primary-dim);
+  }
+
+  .main-inner.index .post-footer {
+    border-top-color: rgba(255,255,255,.06);
+  }
+
+  .main-inner.index .post-tags a {
+    background: rgba(255,255,255,.08);
+  }
+}
+
+// ---------- 暗色模式追加 ----------
+html[data-theme="dark"] {
+  .sidebar-inner {
+    box-shadow: 0 1px 8px rgba(0,0,0,.35);
+    border-color: rgba(255,255,255,.06);
+  }
+
+  .post-nav-item:hover {
+    background: var(--primary-dim);
+  }
+}
+
+// ---------- 阅读进度条 — 渐变色 ----------
+.reading-progress-bar {
+  background: linear-gradient(90deg, #3572b0 0%, #2ecc71 100%);
+}
+
+// ---------- 侧边栏卡片化 ----------
+.sidebar-inner {
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,.06);
+  border: 1px solid rgba(0,0,0,.04);
+}
+
+// ---------- 子菜单指示色 — 统一主题蓝 ----------
+.sub-menu .menu-item-active a {
+  color: var(--primary-color) !important;
+  border-bottom-color: var(--primary-color) !important;
+}
+
+// ---------- 上下篇文章导航 — 打磨 ----------
+.post-nav-item {
+  border-radius: 8px;
+  padding: 10px 16px;
+  transition: background .2s, transform .2s;
+
+  &:hover {
+    background: var(--primary-dim);
+    transform: translateX(4px);
+
+    &:last-child { transform: translateX(-4px); }
+  }
+}
+
+// ---------- 归档/分类列表页 — 条目悬停 + 靠左 ----------
+.posts-collapse .post-header {
+  border-radius: 6px;
+  transition: background .2s;
+  text-align: left !important;
+  &:hover { background: var(--primary-dim); }
+}
+
+.posts-collapse .post-title {
+  border-bottom: none;
+  text-align: left !important;
+}
+
+// ---------- 阅读时间徽章（去掉圆框）----------
+.post-meta .post-meta-item:last-child {
+  // background: var(--primary-dim);
+  // border-radius: 10px;
+  // padding: 2px 10px;
+  font-size: .85em;
+}
+
+// ---------- follow_me 自适应 ----------
+.follow-me {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .6em;
+  .social-item a {
+    white-space: nowrap;
+  }
+}
+
+// ---------- 响应式 ----------
+@media (max-width: 767px) {
+  .main-inner.index.posts-expand {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .main-inner.index .post-block {
+    max-width: 240px;
+    border-radius: 8px;
+  }
+
+  .main-inner.index .post-block .post-content {
+    padding: 14px 14px 0;
+  }
+
+  .main-inner.index .post-footer {
+    padding: 8px 14px 10px;
+  }
+
+  .main-inner.index .post-title {
+    font-size: .95em;
+  }
+
+  .post-block {
+    border-radius: 8px;
+    padding: 20px 16px;
+  }
+
+  .follow-me {
+    gap: .4em;
+    .social-item {
+      margin: 2px 0;
+    }
+  }
+}
