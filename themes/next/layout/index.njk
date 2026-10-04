@@ -7,40 +7,6 @@
 
 {% block content %}
 <div class="about-page">
-  <!-- 小猫区域 -->
-  <div class="cat-container">
-    <div class="cat" id="cat">
-      <svg viewBox="0 0 200 180" width="160" height="144">
-        <!-- 耳朵 -->
-        <polygon points="30,60 20,15 65,45" fill="#f4a460"/>
-        <polygon points="170,60 180,15 135,45" fill="#f4a460"/>
-        <polygon points="35,55 28,25 62,46" fill="#ffb6c1"/>
-        <polygon points="165,55 172,25 138,46" fill="#ffb6c1"/>
-        <!-- 头 -->
-        <ellipse cx="100" cy="95" rx="75" height="60" fill="#f4a460"/>
-        <!-- 脸部白色区域 -->
-        <ellipse cx="100" cy="105" rx="50" height="38" fill="#fff8dc"/>
-        <!-- 眼睛 -->
-        <g class="cat-eyes">
-          <ellipse class="eye-left" cx="72" cy="85" rx="12" ry="14" fill="#2d2d2d"/>
-          <ellipse class="eye-right" cx="128" cy="85" rx="12" ry="14" fill="#2d2d2d"/>
-          <circle class="pupil-left" cx="74" cy="83" r="5" fill="#fff"/>
-          <circle class="pupil-right" cx="130" cy="83" r="5" fill="#fff"/>
-        </g>
-        <!-- 鼻子 -->
-        <ellipse cx="100" cy="102" rx="6" ry="4" fill="#ff9999"/>
-        <!-- 嘴巴 -->
-        <path class="cat-mouth" d="M88,110 Q94,118 100,110 Q106,118 112,110" fill="none" stroke="#2d2d2d" stroke-width="1.8" stroke-linecap="round"/>
-        <!-- 胡须 -->
-        <g class="whiskers" stroke="#2d2d2d" stroke-width="1" opacity="0.5">
-          <line x1="40" y1="98" x2="68" y2="102"/><line x1="38" y1="108" x2="66" y2="108"/>
-          <line x1="160" y1="98" x2="132" y2="102"/><line x1="162" y1="108" x2="134" y2="108"/>
-        </g>
-      </svg>
-    </div>
-    <div class="cat-bubble" id="cat-bubble">喵~ 点我互动呀 🐱</div>
-  </div>
-
   <!-- 自我介绍 -->
   <div class="about-intro">
     <p>🎓 成都信息工程大学</p>
@@ -49,73 +15,272 @@
   </div>
 </div>
 
+<!-- 全局悬浮宠物 - 右下角 -->
+<div class="pet-wrapper" id="pet-wrapper">
+  <div class="pet" id="pet" title="点我互动~">
+    <svg viewBox="0 0 64 64" width="56" height="56" id="pet-svg">
+      <!-- 尾巴 -->
+      <path class="pet-tail" d="M8,52 Q2,42 10,36 Q14,34 12,40" fill="none" stroke="#d4956a" stroke-width="4" stroke-linecap="round"/>
+      <!-- 身体 -->
+      <ellipse cx="32" cy="46" rx="18" ry="14" fill="#f4a460"/>
+      <ellipse cx="32" cy="48" rx="12" ry="8" fill="#fff8dc"/>
+      <!-- 头 -->
+      <circle cx="32" cy="28" r="20" fill="#f4a460"/>
+      <!-- 耳朵 -->
+      <polygon points="14,16 10,0 22,12" fill="#f4a460"/>
+      <polygon points="50,16 54,0 42,12" fill="#f4a460"/>
+      <polygon points="16,14 13,3 21,12" fill="#ffb6c1"/>
+      <polygon points="48,14 51,3 43,12" fill="#ffb6c1"/>
+      <!-- 脸部白区 -->
+      <ellipse cx="32" cy="34" rx="13" height="10" fill="#fff8dc"/>
+      <!-- 眼睛 -->
+      <g class="pet-eyes">
+        <circle class="eye-l" cx="24" cy="26" r="5" fill="#2d2d2d"/>
+        <circle class="eye-r" cx="40" cy="26" r="5" fill="#2d2d2d"/>
+        <circle class="pupil-l" cx="25" cy="25" r="2" fill="#fff"/>
+        <circle class="pupil-r" cx="41" cy="25" r="2" fill="#fff"/>
+      </g>
+      <!-- 鼻子 -->
+      <ellipse cx="32" cy="32" rx="2.5" ry="1.8" fill="#ff9999"/>
+      <!-- 嘴巴 -->
+      <path class="pet-mouth" d="M27,35 Q29.5,38 32,35 Q34.5,38 37,35" fill="none" stroke="#2d2d2d" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- 胡须 -->
+      <g class="pet-whiskers" stroke="#2d2d2d" stroke-width="0.7" opacity="0.4">
+        <line x1="12" y1="30" x2="20" y2="32"/><line x1="11" y1="35" x2="19" y2="35"/>
+        <line x1="52" y1="30" x2="44" y2="32"/><line x1="53" y1="35" x2="45" y2="35"/>
+      </g>
+    </svg>
+    <!-- 气泡 -->
+    <div class="pet-bubble" id="pet-bubble">喵~ 🐱</div>
+    <!-- 返回顶部按钮 -->
+    <div class="pet-top-btn" id="pet-top" title="返回顶部">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+    <!-- 运行天数 -->
+    <div class="pet-days" id="pet-days"></div>
+  </div>
+</div>
+
 <script>
 (function(){
-  var bubble = document.getElementById('cat-bubble');
-  var cat = document.getElementById('cat');
+  var pet = document.getElementById('pet');
+  var bubble = document.getElementById('pet-bubble');
+  var topBtn = document.getElementById('pet-top');
+  var daysEl = document.getElementById('pet-days');
+  var wrapper = document.getElementById('pet-wrapper');
   
-  var phrases = [
-    '喵~ 点我互动呀 🐱',
-    '喵呜~ 欢迎来到我的博客！',
-    '🐾 我是 MalCode 的猫咪助手',
-    '今天也要开心哦~ 😺',
-    '想看技术文章？点导航栏~',
-    '成都信息工程大学，喵~',
-    '逆向工程很有趣的！🔍',
-    'QQ: 2253922210，来找我玩呀~',
-    '喵~ 你今天学什么了？📚',
-    '摸摸头~ 🐱💕',
-    '我是一只安全猫 🛡️',
-    '饿了...有小鱼干吗？🐟'
-  ];
-  var idx = 0;
+  // ====== 状态 ======
+  var state = 'idle'; // idle, happy, sleep, run, climb
+  var clickCount = 0;
+  var idleTimer = null;
+  var sleepTimer = null;
   
-  function meow() {
-    idx = (idx + 1) % phrases.length;
-    bubble.innerHTML = phrases[idx];
+  // ====== 文案库 ======
+  var messages = {
+    welcome: ['欢迎来到本站！🐱', '喵~ 你来啦！', '今天也想学习吗？😺'],
+    click: ['喵！', '喵呜~', '摸摸头~ 🐱💕', '别戳我啦~ 😹', '再戳我要生气了！😾', '好吧...再戳一下~ 😸', '你真的很闲诶 😼'],
+    scroll: ['跑快点~ 🏃', '加油爬！🧗', '快到了！⭐'],
+    sleep: ['zzZ... 💤', '好困啊... 😪', '让我眯一会...'],
+    dark: ['天黑了~ 🌙', '晚上好呀 🐱‍👤', '夜猫子模式启动 🦉'],
+    light: ['早上好~ ☀️', '新的一天！🌅'],
+    top: ['嗖~ 到顶了！⬆️', '飞上去啦~ 🚀'],
+    konami: ['🎮 你发现了彩蛋！', 'Konami Code! 🔥', '极客模式激活！💻']
+  };
+  
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function say(text) {
+    bubble.textContent = text;
     bubble.classList.add('pop');
-    setTimeout(function(){ bubble.classList.remove('pop'); }, 300);
-    
-    // 小猫跳动
-    cat.style.animation = 'none';
-    cat.offsetHeight; // reflow
-    cat.style.animation = 'cat-jump .5s ease';
-    
-    // 眼睛变化
-    var eyes = document.querySelectorAll('.cat-eyes ellipse[rx="12"]');
-    eyes.forEach(function(e){ e.setAttribute('ry', '4'); });
-    setTimeout(function(){
-      eyes.forEach(function(e){ e.setAttribute('ry', '14'); });
-    }, 200);
+    clearTimeout(bubble._t);
+    bubble._t = setTimeout(function(){ bubble.classList.remove('pop'); }, 2500);
   }
   
-  cat.addEventListener('click', meow);
-  bubble.addEventListener('click', meow);
+  // ====== 表情切换 ======
+  function setExpression(type) {
+    var eyeL = document.querySelector('.eye-l');
+    var eyeR = document.querySelector('.eye-r');
+    var mouth = document.querySelector('.pet-mouth');
+    
+    if(!eyeL || !eyeR || !mouth) return;
+    
+    switch(type) {
+      case 'happy':
+        eyeL.setAttribute('ry', '3'); eyeR.setAttribute('ry', '3');
+        mouth.setAttribute('d', 'M27,36 Q32,42 37,36');
+        break;
+      case 'sleep':
+        eyeL.setAttribute('ry', '1'); eyeL.setAttribute('rx', '6');
+        eyeR.setAttribute('ry', '1'); eyeR.setAttribute('rx', '6');
+        mouth.setAttribute('d', 'M29,36 L35,36');
+        break;
+      case 'angry':
+        eyeL.setAttribute('ry', '6'); eyeR.setAttribute('ry', '6');
+        mouth.setAttribute('d', 'M27,34 Q32,30 37,34');
+        break;
+      case 'love':
+        eyeL.setAttribute('r', '4'); eyeR.setAttribute('r', '4');
+        eyeL.setAttribute('fill', '#e74c3c'); eyeR.setAttribute('fill', '#e74c3c');
+        mouth.setAttribute('d', 'M27,36 Q32,43 37,36');
+        break;
+      default: // normal
+        eyeL.setAttribute('r', '5'); eyeL.setAttribute('rx', '5'); eyeL.setAttribute('ry', '5');
+        eyeR.setAttribute('r', '5'); eyeR.setAttribute('rx', '5'); eyeR.setAttribute('ry', '5');
+        eyeL.setAttribute('fill', '#2d2d2d'); eyeR.setAttribute('fill', '#2d2d2d');
+        mouth.setAttribute('d', 'M27,35 Q29.5,38 32,35 Q34.5,38 37,35');
+    }
+  }
   
-  // 鼠标跟随眼睛
-  document.addEventListener('mousemove', function(e){
-    var rect = cat.getBoundingClientRect();
-    var cx = rect.left + rect.width / 2;
-    var cy = rect.top + rect.height * 0.48;
-    var dx = (e.clientX - cx) / 30;
-    var dy = (e.clientY - cy) / 30;
-    var d = Math.sqrt(dx*dx + dy*dy);
-    if(d > 4) { dx = dx/d*4; dy = dy/d*4; }
-    var pl = document.querySelector('.pupil-left');
-    var pr = document.querySelector('.pupil-right');
-    if(pl) { pl.setAttribute('cx', 74+dx); pl.setAttribute('cy', 83+dy); }
-    if(pr) { pr.setAttribute('cx', 130+dx); pr.setAttribute('cy', 83+dy); }
+  function resetEyes() {
+    setExpression('normal');
+  }
+  
+  // ====== 点击交互 ======
+  pet.addEventListener('click', function(e){
+    if(e.target === topBtn || topBtn.contains(e.target)) return;
+    
+    clickCount++;
+    state = 'happy';
+    setExpression('happy');
+    
+    // 连击检测
+    if(clickCount >= 7) {
+      say(pick(messages.konami));
+      pet.classList.add('pet-spin');
+      setTimeout(function(){ pet.classList.remove('pet-spin'); }, 600);
+      clickCount = 0;
+    } else {
+      say(pick(messages.click));
+    }
+    
+    // 跳动动画
+    pet.style.animation = 'none';
+    pet.offsetHeight;
+    pet.style.animation = 'pet-jump .45s ease';
+    
+    resetSleepTimer();
+    
+    setTimeout(resetEyes, 1200);
   });
   
-  // 自动喵
-  setInterval(function() {
-    if(Math.random() > 0.7) {
-      idx = Math.floor(Math.random() * phrases.length);
-      bubble.innerHTML = phrases[idx];
-      bubble.classList.add('pop');
-      setTimeout(function(){ bubble.classList.remove('pop'); }, 300);
+  // ====== 眼睛跟随鼠标 ======
+  document.addEventListener('mousemove', function(e){
+    if(state === 'sleep') return;
+    var rect = pet.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height * 0.42;
+    var dx = (e.clientX - cx) / 25;
+    var dy = (e.clientY - cy) / 25;
+    var d = Math.sqrt(dx*dx + dy*dy);
+    if(d > 3.5) { dx = dx/d*3.5; dy = dy/d*3.5; }
+    var pl = document.querySelector('.pupil-l');
+    var pr = document.querySelector('.pupil-r');
+    if(pl) pl.setAttribute('cx', 25+dx);
+    if(pr) pr.setAttribute('cx', 41+dx);
+    if(pl) pl.setAttribute('cy', 25+dy);
+    if(pr) pr.setAttribute('cy', 25+dy);
+  });
+  
+  // ====== 返回顶部 ======
+  topBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    state = 'run';
+    setExpression('happy');
+    say(pick(messages.top));
+    pet.classList.add('pet-fly');
+    setTimeout(function(){ pet.classList.remove('pet-fly'); setExpression('normal'); }, 800);
+  });
+  
+  // 显示/隐藏返回顶部按钮
+  window.addEventListener('scroll', function(){
+    topBtn.style.opacity = window.scrollY > 300 ? '1' : '0';
+    topBtn.style.pointerEvents = window.scrollY > 300 ? 'auto' : 'none';
+  });
+  
+  // ====== 滚动事件 ======
+  var lastScrollY = 0;
+  var scrollTimeout;
+  window.addEventListener('scroll', function(){
+    var currentY = window.scrollY;
+    clearTimeout(scrollTimeout);
+    
+    if(Math.abs(currentY - lastScrollY) > 50) {
+      state = 'climb';
+      resetSleepTimer();
     }
-  }, 10000);
+    
+    scrollTimeout = setTimeout(function(){
+      if(state !== 'sleep') state = 'idle';
+    }, 150);
+    
+    lastScrollY = currentY;
+  });
+  
+  // ====== 打瞌睡（页面静止15秒）=====
+  function startSleepTimer() {
+    clearTimeout(sleepTimer);
+    sleepTimer = setTimeout(function(){
+      state = 'sleep';
+      setExpression('sleep');
+      say(pick(messages.sleep));
+      pet.classList.add('pet-sleeping');
+    }, 15000);
+  }
+  
+  function resetSleepTimer() {
+    clearTimeout(sleepTimer);
+    pet.classList.remove('pet-sleeping');
+    if(state === 'sleep') { setExpression('normal'); state = 'idle'; }
+    startSleepTimer();
+  }
+  
+  // ====== 暗色模式同步 ======
+  var observer = new MutationObserver(function(){
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+      || document.documentElement.classList.contains('dark');
+    if(isDark) {
+      pet.classList.add('pet-dark');
+      say(pick(messages.dark));
+    } else {
+      pet.classList.remove('pet-dark');
+      say(pick(messages.light));
+    }
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+  
+  // ====== 入场动画 + 欢迎 ======
+  window.addEventListener('load', function(){
+    wrapper.classList.add('pet-enter');
+    setTimeout(function(){
+      say(pick(messages.welcome));
+      setExpression('happy');
+      setTimeout(resetEyes, 2000);
+    }, 800);
+    startSleepTimer();
+  });
+  
+  // 如果页面已加载
+  if(document.readyState === 'complete') {
+    wrapper.classList.add('pet-enter');
+    setTimeout(function(){ say(pick(messages.welcome)); }, 300);
+    startSleepTimer();
+  }
+  
+  // ====== 站点运行天数 ======
+  (function(){
+    // 博客创建日期（可修改）
+    var startDate = new Date('2026-01-01');
+    var now = new Date();
+    var days = Math.floor((now - startDate) / 86400000);
+    if(daysEl && days > 0) {
+      daysEl.textContent = 'Day ' + days;
+    }
+  })();
+  
+  // ====== 用户活动重置睡眠 ======
+  ['mousedown', 'keydown', 'touchstart'].forEach(function(evt){
+    document.addEventListener(evt, resetSleepTimer, { passive: true });
+  });
 })();
 </script>
 
@@ -123,105 +288,184 @@
 /* ===== About Page ===== */
 .about-page {
   text-align: center;
-  padding: 36px 20px 32px;
-  background: linear-gradient(135deg, rgba(53,114,176,.05), rgba(80,168,232,.03));
-  border-radius: 16px;
+  padding: 50px 20px 40px;
 }
-
-/* ===== Cat ===== */
-.cat-container {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 20px;
-  cursor: pointer;
-}
-.cat {
-  animation: cat-idle 3s ease-in-out infinite;
-  filter: drop-shadow(0 4px 10px rgba(244,164,96,.3));
-  transition: transform .2s;
-}
-.cat:hover {
-  transform: scale(1.06);
-}
-
-/* Speech Bubble */
-.cat-bubble {
-  position: absolute;
-  top: -8px;
-  left: 170px;
-  background: #fff;
-  border: 2px solid #f4a460;
-  border-radius: 16px;
-  padding: 11px 18px;
-  font-size: .9em;
-  color: #444;
-  max-width: 220px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-  line-height: 1.6;
-  white-space: nowrap;
-  transition: transform .3s cubic-bezier(.68,-.55,.265,1.55);
-}
-.cat-bubble::before {
-  content: ''; position: absolute; left: -11px; top: 20px;
-  border: 9px solid transparent; border-right-color: #f4a460;
-}
-.cat-bubble::after {
-  content: ''; position: absolute; left: -7px; top: 22px;
-  border: 7px solid transparent; border-right-color: #fff;
-}
-.cat-bubble.pop { transform: scale(1.08); }
-
-/* About Intro */
 .about-intro {
   max-width: 480px;
   margin: 0 auto;
 }
 .about-intro p {
-  font-size: 1em;
+  font-size: 1.05em;
   color: var(--text-color, #333);
-  margin: 6px 0;
-  line-height: 1.7;
+  margin: 8px 0;
+  line-height: 1.75;
 }
 .intro-text {
-  margin-top: 14px !important;
-  padding-top: 14px;
+  margin-top: 18px !important;
+  padding-top: 18px;
   border-top: 1px dashed rgba(53,114,176,.2);
-  font-size: .92em !important;
+  font-size: .95em !important;
   color: var(--text-secondary, #666) !important;
-  line-height: 1.8 !important;
+  line-height: 1.85 !important;
 }
 
-/* Animations */
-@keyframes cat-idle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+/* ===== 悬浮宠物 ===== */
+.pet-wrapper {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(30px) scale(0.6);
+  transition: all .5s cubic-bezier(.34,1.56,.64,1);
+  pointer-events: none;
 }
-@keyframes cat-jump {
+.pet-wrapper.pet-enter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.pet {
+  position: relative;
+  cursor: pointer;
+  animation: pet-idle 3s ease-in-out infinite;
+  filter: drop-shadow(0 3px 8px rgba(244,164,96,.35));
+  transition: filter .3s;
+}
+.pet:hover {
+  filter: drop-shadow(0 5px 14px rgba(244,164,96,.5));
+  transform: scale(1.08);
+}
+.pet:hover .pet-tail {
+  animation: tail-wag .3s ease-in-out infinite alternate;
+}
+
+/* 气泡 */
+.pet-bubble {
+  position: absolute;
+  top: -14px;
+  right: 58px;
+  background: #fff;
+  border: 2px solid #f4a460;
+  border-radius: 14px;
+  padding: 8px 14px;
+  font-size: .82em;
+  color: #444;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+  opacity: 0;
+  transform: translateX(10px) scale(0.8);
+  transition: all .3s cubic-bezier(.68,-.55,.265,1.55);
+  pointer-events: none;
+}
+.pet-bubble::before {
+  content: ''; position: absolute; right: -9px; top: 14px;
+  border: 7px solid transparent; border-left-color: #f4a460;
+}
+.pet-bubble::after {
+  content: ''; position: absolute; right: -6px; top: 15px;
+  border: 5px solid transparent; border-left-color: #fff;
+}
+.pet-bubble.pop {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* 返回顶部按钮 */
+.pet-top-btn {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px; height: 26px;
+  background: linear-gradient(135deg, #f4a460, #e8943a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .65em;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: all .25s;
+  box-shadow: 0 2px 6px rgba(244,164,96,.4);
+}
+.pet-top-btn:hover {
+  transform: translateX(-50%) scale(1.15);
+  background: linear-gradient(135deg, #e8943a, #d4852f);
+}
+
+/* 运行天数 */
+.pet-days {
+  position: absolute;
+  top: 50%;
+  left: -48px;
+  transform: translateY(-50%);
+  font-size: .68em;
+  color: #bbb;
+  background: rgba(255,255,255,.85);
+  padding: 2px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+  font-family: monospace;
+  border: 1px solid #eee;
+}
+
+/* 动画状态 */
+.pet-sleeping { animation: pet-sleep 2.5s ease-in-out infinite !important; }
+.pet-fly { animation: pet-fly-up .7s ease-out !important; }
+.pet-spin { animation: pet-spin-360 .5s ease !important; }
+
+@keyframes pet-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes pet-jump {
   0% { transform: translateY(0) scaleY(1); }
-  30% { transform: translateY(-18px) scaleY(1.08); }
-  50% { transform: translateY(-12px) scaleY(1); }
-  70% { transform: translateY(-4px) scaleY(0.96); }
+  30% { transform: translateY(-16px) scaleY(1.06); }
+  50% { transform: translateY(-10px) scaleY(1); }
+  70% { transform: translateY(-3px) scaleY(0.97); }
   100% { transform: translateY(0) scaleY(1); }
 }
-
-/* Dark mode */
-html[data-theme="dark"] .about-page {
-  background: linear-gradient(135deg, rgba(88,166,255,.04), rgba(56,139,255,.02));
+@keyframes pet-sleep {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(2px) rotate(2deg); }
 }
-html[data-theme="dark"] .about-intro p { color: #e6edf3; }
-html[data-theme="dark"] .intro-text { color: #8b949e !important; }
-html[data-theme="dark"] .cat-bubble {
+@keyframes pet-fly-up {
+  0% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-40px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes pet-spin-360 {
+  from { transform: rotate(0deg) scale(1.1); }
+  to { transform: rotate(360deg) scale(1.1); }
+}
+@keyframes tail-wag {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(8deg); }
+}
+
+/* 暗色模式 */
+html[data-theme="dark"] .pet-dark svg ellipse[fill="#f4a460"] { fill: #c98a54; }
+html[data-theme="dark"] .pet-dark svg circle[fill="#f4a460"] { fill: #c98a54; }
+html[data-theme="dark"] .pet-dark svg polygon[fill="#f4a460"] { fill: #c98a54; }
+html[data-theme="dark"] .pet-dark .pet-bubble {
   background: #161b22; border-color: #d29966; color: #e6edf3;
 }
-html[data-theme="dark"] .cat-bubble::before { border-right-color: #d29966; }
-html[data-theme="dark"] .cat-bubble::after { border-right-color: #161b22; }
+html[data-theme="dark"] .pet-dark .pet-bubble::before { border-left-color: #d29966; }
+html[data-theme="dark"] .pet-dark .pet-bubble::after { border-left-color: #161b22; }
+html[data-theme="dark"] .pet-days {
+  background: rgba(22,27,34,.85); color: #8b949e; border-color: #30363d;
+}
 
-/* Responsive */
-@media (max-width: 800px) {
-  .cat-bubble {
-    position: static; margin-top: 14px; display: inline-block;
-  }
-  .cat-bubble::before, .cat-bubble::after { display: none; }
+/* 响应式 */
+@media (max-width: 768px) {
+  .pet-wrapper { right: 12px; bottom: 12px; }
+  .pet svg { width: 46px; height: 46px; }
+  .pet-bubble { display: none; } /* 手机端隐藏气泡节省空间 */
+  .pet-days { display: none; }
 }
 </style>
 {% endblock %}
