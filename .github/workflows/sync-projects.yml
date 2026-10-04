@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
     env:
-      GITHUB_TOKEN: *** secrets.HEXO_PROJECTS_SYNC }}
+      GITHUB_TOKEN: ${{ secrets.HEXO_PROJECTS_SYNC }}
 
     steps:
       - name: Checkout blog source
