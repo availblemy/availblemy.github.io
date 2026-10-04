@@ -25,6 +25,11 @@ jobs:
       - name: Install Hexo deps
         run: npm install --legacy-peer-deps
 
+      - name: Configure Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Fetch projects from GitHub API
         run: |
           node scripts/sync-projects.js
@@ -37,8 +42,6 @@ jobs:
 
       - name: Commit updated project data
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add source/projects/index.md
           git diff --cached --quiet || git commit -m "chore: sync projects from availblemy/projects"
           git push
