@@ -151,12 +151,8 @@ async function main() {
       '  </a>';
   }).join('\n');
 
-  var mdContent = '---\ntitle: 开源项目\nlayout: page\ncomments: false\n---\n\n' +
+  var mdContent = '---\ntitle: GitHub开源项目\nlayout: page\ncomments: false\n---\n\n' +
     '<style>\n' +
-    '/* Page header */\n' +
-    '.projects-page-header { text-align: center; margin: 30px 0 40px; }\n' +
-    '.projects-page-header h2 { font-size: 2em; margin-bottom: 10px; color: var(--text-color, #333); }\n' +
-    '.projects-page-header p { color: var(--text-secondary, #999); font-size: 1.05em; }\n' +
     '/* Grid */\n' +
     '.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin: 20px 0 40px; }\n' +
     '/* Card */\n' +
@@ -188,10 +184,6 @@ async function main() {
     '/* Responsive */\n' +
     '@media (max-width: 480px) { .projects-grid { grid-template-columns: 1fr; } .project-card { padding: 22px 20px; } }\n' +
     '</style>\n\n' +
-    '<div class="projects-page-header">\n' +
-    '  <h2><i class="fa fa-folder-open-o"></i> 开源项目</h2>\n' +
-    '  <p>一些我在安全研究和逆向工程中的实践项目</p>\n' +
-    '</div>\n\n' +
     '<div class="projects-grid">\n' + cardsHtml + '\n</div>\n';
 
   var outPath = path2.join(__dirname, '..', 'source', 'projects', 'index.md');
