@@ -151,7 +151,7 @@ async function main() {
       '  </a>';
   }).join('\n');
 
-  var mdContent = '---\ntitle: GitHub开源项目\nlayout: page\ncomments: false\n---\n\n' +
+  var mdContent = '---\ntitle: GitHub开源项目\nlayout: page\ncomments: false\nsidebar: false\n---\n\n' +
     '<style>\n' +
     '/* Grid */\n' +
     '.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; margin: 20px 0 40px; }\n' +
