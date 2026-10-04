@@ -21,7 +21,7 @@ jobs:
           node-version: 20
 
       - name: Install Hexo deps
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Fetch projects from GitHub API
         env:
