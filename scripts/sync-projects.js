@@ -1,224 +1,233 @@
 /**
  * sync-projects.js
- * 
+ *
  * 从 availblemy/projects 仓库拉取各子目录的项目信息，
- * 生成 source/_data/projects.yml 和 source/projects/*/index.md
- * 
+ * 直接生成 source/projects/index.md（含卡片网格）
+ *
  * 环境变量：
  *   GITHUB_TOKEN — GitHub PAT（需 repo 权限）
- * 
- * 项目仓库结构（单仓库多项目）：
- *   availblemy/projects/
- *     ├── pe-parser/
- *     │   ├── README.md
- *     │   └── ...
- *     ├── yara-rules/
- *     │   ├── README.md
- *     │   └── ...
- *     └── ...
+ *
+ * 用法：
+ *   node scripts/sync-projects.js
  */
 
 const https = require('https');
-const fs   = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const OWNER = 'availblemy';
-const REPO  = 'projects';
-const TOKEN = process.env.GITHUB_TOKEN;
+const REPO = 'projects';
 
-if (!TOKEN) {
-  console.error('❌ GITHUB_TOKEN 未设置');
-  process.exit(1);
-}
-
-function apiRequest(url) {
+// ── GitHub API helper ──────────────────────────────────────
+function api(path) {
   return new Promise((resolve, reject) => {
-    const req = https.get(url, {
+    const url = `https://api.github.com${path}`;
+    const opts = {
       headers: {
-        'User-Agent': 'hexo-sync-projects',
-        'Authorization': `token ${TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'sync-projects',
+        Accept: 'application/vnd.github.v3+json',
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
       },
-    }, (res) => {
+    };
+    https.get(url, opts, (res) => {
       let data = '';
-      res.on('data', chunk => data += chunk);
+      res.on('data', (c) => { data += c; });
       res.on('end', () => {
-        try { resolve(JSON.parse(data)); }
-        catch (e) { reject(new Error(`Parse error: ${data.slice(0, 200)}`)); }
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(JSON.parse(data));
+        } else {
+          reject(new Error(`GitHub API ${res.statusCode}: ${data.slice(0, 200)}`));
+        }
       });
-    });
-    req.on('error', reject);
+    }).on('error', reject);
   });
 }
 
-async function getRepoTree() {
-  // 获取 main 分支的目录树
-  const data = await apiRequest(
-    `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/main?recursive=1`
-  );
-  return data.tree;
-}
-
-async function getFileContent(filePath) {
-  const data = await apiRequest(
-    `https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`
-  );
-  if (data.content) {
-    return Buffer.from(data.content, 'base64').toString('utf-8');
+// ── 获取 README 内容 ────────────────────────────────────────
+async function getReadme(repoPath) {
+  try {
+    // 使用 Contents API 获取 README.md 的 base64 编码内容
+    const contents = await api(`/repos/${OWNER}/${REPO}/contents/${repoPath}/README.md`);
+    if (contents.content) {
+      return Buffer.from(contents.content, 'base64').toString('utf-8');
+    }
+  } catch (e) {
+    console.warn(`  [warn] 无法获取 ${repoPath}/README.md: ${e.message}`);
   }
-  return '';
+  return null;
 }
 
-async function getRepoInfo() {
-  const data = await apiRequest(
-    `https://api.github.com/repos/${OWNER}/${REPO}`
-  );
-  return {
-    stars: data.stargazers_count || 0,
-    updated: data.pushed_at ? data.pushed_at.slice(0, 10) : '',
-  };
-}
-
+// ── 主流程 ──────────────────────────────────────────────────
 async function main() {
-  console.log('📦 开始同步 availblemy/projects ...');
-
-  // 1. 获取仓库树，找到所有项目子目录
-  const tree = await getRepoTree();
-  
-  // 提取顶层目录名（排除根目录的文件如 README.md, .gitignore 等）
-  const topDirs = new Set();
-  for (const item of tree) {
-    const parts = item.path.split('/');
-    if (parts.length >= 1 && !item.path.startsWith('.') && item.type === 'tree') {
-      topDirs.add(parts[0]);
-    }
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) {
+    console.error('[error] 缺少 GITHUB_TOKEN 环境变量');
+    process.exit(1);
   }
-  // 也检测包含 README.md 的顶层目录
-  const readmeDirs = new Set();
-  for (const item of tree) {
-    const parts = item.path.split('/');
-    if (parts.length === 2 && parts[1].toLowerCase() === 'readme.md') {
-      readmeDirs.add(parts[0]);
-    }
+
+  console.log(`[info] 正在从 ${OWNER}/${REPO} 拉取项目列表...`);
+
+  // 获取仓库根目录，找出所有子目录（每个子目录 = 一个项目）
+  let items;
+  try {
+    items = await api(`/repos/${OWNER}/${REPO}/contents/`);
+  } catch (e) {
+    console.error(`[error] 无法访问 ${OWNER}/${REPO} 仓库: ${e.message}`);
+    process.exit(1);
   }
-  
-  const projectDirs = [...new Set([...topDirs, ...readmeDirs])].sort();
-  console.log(`找到 ${projectDirs.length} 个项目目录: ${projectDirs.join(', ')}`);
 
-  // 2. 获取仓库整体信息
-  const repoInfo = await getRepoInfo();
+  // 过滤出目录类型的项目
+  const projects = items.filter((item) => item.type === 'dir');
+  console.log(`[info] 发现 ${projects.length} 个项目`);
 
-  // 3. 对每个项目目录，拉取 README.md 和推断语言
-  const projects = [];
-  for (const dir of projectDirs) {
-    console.log(`  → 处理 ${dir} ...`);
+  if (projects.length === 0) {
+    console.warn('[warn] 未发现任何项目目录，生成空页面');
+  }
+
+  // 收集项目数据
+  const projectData = [];
+  for (const p of projects) {
+    console.log(`[info] 处理: ${p.name}`);
     
-    // 获取 README
-    let readme = '';
+    // 尝试获取语言信息（通过查看目录内容推断）
+    let lang = 'Unknown';
     try {
-      readme = await getFileContent(`${dir}/README.md`);
-    } catch {
-      // 没有 README 也行
-    }
-
-    // 获取目录内容推断语言
-    let lang = '';
-    try {
-      const dirContent = await apiRequest(
-        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${dir}`
-      );
-      const files = Array.isArray(dirContent) ? dirContent : [];
+      const files = await api(`/repos/${OWNER}/${REPO}/contents/${p.name}`);
       const extMap = {
         '.py': 'Python', '.js': 'JavaScript', '.ts': 'TypeScript',
-        '.c': 'C', '.cpp': 'C++', '.go': 'Go', '.rs': 'Rust',
-        '.yar': 'YARA', '.yara': 'YARA', '.rb': 'Ruby',
-        '.java': 'Java', '.sh': 'Shell', '.ps1': 'PowerShell',
+        '.go': 'Go', '.rs': 'Rust', '.c': 'C', '.cpp': 'C++',
+        '.java': 'Java', '.rb': 'Ruby', '.php': 'PHP',
+        '.cs': 'C#', '.swift': 'Swift', '.kt': 'Kotlin',
       };
-      for (const f of files) {
-        const ext = path.extname(f.name).toLowerCase();
-        if (extMap[ext]) { lang = extMap[ext]; break; }
+      // 找最常见的源码扩展名
+      const srcFiles = files.filter(f => path.extname(f.name) in extMap);
+      if (srcFiles.length > 0) {
+        const extCounts = {};
+        srcFiles.forEach(f => {
+          const e = path.extname(f.name);
+          extCounts[e] = (extCounts[e] || 0) + 1;
+        });
+        const topExt = Object.entries(extCounts).sort((a, b) => b[1] - a[1])[0][0];
+        lang = extMap[topExt];
       }
-    } catch {}
+    } catch (e) {
+      // 忽略
+    }
 
-    // 从 README 第一行提取描述
-    let desc = '';
+    // 获取 README 第一行作为描述
+    let desc = p.name;
+    const readme = await getReadme(p.name);
     if (readme) {
-      const firstLine = readme.split('\n').find(l => l.trim().startsWith('#'));
-      if (firstLine) {
-        desc = firstLine.replace(/^#+\s*/, '').trim();
-      }
-      // 如果第一行是标题，取第二行非空作为描述
-      const lines = readme.split('\n').filter(l => l.trim());
-      if (lines.length >= 2 && lines[0].startsWith('#')) {
-        desc = lines[1].replace(/^[-–—]\s*/, '').trim() || desc;
-      }
+      // 取第一个非空、非标题行的内容
+      const lines = readme.split('\n').filter(l => l.trim() && !l.startsWith('#'));
+      desc = lines[0]?.trim().slice(0, 120) || p.name;
     }
 
-    projects.push({
-      name: dir,
-      desc: desc || dir,
-      lang: lang || '-',
-      stars: 0,  // 单仓库内子目录无独立 star
-      updated: repoInfo.updated,
-      url: `https://github.com/${OWNER}/${REPO}/tree/main/${dir}`,
-      readme: readme || '',
+    projectData.push({
+      name: p.name,
+      desc: desc,
+      lang: lang,
+      url: `https://github.com/${OWNER}/${REPO}/tree/main/${p.name}`,
     });
+
+    // 避免 API 限流
+    await new Promise(r => setTimeout(r, 300));
   }
 
-  // 4. 生成 source/_data/projects.yml
-  const ymlLines = ['# 由 sync-projects.js 自动生成，请勿手动编辑', 'projects:'];
-  for (const p of projects) {
-    ymlLines.push(`  - name: "${p.name}"`);
-    ymlLines.push(`    desc: "${p.desc.replace(/"/g, '\\"')}"`);
-    ymlLines.push(`    lang: "${p.lang}"`);
-    ymlLines.push(`    stars: ${p.stars}`);
-    ymlLines.push(`    updated: "${p.updated}"`);
-    ymlLines.push(`    url: "${p.url}"`);
-    // README 用 | 块标量
-    ymlLines.push('    readme: |');
-    for (const line of p.readme.split('\n')) {
-      ymlLines.push(`      ${line}`);
-    }
-    ymlLines.push('');
-  }
+  // ── 生成 index.md ────────────────────────────────────────
+  const cardsHtml = projectData.map(p => `  <a class="project-card" href="${p.url}" target="_blank" rel="noopener">
+    <div class="project-card-header">
+      <i class="fa fa-code"></i>
+      <span>${p.name}</span>
+    </div>
+    <div class="project-card-desc">${p.desc}</div>
+    <div class="project-card-meta">
+      <span class="project-lang">${p.lang}</span>
+    </div>
+    <div class="project-card-link">GitHub →</div>
+  </a>`).join('\n');
 
-  const ymlPath = path.join('source', '_data', 'projects.yml');
-  fs.mkdirSync(path.dirname(ymlPath), { recursive: true });
-  fs.writeFileSync(ymlPath, ymlLines.join('\n'), 'utf-8');
-  console.log(`✅ 写入 ${ymlPath}`);
+  const mdContent = `---
+title: 开源项目
+layout: page
+comments: false
+---
 
-  // 5. 生成各项目详情页 source/projects/<name>/index.md
-  for (const p of projects) {
-    const dir = path.join('source', 'projects', p.name);
-    fs.mkdirSync(dir, { recursive: true });
+<style>
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+.project-card {
+  display: block;
+  border: 1px solid var(--card-border, #e1e4e8);
+  border-radius: var(--card-radius, 12px);
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: all .3s ease;
+  background: var(--card-bg, #fff);
+}
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover, 0 6px 24px rgba(0,0,0,.12));
+  border-color: var(--primary-color, #3572b0);
+}
+.project-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 1.15em;
+  font-weight: 600;
+  color: var(--primary-color, #3572b0);
+}
+.project-card-desc {
+  color: var(--text-secondary, #7f8c8d);
+  font-size: .92em;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.project-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: .82em;
+  color: var(--text-secondary, #7f8c8d);
+}
+.project-lang {
+  background: var(--primary-dim, rgba(53,114,176,.08));
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.project-card-link {
+  margin-top: 12px;
+  font-size: .85em;
+  color: var(--primary-color, #3572b0);
+}
+html[data-theme="dark"] .project-card {
+  --card-bg: #161b22;
+  --card-border: #30363d;
+}
+html[data-theme="dark"] .project-card:hover {
+  --card-border: #58a6ff;
+}
+</style>
 
-    const md = [
-      '---',
-      `title: ${p.name}`,
-      'layout: page',
-      'comments: false',
-      '---',
-      '',
-      `<div class="project-detail-header" style="margin-bottom:1.5em">\`,
-      `  <a href="${p.url}" target="_blank" rel="noopener" style="color:var(--primary-color)">\`,
-      `    availblemy/projects/${p.name}`,
-      `    · ${p.lang}`,
-      `  </a>`,
-      '</div>',
-      '',
-      p.readme || '(暂无 README)',
-      '',
-      `<p><a href="${p.url}" target="_blank" rel="noopener">🔗 查看完整源码 → GitHub</a></p>`,
-    ].join('\n');
+<div class="projects-grid">
+${cardsHtml}
+</div>
+`;
 
-    fs.writeFileSync(path.join(dir, 'index.md'), md, 'utf-8');
-    console.log(`✅ 写入 source/projects/${p.name}/index.md`);
-  }
-
-  console.log(`\n🎉 同步完成！${projects.length} 个项目已更新。`);
+  const outPath = path.join(__dirname, '..', 'source', 'projects', 'index.md');
+  fs.writeFileSync(outPath, mdContent, 'utf-8');
+  console.log(`\n[done] 已生成 ${outPath}，包含 ${projectData.length} 个项目`);
 }
 
 main().catch(e => {
-  console.error('❌ 同步失败:', e.message);
+  console.error('[fatal]', e.message);
   process.exit(1);
 });

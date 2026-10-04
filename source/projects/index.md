@@ -59,7 +59,6 @@ comments: false
   font-size: .85em;
   color: var(--primary-color, #3572b0);
 }
-/* 暗色适配 */
 html[data-theme="dark"] .project-card {
   --card-bg: #161b22;
   --card-border: #30363d;
@@ -70,19 +69,17 @@ html[data-theme="dark"] .project-card:hover {
 </style>
 
 <div class="projects-grid">
-{% for p in site.data.projects.projects %}
-  <a class="project-card" href="{{ p.url }}" target="_blank" rel="noopener">
+  <a class="project-card" href="https://github.com/availblemy/projects/tree/main/pe-parser" target="_blank" rel="noopener">
     <div class="project-card-header">
       <i class="fa fa-code"></i>
-      <span>{{ p.name }}</span>
+      <span>pe-parser</span>
     </div>
-    <div class="project-card-desc">{{ p.desc }}</div>
+    <div class="project-card-desc">轻量级 PE 文件结构解析工具</div>
     <div class="project-card-meta">
-      {% if p.lang %}<span class="project-lang">{{ p.lang }}</span>{% endif %}
-      <span>⭐ {{ p.stars }}</span>
-      <span>更新 {{ p.updated }}</span>
+      <span class="project-lang">Python</span>
+      <span>⭐ 0</span>
+      <span>更新 2026-01-01</span>
     </div>
     <div class="project-card-link">GitHub →</div>
   </a>
-{% endfor %}
 </div>
