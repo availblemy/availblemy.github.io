@@ -173,7 +173,7 @@ async function main() {
     '.card-arrow { margin-left: auto; color: var(--text-lighter, #aaa); font-size: 1.1em; transition: all .3s; }\n' +
     '.project-card:hover .card-arrow { color: #3572b0; transform: translateX(4px); }\n' +
     '/* Hide NexT default page elements */\n' +
-    'body.page-project .sidebar-toc, body.page-project .sidebar-links, body.page-project .posts-expand + .sidebar-container { display: none !important; }\n' +
+    'body.page-project .sidebar-toc, body.page-project .posts-expand + .sidebar-container .sidebar-toc { display: none !important; }\n' +
     '/* Dark mode */\n' +
     'html[data-theme="dark"] .project-card { --card-bg: #161b22; --card-border: #30363d; }\n' +
     'html[data-theme="dark"] .project-card:hover { box-shadow: 0 12px 36px rgba(88,166,255,.12), 0 4px 12px rgba(0,0,0,.3); }\n' +
