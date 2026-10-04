@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      GITHUB_TOKEN: *** secrets.HEXO_PROJECTS_SYNC }}
 
     steps:
       - name: Checkout blog source
@@ -24,8 +26,6 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Fetch projects from GitHub API
-        env:
-          GITHUB_TOKEN: ${{ secrets.HEXO_PROJECTS_SYNC }}
         run: |
           node scripts/sync-projects.js
 
@@ -37,8 +37,8 @@ jobs:
 
       - name: Commit updated project data
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add source/projects/index.md
-          git diff --cached --quiet || git commit -m 'chore: sync projects from availblemy/projects'
+          git diff --cached --quiet || git commit -m "chore: sync projects from availblemy/projects"
           git push
