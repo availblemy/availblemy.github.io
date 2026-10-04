@@ -7,80 +7,115 @@
 
 {% block content %}
 <div class="about-page">
-  <!-- 机器人区域 -->
-  <div class="robot-container">
-    <div class="robot" id="robot">
-      <div class="robot-head">
-        <div class="robot-eyes">
-          <div class="eye left"></div>
-          <div class="eye right"></div>
-        </div>
-        <div class="robot-mouth"></div>
-        <div class="robot-antenna">
-          <div class="antenna-ball"></div>
-        </div>
-      </div>
-      <div class="robot-body">
-        <div class="robot-chest-light"></div>
-      </div>
+  <!-- 小猫区域 -->
+  <div class="cat-container">
+    <div class="cat" id="cat">
+      <svg viewBox="0 0 200 180" width="160" height="144">
+        <!-- 耳朵 -->
+        <polygon points="30,60 20,15 65,45" fill="#f4a460"/>
+        <polygon points="170,60 180,15 135,45" fill="#f4a460"/>
+        <polygon points="35,55 28,25 62,46" fill="#ffb6c1"/>
+        <polygon points="165,55 172,25 138,46" fill="#ffb6c1"/>
+        <!-- 头 -->
+        <ellipse cx="100" cy="95" rx="75" height="60" fill="#f4a460"/>
+        <!-- 脸部白色区域 -->
+        <ellipse cx="100" cy="105" rx="50" height="38" fill="#fff8dc"/>
+        <!-- 眼睛 -->
+        <g class="cat-eyes">
+          <ellipse class="eye-left" cx="72" cy="85" rx="12" ry="14" fill="#2d2d2d"/>
+          <ellipse class="eye-right" cx="128" cy="85" rx="12" ry="14" fill="#2d2d2d"/>
+          <circle class="pupil-left" cx="74" cy="83" r="5" fill="#fff"/>
+          <circle class="pupil-right" cx="130" cy="83" r="5" fill="#fff"/>
+        </g>
+        <!-- 鼻子 -->
+        <ellipse cx="100" cy="102" rx="6" ry="4" fill="#ff9999"/>
+        <!-- 嘴巴 -->
+        <path class="cat-mouth" d="M88,110 Q94,118 100,110 Q106,118 112,110" fill="none" stroke="#2d2d2d" stroke-width="1.8" stroke-linecap="round"/>
+        <!-- 胡须 -->
+        <g class="whiskers" stroke="#2d2d2d" stroke-width="1" opacity="0.5">
+          <line x1="40" y1="98" x2="68" y2="102"/><line x1="38" y1="108" x2="66" y2="108"/>
+          <line x1="160" y1="98" x2="132" y2="102"/><line x1="162" y1="108" x2="134" y2="108"/>
+        </g>
+      </svg>
     </div>
-    <div class="robot-bubble" id="robot-bubble">你好呀！我是 MalCode 的助手 🤖<br>点我试试~</div>
+    <div class="cat-bubble" id="cat-bubble">喵~ 点我互动呀 🐱</div>
   </div>
 
-  <!-- 关于信息 -->
-  <div class="about-info">
-    <h1 class="about-name">成都信息工程大学</h1>
-    <p class="about-detail"><i class="fa fa-envelope"></i> QQ: 2253922210</p>
-  </div>
-
-  <!-- 快捷链接 -->
-  <div class="about-links">
-    <a href="/projects/"><i class="fa fa-code"></i> 开源项目</a>
-    <a href="https://github.com/availblemy" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-    <a href="/archives/"><i class="fa fa-book-open"></i> 技术文章</a>
+  <!-- 自我介绍 -->
+  <div class="about-intro">
+    <p>🎓 成都信息工程大学</p>
+    <p>📧 QQ: 2253922210</p>
+    <p class="intro-text">我是 MalCode，一个热爱逆向工程和安全研究的大学生。平时喜欢分析恶意软件、写脚本、搞 CTF，偶尔也写写博客记录学习过程。欢迎来找我交流~ 😊</p>
   </div>
 </div>
 
 <script>
 (function(){
-  var bubble = document.getElementById('robot-bubble');
-  var robot = document.getElementById('robot');
+  var bubble = document.getElementById('cat-bubble');
+  var cat = document.getElementById('cat');
+  
   var phrases = [
-    '你好呀！我是 MalCode 的助手 🤖',
-    '欢迎来到我的博客！',
-    '想看项目？点下面链接~',
-    '最近在研究恶意软件分析 🛡️',
-    '今天也要加油哦！💪',
-    '点我可以换句话~',
-    '成都信息工程大学，了解一下？',
-    'QQ: 2253922210，欢迎交流~',
-    '逆向工程真的很有趣！',
-    '你今天学什么了？📚'
+    '喵~ 点我互动呀 🐱',
+    '喵呜~ 欢迎来到我的博客！',
+    '🐾 我是 MalCode 的猫咪助手',
+    '今天也要开心哦~ 😺',
+    '想看技术文章？点导航栏~',
+    '成都信息工程大学，喵~',
+    '逆向工程很有趣的！🔍',
+    'QQ: 2253922210，来找我玩呀~',
+    '喵~ 你今天学什么了？📚',
+    '摸摸头~ 🐱💕',
+    '我是一只安全猫 🛡️',
+    '饿了...有小鱼干吗？🐟'
   ];
   var idx = 0;
   
-  function say() {
+  function meow() {
     idx = (idx + 1) % phrases.length;
     bubble.innerHTML = phrases[idx];
     bubble.classList.add('pop');
     setTimeout(function(){ bubble.classList.remove('pop'); }, 300);
     
-    robot.style.animation = 'none';
-    robot.offsetHeight;
-    robot.style.animation = 'robot-bounce .4s ease';
+    // 小猫跳动
+    cat.style.animation = 'none';
+    cat.offsetHeight; // reflow
+    cat.style.animation = 'cat-jump .5s ease';
+    
+    // 眼睛变化
+    var eyes = document.querySelectorAll('.cat-eyes ellipse[rx="12"]');
+    eyes.forEach(function(e){ e.setAttribute('ry', '4'); });
+    setTimeout(function(){
+      eyes.forEach(function(e){ e.setAttribute('ry', '14'); });
+    }, 200);
   }
   
-  robot.addEventListener('click', say);
-  bubble.addEventListener('click', say);
+  cat.addEventListener('click', meow);
+  bubble.addEventListener('click', meow);
   
+  // 鼠标跟随眼睛
+  document.addEventListener('mousemove', function(e){
+    var rect = cat.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height * 0.48;
+    var dx = (e.clientX - cx) / 30;
+    var dy = (e.clientY - cy) / 30;
+    var d = Math.sqrt(dx*dx + dy*dy);
+    if(d > 4) { dx = dx/d*4; dy = dy/d*4; }
+    var pl = document.querySelector('.pupil-left');
+    var pr = document.querySelector('.pupil-right');
+    if(pl) { pl.setAttribute('cx', 74+dx); pl.setAttribute('cy', 83+dy); }
+    if(pr) { pr.setAttribute('cx', 130+dx); pr.setAttribute('cy', 83+dy); }
+  });
+  
+  // 自动喵
   setInterval(function() {
-    if (Math.random() > 0.7) {
+    if(Math.random() > 0.7) {
       idx = Math.floor(Math.random() * phrases.length);
       bubble.innerHTML = phrases[idx];
       bubble.classList.add('pop');
       setTimeout(function(){ bubble.classList.remove('pop'); }, 300);
     }
-  }, 8000);
+  }, 10000);
 })();
 </script>
 
@@ -88,135 +123,105 @@
 /* ===== About Page ===== */
 .about-page {
   text-align: center;
-  padding: 40px 20px 30px;
-  background: linear-gradient(135deg, rgba(53,114,176,.06), rgba(80,168,232,.04));
+  padding: 36px 20px 32px;
+  background: linear-gradient(135deg, rgba(53,114,176,.05), rgba(80,168,232,.03));
   border-radius: 16px;
 }
 
-/* ===== Robot ===== */
-.robot-container {
+/* ===== Cat ===== */
+.cat-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   cursor: pointer;
 }
-
-.robot {
-  width: 100px; height: 120px; position: relative;
-  animation: robot-float 3s ease-in-out infinite;
+.cat {
+  animation: cat-idle 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 10px rgba(244,164,96,.3));
+  transition: transform .2s;
 }
-.robot-head {
-  width: 70px; height: 55px;
-  background: linear-gradient(135deg, #5b9bd5, #3572b0);
-  border-radius: 18px 18px 12px 12px;
-  position: absolute; top: 0; left: 15px;
-  box-shadow: 0 3px 12px rgba(53,114,176,.3);
-}
-.robot-eyes { display: flex; justify-content: center; gap: 14px; padding-top: 14px; }
-.eye {
-  width: 14px; height: 14px; background: #fff; border-radius: 50%;
-  position: relative; animation: blink 4s ease-in-out infinite;
-}
-.eye::after {
-  content: ''; position: absolute; width: 6px; height: 6px;
-  background: #222; border-radius: 50%; top: 4px; left: 4px; transition: all .15s;
-}
-.robot:hover .eye.left::after { transform: translate(-2px, 0); }
-.robot:hover .eye.right::after { transform: translate(2px, 0); }
-
-.robot-mouth {
-  width: 16px; height: 8px; background: #fff;
-  border-radius: 0 0 10px 10px; margin: 6px auto 0; transition: all .2s;
-}
-.robot:hover .robot-mouth { height: 12px; border-radius: 50%; }
-
-.robot-antenna {
-  position: absolute; width: 3px; height: 16px;
-  background: #3572b0; top: -14px; left: 50%; margin-left: -1.5px;
-}
-.antenna-ball {
-  width: 10px; height: 10px; background: #e74c3c; border-radius: 50%;
-  position: absolute; top: -10px; left: -3.5px;
-  animation: antenna-glow 2s ease-in-out infinite alternate;
-}
-.robot-body {
-  width: 56px; height: 45px;
-  background: linear-gradient(135deg, #6ba3de, #4a90d9);
-  border-radius: 10px 10px 16px 16px;
-  position: absolute; top: 52px; left: 22px;
-  box-shadow: 0 3px 12px rgba(53,114,176,.25);
-}
-.robot-chest-light {
-  width: 14px; height: 14px; background: #2ecc71; border-radius: 50%;
-  margin: 12px auto 0;
-  box-shadow: 0 0 8px rgba(46,204,113,.6);
-  animation: chest-pulse 2s ease-in-out infinite alternate;
+.cat:hover {
+  transform: scale(1.06);
 }
 
 /* Speech Bubble */
-.robot-bubble {
-  position: absolute; top: -10px; left: 120px;
-  background: #fff; border: 2px solid #3572b0; border-radius: 14px;
-  padding: 12px 18px; font-size: .88em; color: #333; max-width: 220px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.1); line-height: 1.55;
+.cat-bubble {
+  position: absolute;
+  top: -8px;
+  left: 170px;
+  background: #fff;
+  border: 2px solid #f4a460;
+  border-radius: 16px;
+  padding: 11px 18px;
+  font-size: .9em;
+  color: #444;
+  max-width: 220px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  line-height: 1.6;
   white-space: nowrap;
   transition: transform .3s cubic-bezier(.68,-.55,.265,1.55);
 }
-.robot-bubble::before {
-  content: ''; position: absolute; left: -10px; top: 20px;
-  border: 8px solid transparent; border-right-color: #3572b0;
+.cat-bubble::before {
+  content: ''; position: absolute; left: -11px; top: 20px;
+  border: 9px solid transparent; border-right-color: #f4a460;
 }
-.robot-bubble::after {
-  content: ''; position: absolute; left: -6px; top: 22px;
-  border: 6px solid transparent; border-right-color: #fff;
+.cat-bubble::after {
+  content: ''; position: absolute; left: -7px; top: 22px;
+  border: 7px solid transparent; border-right-color: #fff;
 }
-.robot-bubble.pop { transform: scale(1.08); }
+.cat-bubble.pop { transform: scale(1.08); }
 
-/* About Info */
-.about-name { font-size: 1.6em; font-weight: 700; margin: 0 0 8px; color: var(--text-color); }
-.about-detail { font-size: 1em; color: var(--text-secondary); margin: 0 0 18px; }
-.about-detail i { color: #3572b0; margin-right: 6px; }
-
-/* Links */
-.about-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-.about-links a {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 8px 18px; border-radius: 8px; font-size: .88em;
-  text-decoration: none; transition: all .25s;
-  color: #3572b0; background: rgba(53,114,176,.07);
-  border: 1px solid rgba(53,114,176,.15);
+/* About Intro */
+.about-intro {
+  max-width: 480px;
+  margin: 0 auto;
 }
-.about-links a:hover { background: #3572b0; color: #fff; transform: translateY(-2px); }
+.about-intro p {
+  font-size: 1em;
+  color: var(--text-color, #333);
+  margin: 6px 0;
+  line-height: 1.7;
+}
+.intro-text {
+  margin-top: 14px !important;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(53,114,176,.2);
+  font-size: .92em !important;
+  color: var(--text-secondary, #666) !important;
+  line-height: 1.8 !important;
+}
 
 /* Animations */
-@keyframes robot-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-@keyframes robot-bounce {
-  0%{transform:translateY(0)rotate(0)} 25%{transform:translateY(-12px)rotate(-3deg)}
-  50%{transform:translateY(0)rotate(0)} 75%{transform:translateY(-6px)rotate(3deg)}
-  100%{transform:translateY(0)rotate(0)}
+@keyframes cat-idle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
-@keyframes blink { 0%,96%,100%{transform:scaleY(1)} 98%{transform:scaleY(0.1)} }
-@keyframes antenna-glow {
-  from{box-shadow:0 0 4px #e74c3c} to{box-shadow:0 0 12px #e74c3c,0 0 20px rgba(231,76,60,.3)}
-}
-@keyframes chest-pulse {
-  from{opacity:1;box-shadow:0 0 8px rgba(46,204,113,.6)}
-  to{opacity:.6;box-shadow:0 0 4px rgba(46,204,113,.3)}
+@keyframes cat-jump {
+  0% { transform: translateY(0) scaleY(1); }
+  30% { transform: translateY(-18px) scaleY(1.08); }
+  50% { transform: translateY(-12px) scaleY(1); }
+  70% { transform: translateY(-4px) scaleY(0.96); }
+  100% { transform: translateY(0) scaleY(1); }
 }
 
 /* Dark mode */
 html[data-theme="dark"] .about-page {
-  background: linear-gradient(135deg, rgba(88,166,255,.06), rgba(56,139,253,.03));
+  background: linear-gradient(135deg, rgba(88,166,255,.04), rgba(56,139,255,.02));
 }
-html[data-theme="dark"] .about-name { color: #e6edf3; }
-html[data-theme="dark"] .robot-bubble { background: #161b22; border-color: #58a6ff; color: #e6edf3; }
-html[data-theme="dark"] .robot-bubble::before { border-right-color: #58a6ff; }
-html[data-theme="dark"] .robot-bubble::after { border-right-color: #161b22; }
+html[data-theme="dark"] .about-intro p { color: #e6edf3; }
+html[data-theme="dark"] .intro-text { color: #8b949e !important; }
+html[data-theme="dark"] .cat-bubble {
+  background: #161b22; border-color: #d29966; color: #e6edf3;
+}
+html[data-theme="dark"] .cat-bubble::before { border-right-color: #d29966; }
+html[data-theme="dark"] .cat-bubble::after { border-right-color: #161b22; }
 
 /* Responsive */
 @media (max-width: 800px) {
-  .robot-bubble { position: static; margin-top: 16px; display: inline-block; }
-  .robot-bubble::before, .robot-bubble::after { display: none; }
+  .cat-bubble {
+    position: static; margin-top: 14px; display: inline-block;
+  }
+  .cat-bubble::before, .cat-bubble::after { display: none; }
 }
 </style>
 {% endblock %}
