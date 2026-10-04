@@ -81,7 +81,7 @@ avatar:
   rounded: true
   rotated: false
 
-site_state: true
+site_state: false
 
 social:
   GitHub: https://github.com/availblemy || fab fa-github
