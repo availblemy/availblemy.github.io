@@ -25,8 +25,6 @@ sidebar: false
 .lang-name { color: var(--text-secondary, #777); font-weight: 500; }
 .card-arrow { margin-left: auto; color: var(--text-lighter, #aaa); font-size: 1.1em; transition: all .3s; }
 .project-card:hover .card-arrow { color: #3572b0; transform: translateX(4px); }
-/* Hide NexT default page elements */
-body.page-project .sidebar-toc, body.page-project .posts-expand + .sidebar-container .sidebar-toc { display: none !important; }
 /* Dark mode */
 html[data-theme="dark"] .project-card { --card-bg: #161b22; --card-border: #30363d; }
 html[data-theme="dark"] .project-card:hover { box-shadow: 0 12px 36px rgba(88,166,255,.12), 0 4px 12px rgba(0,0,0,.3); }
