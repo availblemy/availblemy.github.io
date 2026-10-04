@@ -53,4 +53,16 @@ html[data-theme="dark"] .lang-name { color: #8b949e; }
       <span class="card-arrow"><i class="fa fa-angle-right"></i></span>
     </div>
   </a>
+  <a class="project-card" href="https://github.com/availblemy/projects/tree/main/test2" target="_blank" rel="noopener">
+    <div class="card-top">
+      <div class="card-icon"><i class="fa fa-code"></i></div>
+      <h3 class="card-title">test2</h3>
+      <p class="card-desc">test2</p>
+    </div>
+    <div class="card-footer">
+      <span class="lang-dot" style="background:#8b949e"></span>
+      <span class="lang-name">Unknown</span>
+      <span class="card-arrow"><i class="fa fa-angle-right"></i></span>
+    </div>
+  </a>
 </div>
