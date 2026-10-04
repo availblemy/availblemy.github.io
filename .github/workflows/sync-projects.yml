@@ -25,10 +25,10 @@ jobs:
       - name: Install Hexo deps
         run: npm install --legacy-peer-deps
 
-      - name: Configure Git identity
+      - name: Configure Git identity (global)
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Fetch projects from GitHub API
         run: |
