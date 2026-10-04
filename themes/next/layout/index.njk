@@ -41,31 +41,6 @@
   </div>
 </div>
 
-<!-- 最近文章 -->
-<div class="home-sections">
-  <div>
-    <div class="section-header">
-      <h2><i class="fa fa-code"></i> 最近项目</h2>
-      <a href="/projects/">查看全部 &rarr;</a>
-    </div>
-    <div id="projects-preview" style="display:grid;gap:14px;">
-      <div style="padding:20px;border:1px dashed #ddd;border-radius:10px;text-align:center;color:#999;font-size:.9em;">
-        <i class="fa fa-folder-open-o" style="font-size:1.5em;display:block;margin-bottom:8px;"></i>
-        项目数据同步中...<br><small style="color:#bbb;">前往 <a href="/projects/" style="color:#3572b0;">项目页</a> 查看</small>
-      </div>
-    </div>
-  </div>
-  <div>
-    <div class="section-header">
-      <h2><i class="fa fa-pencil"></i> 最近文章</h2>
-      <a href="/archives/">查看全部 &rarr;</a>
-    </div>
-    <div class="recent-posts-grid">
-      {{ recent_posts_html }}
-    </div>
-  </div>
-</div>
-
 <script>
 (function(){
   var bubble = document.getElementById('robot-bubble');
@@ -90,16 +65,14 @@
     bubble.classList.add('pop');
     setTimeout(function(){ bubble.classList.remove('pop'); }, 300);
     
-    // 机器人晃动
     robot.style.animation = 'none';
-    robot.offsetHeight; // reflow
+    robot.offsetHeight;
     robot.style.animation = 'robot-bounce .4s ease';
   }
   
   robot.addEventListener('click', say);
   bubble.addEventListener('click', say);
   
-  // 自动说话
   setInterval(function() {
     if (Math.random() > 0.7) {
       idx = Math.floor(Math.random() * phrases.length);
@@ -112,13 +85,12 @@
 </script>
 
 <style>
-/* ===== About Page Layout ===== */
+/* ===== About Page ===== */
 .about-page {
   text-align: center;
   padding: 40px 20px 30px;
   background: linear-gradient(135deg, rgba(53,114,176,.06), rgba(80,168,232,.04));
   border-radius: 16px;
-  margin-bottom: 36px;
 }
 
 /* ===== Robot ===== */
@@ -130,105 +102,52 @@
 }
 
 .robot {
-  width: 100px;
-  height: 120px;
-  position: relative;
+  width: 100px; height: 120px; position: relative;
   animation: robot-float 3s ease-in-out infinite;
 }
-
 .robot-head {
-  width: 70px;
-  height: 55px;
+  width: 70px; height: 55px;
   background: linear-gradient(135deg, #5b9bd5, #3572b0);
   border-radius: 18px 18px 12px 12px;
-  position: absolute;
-  top: 0;
-  left: 15px;
+  position: absolute; top: 0; left: 15px;
   box-shadow: 0 3px 12px rgba(53,114,176,.3);
 }
-
-.robot-eyes {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  padding-top: 14px;
-}
-
+.robot-eyes { display: flex; justify-content: center; gap: 14px; padding-top: 14px; }
 .eye {
-  width: 14px;
-  height: 14px;
-  background: #fff;
-  border-radius: 50%;
-  position: relative;
-  animation: blink 4s ease-in-out infinite;
+  width: 14px; height: 14px; background: #fff; border-radius: 50%;
+  position: relative; animation: blink 4s ease-in-out infinite;
 }
-
 .eye::after {
-  content: '';
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #222;
-  border-radius: 50%;
-  top: 4px;
-  left: 4px;
-  transition: all .15s;
+  content: ''; position: absolute; width: 6px; height: 6px;
+  background: #222; border-radius: 50%; top: 4px; left: 4px; transition: all .15s;
 }
-
 .robot:hover .eye.left::after { transform: translate(-2px, 0); }
 .robot:hover .eye.right::after { transform: translate(2px, 0); }
 
 .robot-mouth {
-  width: 16px;
-  height: 8px;
-  background: #fff;
-  border-radius: 0 0 10px 10px;
-  margin: 6px auto 0;
-  transition: all .2s;
+  width: 16px; height: 8px; background: #fff;
+  border-radius: 0 0 10px 10px; margin: 6px auto 0; transition: all .2s;
 }
-
-.robot:hover .robot-mouth {
-  height: 12px;
-  border-radius: 50%;
-}
+.robot:hover .robot-mouth { height: 12px; border-radius: 50%; }
 
 .robot-antenna {
-  position: absolute;
-  width: 3px;
-  height: 16px;
-  background: #3572b0;
-  top: -14px;
-  left: 50%;
-  margin-left: -1.5px;
+  position: absolute; width: 3px; height: 16px;
+  background: #3572b0; top: -14px; left: 50%; margin-left: -1.5px;
 }
-
 .antenna-ball {
-  width: 10px;
-  height: 10px;
-  background: #e74c3c;
-  border-radius: 50%;
-  position: absolute;
-  top: -10px;
-  left: -3.5px;
+  width: 10px; height: 10px; background: #e74c3c; border-radius: 50%;
+  position: absolute; top: -10px; left: -3.5px;
   animation: antenna-glow 2s ease-in-out infinite alternate;
 }
-
 .robot-body {
-  width: 56px;
-  height: 45px;
+  width: 56px; height: 45px;
   background: linear-gradient(135deg, #6ba3de, #4a90d9);
   border-radius: 10px 10px 16px 16px;
-  position: absolute;
-  top: 52px;
-  left: 22px;
+  position: absolute; top: 52px; left: 22px;
   box-shadow: 0 3px 12px rgba(53,114,176,.25);
 }
-
 .robot-chest-light {
-  width: 14px;
-  height: 14px;
-  background: #2ecc71;
-  border-radius: 50%;
+  width: 14px; height: 14px; background: #2ecc71; border-radius: 50%;
   margin: 12px auto 0;
   box-shadow: 0 0 8px rgba(46,204,113,.6);
   animation: chest-pulse 2s ease-in-out infinite alternate;
@@ -236,217 +155,53 @@
 
 /* Speech Bubble */
 .robot-bubble {
-  position: absolute;
-  top: -10px;
-  left: 120px;
-  background: #fff;
-  border: 2px solid #3572b0;
-  border-radius: 14px;
-  padding: 12px 18px;
-  font-size: .88em;
-  color: #333;
-  max-width: 220px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.1);
-  line-height: 1.55;
+  position: absolute; top: -10px; left: 120px;
+  background: #fff; border: 2px solid #3572b0; border-radius: 14px;
+  padding: 12px 18px; font-size: .88em; color: #333; max-width: 220px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.1); line-height: 1.55;
   white-space: nowrap;
   transition: transform .3s cubic-bezier(.68,-.55,.265,1.55);
 }
-
 .robot-bubble::before {
-  content: '';
-  position: absolute;
-  left: -10px;
-  top: 20px;
-  border: 8px solid transparent;
-  border-right-color: #3572b0;
+  content: ''; position: absolute; left: -10px; top: 20px;
+  border: 8px solid transparent; border-right-color: #3572b0;
 }
-
 .robot-bubble::after {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 22px;
-  border: 6px solid transparent;
-  border-right-color: #fff;
+  content: ''; position: absolute; left: -6px; top: 22px;
+  border: 6px solid transparent; border-right-color: #fff;
 }
-
-.robot-bubble.pop {
-  transform: scale(1.08);
-}
+.robot-bubble.pop { transform: scale(1.08); }
 
 /* About Info */
-.about-name {
-  font-size: 1.6em;
-  font-weight: 700;
-  color: var(--text-color);
-  margin: 0 0 8px;
-}
-
-.about-detail {
-  font-size: 1em;
-  color: var(--text-secondary);
-  margin: 0 0 18px;
-}
-
-.about-detail i {
-  color: #3572b0;
-  margin-right: 6px;
-}
+.about-name { font-size: 1.6em; font-weight: 700; margin: 0 0 8px; color: var(--text-color); }
+.about-detail { font-size: 1em; color: var(--text-secondary); margin: 0 0 18px; }
+.about-detail i { color: #3572b0; margin-right: 6px; }
 
 /* Links */
-.about-links {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
+.about-links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 .about-links a {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 18px;
-  border-radius: 8px;
-  font-size: .88em;
-  text-decoration: none;
-  transition: all .25s;
-  color: #3572b0;
-  background: rgba(53,114,176,.07);
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 18px; border-radius: 8px; font-size: .88em;
+  text-decoration: none; transition: all .25s;
+  color: #3572b0; background: rgba(53,114,176,.07);
   border: 1px solid rgba(53,114,176,.15);
 }
-
-.about-links a:hover {
-  background: #3572b0;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-/* Section Headers */
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 22px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--divider, #eee);
-}
-
-.section-header h2 {
-  font-size: 1.35em;
-  margin: 0;
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.section-header h2 i { color: #3572b0; }
-
-.section-header a {
-  font-size: .85em;
-  color: #3572b0;
-  text-decoration: none;
-}
-.section-header a:hover { text-decoration: underline; }
-
-/* Two Column */
-.home-sections {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-top: 36px;
-}
-
-.recent-posts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.post-card {
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid var(--card-border, #eaecef);
-  text-decoration: none;
-  color: inherit;
-  transition: all .28s ease;
-  background: var(--card-bg, #fff);
-  display: block;
-}
-
-.post-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(53,114,176,.12);
-  border-color: transparent;
-}
-
-.post-card-title {
-  font-size: 1.02em;
-  font-weight: 600;
-  margin: 0 0 8px;
-  color: var(--text-color);
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.post-card-desc {
-  font-size: .86em;
-  color: var(--text-secondary, #666);
-  line-height: 1.55;
-  margin: 0 0 12px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.post-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: .8em;
-  color: var(--text-lighter, #999);
-}
-
-.post-card-cat {
-  background: rgba(53,114,176,.08);
-  color: #3572b0;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: 500;
-}
+.about-links a:hover { background: #3572b0; color: #fff; transform: translateY(-2px); }
 
 /* Animations */
-@keyframes robot-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
+@keyframes robot-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 @keyframes robot-bounce {
-  0% { transform: translateY(0) rotate(0); }
-  25% { transform: translateY(-12px) rotate(-3deg); }
-  50% { transform: translateY(0) rotate(0); }
-  75% { transform: translateY(-6px) rotate(3deg); }
-  100% { transform: translateY(0) rotate(0); }
+  0%{transform:translateY(0)rotate(0)} 25%{transform:translateY(-12px)rotate(-3deg)}
+  50%{transform:translateY(0)rotate(0)} 75%{transform:translateY(-6px)rotate(3deg)}
+  100%{transform:translateY(0)rotate(0)}
 }
-
-@keyframes blink {
-  0%, 96%, 100% { transform: scaleY(1); }
-  98% { transform: scaleY(0.1); }
-}
-
+@keyframes blink { 0%,96%,100%{transform:scaleY(1)} 98%{transform:scaleY(0.1)} }
 @keyframes antenna-glow {
-  from { box-shadow: 0 0 4px #e74c3c; }
-  to { box-shadow: 0 0 12px #e74c3c, 0 0 20px rgba(231,76,60,.3); }
+  from{box-shadow:0 0 4px #e74c3c} to{box-shadow:0 0 12px #e74c3c,0 0 20px rgba(231,76,60,.3)}
 }
-
 @keyframes chest-pulse {
-  from { opacity: 1; box-shadow: 0 0 8px rgba(46,204,113,.6); }
-  to { opacity: .6; box-shadow: 0 0 4px rgba(46,204,113,.3); }
+  from{opacity:1;box-shadow:0 0 8px rgba(46,204,113,.6)}
+  to{opacity:.6;box-shadow:0 0 4px rgba(46,204,113,.3)}
 }
 
 /* Dark mode */
@@ -454,31 +209,14 @@ html[data-theme="dark"] .about-page {
   background: linear-gradient(135deg, rgba(88,166,255,.06), rgba(56,139,253,.03));
 }
 html[data-theme="dark"] .about-name { color: #e6edf3; }
-html[data-theme="dark"] .robot-bubble {
-  background: #161b22;
-  border-color: #58a6ff;
-  color: #e6edf3;
-}
+html[data-theme="dark"] .robot-bubble { background: #161b22; border-color: #58a6ff; color: #e6edf3; }
 html[data-theme="dark"] .robot-bubble::before { border-right-color: #58a6ff; }
 html[data-theme="dark"] .robot-bubble::after { border-right-color: #161b22; }
-html[data-theme="dark"] .post-card {
-  --card-bg: #161b22;
-  --card-border: #30363d;
-}
-html[data-theme="dark"] .post-card-title { color: #e6edf3; }
-html[data-theme="dark"] .section-header { border-bottom-color: #21262d; }
 
 /* Responsive */
 @media (max-width: 800px) {
-  .home-sections { grid-template-columns: 1fr; }
-  .recent-posts-grid { grid-template-columns: 1fr; }
-  .robot-bubble {
-    position: static;
-    margin-top: 16px;
-    display: inline-block;
-  }
-  .robot-bubble::before,
-  .robot-bubble::after { display: none; }
+  .robot-bubble { position: static; margin-top: 16px; display: inline-block; }
+  .robot-bubble::before, .robot-bubble::after { display: none; }
 }
 </style>
 {% endblock %}
