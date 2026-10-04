@@ -56,16 +56,8 @@ open_graph:
 
 menu:
   首页: / || fa fa-home
-  归档: /archives/ || fa fa-archive
-  关于: /about/ || fa fa-user
   项目: /projects/ || fa fa-code
-  样本分析: /categories/样本分析/ || fa fa-bug
-  流量分析: /categories/流量分析/ || fa fa-network-wired
-  逆向基础: /categories/逆向基础/ || fa fa-microscope
-  日志分析: /categories/日志分析/ || fa fa-clipboard-list
-  Web安全: /categories/Web安全/ || fa fa-globe-americas
-  其他: /categories/其他/ || fa fa-ellipsis-h
-  标签: /tags/ || fa fa-tags
+  文章: /archives/ || fa fa-book-open
 
 menu_settings:
   icons: true
