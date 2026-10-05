@@ -3,14 +3,16 @@
     {{ _p('counter.tag_cloud', site.tags.length) }}
   </div>
   <div class="tag-cloud-tags">
-    {{ tagcloud({
-      min_font: theme.tagcloud.min,
-      max_font: theme.tagcloud.max,
-      amount  : theme.tagcloud.amount,
-      orderby : theme.tagcloud.orderby,
-      order   : theme.tagcloud.order,
-      class   : 'tag-cloud'
-      })
-    }}
+    {%- set max_count = 1 -%}
+    {%- for t in site.tags.toArray() -%}
+      {%- if t.posts.length > max_count -%}{%- set max_count = t.posts.length -%}{%- endif -%}
+    {%- endfor -%}
+    {%- for tag in site.tags.sort('name').toArray() -%}
+      {%- set ratio = tag.posts.length / max_count -%}
+      {%- set fs = (14 + ratio * 18) | round(0) -%}
+      <a href="{{ url_for(tag.path) }}" style="font-size: {{ fs }}px;" class="tag-cloud-{{ (ratio * 10) | round(0) }}">
+        {{- tag.name }}<span class="tag-post-count">({{ tag.posts.length }})</span>
+      </a>
+    {%- endfor -%}
   </div>
 </div>
