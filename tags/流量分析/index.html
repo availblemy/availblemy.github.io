@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css?v=20261010">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"woshinext.top","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":260,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js?v=20261010" defer></script>
+
+    <meta name="description" content="心之所向，素履以往">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Next的小站">
+<meta property="og:url" content="https://woshinext.top/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Next的小站">
+<meta property="og:description" content="心之所向，素履以往">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Next">
+<meta property="article:tag" content="恶意代码分析,逆向工程,CTF,脱壳,样本分析,PE结构,反调试,木马分析,IDA,Shellcode">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://woshinext.top/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/流量分析/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>标签: -流量分析 | Next的小站</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/7.2.0/pangu.umd.js" integrity="sha256-JnmRRnJK7DC6RQJbAJb6AXOM9OmWzS6z8eYultk/48Y=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js?v=20261010" defer></script><script src="/js/motion.js?v=20261010" defer></script><script src="/js/sidebar.js?v=20261010" defer></script><script src="/js/next-boot.js?v=20261010" defer></script><script src="/js/pjax.js?v=20261010" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js?v=20261010" defer></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js?v=20261010" defer></script>
+
+
+
+
+
+  
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quicklink/3.0.1/quicklink.umd.js" integrity="sha256-44BednzIpUeQJcY8qtLyarFu0UCCTbgmWOvaoehiFQQ=" crossorigin="anonymous" defer></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://woshinext.top/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/"}</script>
+  <script src="/js/third-party/quicklink.js?v=20261010" defer></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css?v=20261010">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Next的小站" type="application/atom+xml">
+<link rel="alternate" href="/rss2.xml" title="Next的小站" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Next的小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">恶意代码分析，威胁情报，逆向工程</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-首页"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-项目"><a href="/projects/" rel="section"><i class="fa fa-code fa-fw"></i>项目</a></li><li class="menu-item menu-item-文章"><a href="/archives/" rel="section"><i class="fa fa-book-open fa-fw"></i>文章</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Next</p>
+  <div class="site-description" itemprop="description">心之所向，素履以往</div>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/availblemy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;availblemy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+        <div class="pjax">
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner tag posts-collapse">
+
+
+  
+  
+  
+  <div class="post-block">
+    <div class="post-content">
+      <div class="collection-title">
+        <h1 class="collection-header">-流量分析
+          <small>标签</small>
+        </h1>
+      </div>
+
+      
+    <div class="collection-year">
+      <span class="collection-header">2026</span>
+    </div>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2026-07-25T17:30:49+08:00"
+              content="2026-07-25">
+          07-25
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2026/07/25/Wireshark%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90%E5%9F%BA%E7%A1%80/" itemprop="url">
+            <span itemprop="name">.Wireshark流量分析基础</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+    </div>
+  </div>
+  
+  
+  
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">true</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">19k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:07</span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  <!-- 全局悬浮像素猫 -->
+  <div class="pet-wrapper" id="pet-wrapper">
+    <div class="pet" id="pet" title="点我互动~">
+      <!-- 像素猫 SVG -->
+      <svg viewBox="0 0 32 32" width="48" height="48" id="pet-svg" shape-rendering="crispEdges">
+        <!-- 耳朵 -->
+        <rect x="6" y="2" width="4" height="5" fill="#d4956a"/>
+        <rect x="22" y="2" width="4" height="5" fill="#d4956a"/>
+        <rect x="7" y="3" width="2" height="3" fill="#ffb6c1"/>
+        <rect x="23" y="3" width="2" height="3" fill="#ffb6c1"/>
+        <!-- 头 -->
+        <rect x="5" y="6" width="22" height="18" rx="3" fill="#f4a460"/>
+        <!-- 脸白区 -->
+        <rect x="9" y="14" width="14" height="8" fill="#fff8dc"/>
+        <!-- 眼睛 -->
+        <rect class="eye-l" x="10" y="11" width="4" height="5" fill="#222"/>
+        <rect class="eye-r" x="18" y="11" width="4" height="5" fill="#222"/>
+        <rect class="pupil-l" x="11" y="12" width="2" height="2" fill="#fff"/>
+        <rect class="pupil-r" x="19" y="12" width="2" height="2" fill="#fff"/>
+        <!-- 鼻子 -->
+        <rect x="15" y="16" width="2" height="2" rx="1" fill="#ff9999"/>
+        <!-- 嘴巴 -->
+        <path class="pet-mouth" d="M13,19 L15,20 L17,19 L19,20" fill="none" stroke="#222" stroke-width="1" shape-rendering="geometricPrecision"/>
+        <!-- 身体 -->
+        <rect x="8" y="24" width="16" height="7" rx="2" fill="#f4a460"/>
+        <!-- 尾巴 -->
+        <path class="pet-tail" d="M24,28 L28,25 L29,28 L26,30" fill="#d4956a" shape-rendering="crispEdges"/>
+      </svg>
+      <!-- 气泡 -->
+      <div class="pet-bubble" id="pet-bubble">喵~</div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var pet = document.getElementById('pet');
+    var bubble = document.getElementById('pet-bubble');
+    var wrapper = document.getElementById('pet-wrapper');
+    
+    var state = 'idle';
+    var clickCount = 0;
+    var sleepTimer = null;
+    
+    var msgs = {
+      welcome: ['欢迎来到本站！🐱', '喵~ 你来啦！', '今天也想学习吗？😺'],
+      click: ['喵！', '喵呜~', '摸摸头~ 🐱💕', '别戳我啦~ 😹', '再戳我要生气了！😾', '好吧...再戳一下~ 😸'],
+      sleep: ['zzZ... 💤', '好困啊... 😪', '让我眯一会...'],
+      dark: ['天黑了~ 🌙', '晚上好呀 🐱‍👤'],
+      light: ['早上好~ ☀️', '新的一天！🌅'],
+      konami: ['🎮 你发现了彩蛋！', '连击大师！🔥']
+    };
+    
+    function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+    function say(t){
+      bubble.textContent=t; bubble.classList.add('pop');
+      clearTimeout(bubble._t); bubble._t=setTimeout(function(){bubble.classList.remove('pop')},2500);
+    }
+    
+    function setExpr(t){
+      var el=document.querySelector('.eye-l'),er=document.querySelector('.eye-r'),m=document.querySelector('.pet-mouth');
+      if(!el)return;
+      if(t==='happy'){el.setAttribute('height','2');er.setAttribute('height','2');m.setAttribute('d','M13,18 L16,21 L19,18');}
+      else if(t==='sleep'){el.setAttribute('width','5');el.setAttribute('height','1');er.setAttribute('width','5');er.setAttribute('height','1');m.setAttribute('d','M14,19 L18,19');}
+      else{el.setAttribute('width','4');el.setAttribute('height','5');er.setAttribute('width','4');er.setAttribute('height','5');m.setAttribute('d','M13,19 L15,20 L17,19 L19,20');}
+    }
+    function resetEyes(){ setExpr('normal'); }
+    
+    pet.addEventListener('click',function(e){
+      clickCount++;state='happy';setExpr('happy');
+      if(clickCount>=8){say(pick(msgs.konami));pet.classList.add('pet-spin');setTimeout(function(){pet.classList.remove('pet-spin')},600);clickCount=0;}
+      else{say(pick(msgs.click));}
+      pet.style.animation='none';pet.offsetHeight;pet.style.animation='pet-jump .4s ease';
+      resetSleep();setTimeout(resetEyes,1000);
+    });
+    
+    document.addEventListener('mousemove',function(e){
+      if(state==='sleep')return;
+      var r=pet.getBoundingClientRect();var cx=r.left+r.width/2;var cy=r.top+r.height*0.42;
+      var dx=(e.clientX-cx)/20;var dy=(e.clientY-cy)/20;var d=Math.sqrt(dx*dx+dy*dy);
+      if(d>3){dx=dx/d*3;dy=dy/d*3;}
+      var pl=document.querySelector('.pupil-l'),pr=document.querySelector('.pupil-r');
+      if(pl){pl.setAttribute('x',11+Math.round(dx));pl.setAttribute('y',12+Math.round(dy));}
+      if(pr){pr.setAttribute('x',19+Math.round(dx));pr.setAttribute('y',12+Math.round(dy));}
+    });
+    
+
+    function resetSleep(){clearTimeout(sleepTimer);pet.classList.remove('pet-sleeping');if(state==='sleep'){resetEyes();state='idle';}startSleep();}
+    function startSleep(){clearTimeout(sleepTimer);sleepTimer=setTimeout(function(){state='sleep';setExpr('sleep');say(pick(msgs.sleep));pet.classList.add('pet-sleeping');},15000);}
+    
+    new MutationObserver(function(){var isDark=document.documentElement.getAttribute('data-theme')==='dark'||document.documentElement.classList.contains('dark');if(isDark){pet.classList.add('pet-dark');say(pick(msgs.dark));}else{pet.classList.remove('pet-dark');say(pick(msgs.light));}}).observe(document.documentElement,{attributes:true,attributeFilter:['class','data-theme']});
+
+    
+    wrapper.classList.add('pet-enter');
+    setTimeout(function(){say(pick(msgs.welcome));setExpr('happy');setTimeout(resetEyes,2000);},600);
+    startSleep();
+    
+['mousedown','keydown','touchstart'].forEach(function(e){document.addEventListener(e,resetSleep,{passive:true});});
+  })();
+  </script>
+
+  <style>
+  .pet-wrapper{position:fixed;right:20px;bottom:20px;z-index:999;opacity:0;transform:translateY(30px) scale(0.6);transition:all .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+  .pet-wrapper.pet-enter{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}
+  .pet{position:relative;cursor:pointer;animation:pet-idle 3s ease-in-out infinite;image-rendering:pixelated;image-rendering:-moz-crisp-edges;transition:transform .2s;}
+  .pet:hover{transform:scale(1.1);}
+  .pet:hover .pet-tail{animation:tail-wag .25s ease-in-out infinite alternate;}
+  .pet-bubble{position:absolute;bottom:100%;right:0;margin-bottom:8px;background:#fff;border:2px solid #f4a460;border-radius:10px;padding:6px 12px;font-size:.78em;color:#444;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:0;transform:translateY(6px) scale(.8);transition:all .3s cubic-bezier(.68,-.55,.265,1.55);pointer-events:none;}
+  .pet-bubble::before{content:'';position:absolute;bottom:-7px;right:16px;border:6px solid transparent;border-top-color:#f4a460;}
+  .pet-bubble::after{content:'';position:absolute;bottom:-5px;right:17px;border:5px solid transparent;border-top-color:#fff;}
+  .pet-bubble.pop{opacity:1;transform:translateX(0) scale(1);}
+  .pet-sleeping{animation:pet-sleep 2.5s ease-in-out infinite!important;}
+  .pet-spin{animation:pet-spin-360 .45s ease!important;}
+  @keyframes pet-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  @keyframes pet-jump{0%{transform:translateY(0)}30%{transform:translateY(-14px)scale(1.05)}50%{transform:translateY(-8px)}70%{transform:translateY(-2px)scale(.97)}100%{transform:translateY(0)}}
+  @keyframes pet-sleep{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
+  @keyframes pet-spin-360{from{transform:rotate(0deg)scale(1.1)}to{transform:rotate(360deg)scale(1.1)}}
+  @keyframes tail-wag{from{transform:rotate(-10deg)}to{transform:rotate(10deg)}}
+  html[data-theme="dark"] .pet-dark svg rect[fill="#f4a460"]{fill:#c98a54;}html[data-theme="dark"] .pet-dark .pet-bubble{background:#161b22;border-color:#d29966;color:#e6edf3;}html[data-theme="dark"] .pet-dark .pet-bubble::before{border-left-color:#d29966;}html[data-theme="dark"] .pet-dark .pet-bubble::after{border-left-color:#161b22;}
+  @media(max-width:768px){.pet-wrapper{right:10px;bottom:10px;}.pet svg{width:40px;height:40px;}.pet-bubble{display:none;}}
+  </style><script class="next-config" data-name="isso" type="application/json">{"enable":false}</script>
+<script src="/js/third-party/comments/isso.js?v=20261010" defer></script>
+
+</body>
+</html>
