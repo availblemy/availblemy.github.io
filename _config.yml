@@ -4,9 +4,9 @@
 
 # Site
 title: Next的小站
-subtitle: '恶意代码分析，威胁情报，逆向工程'
+subtitle: ''
 description: '心之所向，素履以往'
-keywords: 恶意代码分析,逆向工程,CTF,脱壳,样本分析,PE结构,反调试,木马分析,IDA,Shellcode
+keywords: 
 author: Next
 language: zh-CN
 timezone: 'Asia/Shanghai'
