@@ -47,9 +47,9 @@ html[data-theme="dark"] .post-card-title { color: #e6edf3; }
 <!-- Hero -->
 <div class="hero">
   <div class="hero-avatar"><i class="fa fa-shield"></i></div>
-  <div class="hero-name">MalCode</div>
-  <div class="hero-title">威胁情报 &amp; 恶意软件分析</div>
-  <div class="hero-bio">专注于恶意软件逆向工程、威胁情报研究。擅长 PE/ELF/.NET 分析、Shellcode 解密、OLLVM 去混淆，以及 C2 协议还原。</div>
+  <div class="hero-name">Next</div>
+  <div class="hero-title"> &amp; </div>
+  <div class="hero-bio"></div>
   <div class="hero-links">
     <a href="/projects/"><i class="fa fa-code"></i> 开源项目</a>
     <a href="https://github.com/availblemy" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
