@@ -27,7 +27,7 @@ html[data-theme="dark"] .project-card-sep { border-bottom-color: #30363d; }
     <div class="card-top">
       <div class="card-icon"><i class="fa-solid fa-code"></i></div>
       <h3 class="card-title">test2</h3>
-      <p class="card-desc">这是一个测试项目，用于验证博客同步功能。</p>
+      <p class="card-desc">No description.</p>
     </div>
     <div class="card-footer">
       <span class="lang-dot" style="background:#555555"></span>
