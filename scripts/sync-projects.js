@@ -177,8 +177,11 @@ function generateHTML(projects) {
 
   const sepStyle = `
 <style>
-.project-card-sep { border-bottom: 1px dashed var(--card-border, #eaecef); padding-bottom: 24px; margin-bottom: 24px; border-radius: 14px 14px 0 0; }
-html[data-theme="dark"] .project-card-sep { border-bottom-color: #30363d; }
+.projects-grid { display: flex; flex-direction: column; }
+.project-card { border-bottom: 1px dashed #d0d7de; padding-bottom: 24px; margin-bottom: 24px; display: block; text-decoration: none; color: inherit; transition: opacity .2s; }
+.project-card:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.project-card:hover { opacity: .8; }
+html[data-theme="dark"] .project-card { border-bottom-color: #30363d; }
 </style>`;
 
   const cards = projects.map(p => {
@@ -189,10 +192,7 @@ html[data-theme="dark"] .project-card-sep { border-bottom-color: #30363d; }
     const desc = p.description || 'No description.';
     const shortDesc = desc.length > 120 ? desc.substring(0, 117) + '...' : desc;
 
-    const isLast = projects.indexOf(p) === projects.length - 1;
-    const sepClass = isLast ? '' : ' project-card-sep';
-
-    return `<a class="project-card${sepClass}" href="${p.url}" target="_blank" rel="noopener">
+    return `<a class="project-card" href="${p.url}" target="_blank" rel="noopener">
     <div class="card-top">
       <div class="card-icon"><i class="${icon}"></i></div>
       <h3 class="card-title">${escapeHtml(p.name)}</h3>
