@@ -6,6 +6,7 @@ cd /d %~dp0
 REM ============================================================
 REM   === SET YOUR GITHUB TOKEN HERE ===
 REM   Get token from: https://github.com/settings/tokens (need 'repo' scope)
+REM   Replace *** below with your token (starts with ghp_)
 REM ============================================================
 set "GITHUB_TOKEN=***"
 
@@ -17,13 +18,16 @@ echo.
 REM --- Step 1: Sync GitHub projects ---
 echo [1/4] Syncing GitHub projects...
 if defined GITHUB_TOKEN (
-    if not "%GITHUB_TOKEN%"=="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" (
-        node scripts/sync-projects.js
-        if !errorlevel! neq 0 (
-            echo [WARN] Project sync failed, skipping...
-        )
+    if "%GITHUB_TOKEN%"=="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" (
+        echo [INFO] Please edit refresh.bat and set your GITHUB_TOKEN on line 14.
     ) else (
-        echo [INFO] Please edit refresh.bat and set your GITHUB_TOKEN.
+        echo       Running sync-projects.js...
+        call node scripts/sync-projects.js
+        if !errorlevel! neq 0 (
+            echo [WARN] Project sync had issues, but continuing...
+        ) else (
+            echo [OK] Project sync done.
+        )
     )
 ) else (
     echo [INFO] GITHUB_TOKEN not set, skip project sync.
@@ -55,12 +59,7 @@ echo.
 
 REM --- Step 3: Generate static site ---
 echo [3/4] Generating static site...
-call npx hexo clean
-if !errorlevel! neq 0 (
-    echo [ERROR] Clean failed!
-    pause
-    exit /b 1
-)
+call npx hexo clean >nul 2>&1
 call npx hexo generate
 if !errorlevel! neq 0 (
     echo [ERROR] Generate failed!
