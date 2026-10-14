@@ -127,9 +127,8 @@ function escapeHtml(str) {
 
 async function main() {
   if (!TOKEN) {
-    console.error('[ERROR] GITHUB_TOKEN 环境变量未设置！');
-    console.error('  本地运行：GITHUB_TOKEN=ghp_xxxx node scripts/sync-projects.js');
-    process.exit(1);
+    console.warn('[WARN] GITHUB_TOKEN not set. Skipping project sync.');
+    process.exit(0);
   }
 
   console.log(`[1/3] Fetching repos for ${USER}...`);

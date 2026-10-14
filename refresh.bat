@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
 cd /d %~dp0
 
@@ -24,17 +24,17 @@ REM --- Step 2: Push source to remote FIRST ---
 echo [2/4] Pushing source to remote hexo branch...
 git add -A
 git diff --cached --quiet >nul 2>&1
-if %errorlevel% equ 0 (
+if !errorlevel! equ 0 (
     echo       No source changes, skip commit.
 ) else (
     git commit -m "chore: update blog content"
-    if %errorlevel% neq 0 (
+    if !errorlevel! neq 0 (
         echo [ERROR] Git commit failed!
         pause
         exit /b 1
     )
     git push origin hexo
-    if %errorlevel% neq 0 (
+    if !errorlevel! neq 0 (
         echo [ERROR] Git push failed!
         pause
         exit /b 1
@@ -46,13 +46,13 @@ echo.
 REM --- Step 3: Generate static site ---
 echo [3/4] Generating static site...
 call npx hexo clean
-if %errorlevel% neq 0 (
+if !errorlevel! neq 0 (
     echo [ERROR] Clean failed!
     pause
     exit /b 1
 )
 call npx hexo generate
-if %errorlevel% neq 0 (
+if !errorlevel! neq 0 (
     echo [ERROR] Generate failed!
     pause
     exit /b 1
@@ -63,7 +63,7 @@ echo.
 REM --- Step 4: Deploy to GitHub Pages ---
 echo [4/4] Deploying to GitHub Pages...
 call npx hexo deploy
-if %errorlevel% neq 0 (
+if !errorlevel! neq 0 (
     echo [ERROR] Deploy failed!
     pause
     exit /b 1
