@@ -18,7 +18,7 @@ html[data-theme="dark"] .project-card { border-bottom-color: #30363d; }
     <div class="card-top">
       <div class="card-icon"><i class="fa-brands fa-python"></i></div>
       <h3 class="card-title">test</h3>
-      <p class="card-desc">这里写项目简介，会自动显示在博客卡片上。</p>
+      <p class="card-desc">这里写项目简介，会自动显示在博客卡片上123。666!!!</p>
     </div>
     <div class="card-footer">
       <span class="lang-dot" style="background:#3572A5"></span>
