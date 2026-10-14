@@ -175,6 +175,12 @@ function generateHTML(projects) {
     return '<div class="projects-grid"><p style="text-align:center;color:#999;grid-column:1/-1;">No projects yet.</p></div>';
   }
 
+  const sepStyle = `
+<style>
+.project-card-sep { border-bottom: 1px dashed var(--card-border, #eaecef); padding-bottom: 24px; margin-bottom: 24px; border-radius: 14px 14px 0 0; }
+html[data-theme="dark"] .project-card-sep { border-bottom-color: #30363d; }
+</style>`;
+
   const cards = projects.map(p => {
     const lang = p.language || 'Unknown';
     const langLower = (lang || '').toLowerCase();
@@ -183,7 +189,10 @@ function generateHTML(projects) {
     const desc = p.description || 'No description.';
     const shortDesc = desc.length > 120 ? desc.substring(0, 117) + '...' : desc;
 
-    return `<a class="project-card" href="${p.url}" target="_blank" rel="noopener">
+    const isLast = projects.indexOf(p) === projects.length - 1;
+    const sepClass = isLast ? '' : ' project-card-sep';
+
+    return `<a class="project-card${sepClass}" href="${p.url}" target="_blank" rel="noopener">
     <div class="card-top">
       <div class="card-icon"><i class="${icon}"></i></div>
       <h3 class="card-title">${escapeHtml(p.name)}</h3>
@@ -197,7 +206,7 @@ function generateHTML(projects) {
   </a>`;
   }).join('\n  ');
 
-  return `<div class="projects-grid">\n  ${cards}\n</div>`;
+  return `${sepStyle}\n<div class="projects-grid">\n  ${cards}\n</div>`;
 }
 
 function escapeHtml(str) {
