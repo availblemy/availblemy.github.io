@@ -51,7 +51,7 @@ html[data-theme="dark"] .card-footer { color: #8b949e; }
       <div class="card-icon"><i class="fa-brands fa-python"></i></div>
       <h3 class="card-title">test</h3>
     </div>
-    <p class="card-desc">这里写项目简介，会自动显示在博客卡片上123。666!!!</p>
+    <p class="card-desc">No description.</p>
     <div class="card-footer">
       <span class="lang-dot" style="background:#3572A5"></span>
       <span class="lang-name">python</span>
@@ -63,7 +63,7 @@ html[data-theme="dark"] .card-footer { color: #8b949e; }
       <div class="card-icon"><i class="fa-solid fa-code"></i></div>
       <h3 class="card-title">test2</h3>
     </div>
-    <p class="card-desc">这是一个测试项目，用于验证博客同步功能。</p>
+    <p class="card-desc">No description.</p>
     <div class="card-footer">
       <span class="lang-dot" style="background:#555555"></span>
       <span class="lang-name">c</span>
