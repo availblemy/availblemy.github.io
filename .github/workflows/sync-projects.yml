@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Hexo deps
+      - name: Install dependencies for sync script
         run: npm install --legacy-peer-deps
 
       - name: Configure Git identity (global)
@@ -30,21 +30,13 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Fetch projects from GitHub API
-        run: |
-          node scripts/sync-projects.js
-
-      - name: Generate and Deploy
+      - name: Fetch projects from GitHub API and commit
         env:
           GITHUB_TOKEN: ${{ secrets.HEXO_PROJECTS_SYNC }}
         run: |
-          npx hexo clean
-          npx hexo generate
-          # Inject token into deploy URL for auth
-          sed -i "s|repo: https://github.com/availblemy/availblemy.github.io.git|repo: https://x-access-token:${GITHUB_TOKEN}@github.com/availblemy/availblemy.github.io.git|" _config.yml
-          npx hexo deploy
+          node scripts/sync-projects.js
 
-      - name: Commit updated project data
+      - name: Commit updated project data only
         run: |
           git add source/projects/index.md
           git diff --cached --quiet || git commit -m "chore: sync projects from availblemy/projects"
