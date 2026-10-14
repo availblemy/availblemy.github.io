@@ -3,6 +3,12 @@ setlocal EnableDelayedExpansion
 
 cd /d %~dp0
 
+REM ============================================================
+REM   === SET YOUR GITHUB TOKEN HERE ===
+REM   Get token from: https://github.com/settings/tokens (need 'repo' scope)
+REM ============================================================
+set "GITHUB_TOKEN=***"
+
 echo ============================================
 echo   Hexo Blog - One-Click Deploy
 echo ============================================
@@ -11,9 +17,13 @@ echo.
 REM --- Step 1: Sync GitHub projects ---
 echo [1/4] Syncing GitHub projects...
 if defined GITHUB_TOKEN (
-    node scripts/sync-projects.js
-    if !errorlevel! neq 0 (
-        echo [WARN] Project sync failed, skipping...
+    if not "%GITHUB_TOKEN%"=="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" (
+        node scripts/sync-projects.js
+        if !errorlevel! neq 0 (
+            echo [WARN] Project sync failed, skipping...
+        )
+    ) else (
+        echo [INFO] Please edit refresh.bat and set your GITHUB_TOKEN.
     )
 ) else (
     echo [INFO] GITHUB_TOKEN not set, skip project sync.
